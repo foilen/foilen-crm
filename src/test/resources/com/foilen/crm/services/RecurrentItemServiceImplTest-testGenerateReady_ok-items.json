@@ -1,0 +1,126 @@
+[ {
+  "category" : "consulting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "description" : "Install Wordpress",
+  "price" : 2000,
+  "priceFormatted" : "20.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "description" : "Shared hosting - L1",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "name" : "Bazar",
+    "shortName" : "bazar"
+  },
+  "description" : "Shared hosting - L1",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "description" : "Shared hosting - L1",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "name" : "Bazar",
+    "shortName" : "bazar"
+  },
+  "description" : "Shared hosting - L1",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "zeo@example.com",
+    "lang" : "FR",
+    "name" : "Zoo Alphonce",
+    "shortName" : "zooa"
+  },
+  "description" : "Shared hosting - L2",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "zeo@example.com",
+    "lang" : "FR",
+    "name" : "Zoo Alphonce",
+    "shortName" : "zooa"
+  },
+  "description" : "Shared hosting - L2",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "description" : "Shared hosting - L1",
+  "invoiceId" : "I190601-1",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "consulting",
+  "client" : {
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "name" : "Bazar",
+    "shortName" : "bazar"
+  },
+  "description" : "Install Wordpress",
+  "invoiceId" : "I190601-2",
+  "price" : 2000,
+  "priceFormatted" : "20.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "name" : "Bazar",
+    "shortName" : "bazar"
+  },
+  "description" : "Shared hosting - L1",
+  "invoiceId" : "I190601-2",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "category" : "hosting",
+  "client" : {
+    "email" : "zeo@example.com",
+    "lang" : "FR",
+    "name" : "Zoo Alphonce",
+    "shortName" : "zooa"
+  },
+  "description" : "Shared hosting - L2",
+  "invoiceId" : "I190601-3",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+} ]

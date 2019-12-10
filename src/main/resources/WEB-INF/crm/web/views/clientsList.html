@@ -1,0 +1,132 @@
+<div class="row">
+
+  <div class="col-12">
+
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createModal">{{ $t('button.create') }}</button>
+
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createModalLabel">{{ $t('button.create') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <error-results v-bind:formResult="formResult"></error-results>
+
+            <div class="form-group">
+              <label for="name">{{ $t('term.name') }}</label> <input type="text" class="form-control" id="name" v-model="form.name" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.name">
+                <p v-for="errorCode in formResult.validationErrorsByField.name">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="shortName">{{ $t('term.shortName') }}</label> <input type="text" class="form-control" id="shortName" v-model="form.shortName" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.shortName">
+                <p v-for="errorCode in formResult.validationErrorsByField.shortName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contactName">{{ $t('term.contactName') }}</label> <input type="text" class="form-control" id="contactName" v-model="form.contactName" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.contactName">
+                <p v-for="errorCode in formResult.validationErrorsByField.contactName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">{{ $t('term.email') }}</label> <input type="text" class="form-control" id="email" v-model="form.email" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.email">
+                <p v-for="errorCode in formResult.validationErrorsByField.email">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">{{ $t('term.address') }}</label> <input type="text" class="form-control" id="address" v-model="form.address" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.address">
+                <p v-for="errorCode in formResult.validationErrorsByField.address">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tel">{{ $t('term.tel') }}</label> <input type="text" class="form-control" id="tel" v-model="form.tel" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.tel">
+                <p v-for="errorCode in formResult.validationErrorsByField.tel">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="mainSite">{{ $t('term.mainSite') }}</label> <input type="text" class="form-control" id="mainSite" v-model="form.mainSite" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.mainSite">
+                <p v-for="errorCode in formResult.validationErrorsByField.mainSite">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lang">{{ $t('term.lang') }}</label> <select class="form-control" id="lang" v-model="form.lang" autocomplete="off">
+                <option value=""></option>
+                <option>FR</option>
+                <option>EN</option>
+              </select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.lang">
+                <p v-for="errorCode in formResult.validationErrorsByField.lang">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="technicalSupportSid">{{ $t('term.technicalSupportSid') }}</label>
+              <technical-support-select id="technicalSupportSid" v-model="form.technicalSupportSid"></technical-support-select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.technicalSupportSid">
+                <p v-for="errorCode in formResult.validationErrorsByField.technicalSupportSid">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+            <button type="button" class="btn btn-success" v-on:click="create()">{{ $t('button.create') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t('term.name') }}</th>
+          <th scope="col">{{ $t('term.shortName') }}</th>
+          <th scope="col">{{ $t('term.contactName') }}</th>
+          <th scope="col">{{ $t('term.email') }}</th>
+          <th scope="col">{{ $t('term.address') }}</th>
+          <th scope="col">{{ $t('term.tel') }}</th>
+          <th scope="col">{{ $t('term.mainSite') }}</th>
+          <th scope="col">{{ $t('term.lang') }}</th>
+          <th scope="col">{{ $t('term.sid') }}</th>
+          <th scope="col">{{ $t('term.pricePerHour') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items">
+          <td>{{item.name}}</td>
+          <td>{{item.shortName}}</td>
+          <td>{{item.contactName}}</td>
+          <td><a v-bind:href="'mailto:' + item.email">{{item.email}}</a></td>
+          <td>{{item.address}}</td>
+          <td>{{item.tel}}</td>
+          <td><a v-bind:href="item.mainSite" target="_blank">{{item.mainSite}}</a></td>
+          <td>{{item.lang}}</td>
+          <td>{{item.technicalSupport ? item.technicalSupport.sid : ''}}</td>
+          <td>{{item.technicalSupport ? item.technicalSupport.pricePerHourFormatted + '$' : ''}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

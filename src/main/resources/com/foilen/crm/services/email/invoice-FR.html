@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Facture</title>
+<style>
+
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+h1 {
+  color: #0011CE;
+  border-bottom: solid 3px #001178;
+  font-size: 16px;
+}
+
+table {
+  border: solid 1px #477EFF;
+  width: 100%;
+}
+
+th {
+  background-color: #BACFFF;
+  text-align: left;
+}
+
+tr:nth-child(odd) {
+  background-color: #F4F5FF;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+table.total {
+  border: solid 1px #477EFF;
+  float: right;
+  margin-top: 20px;
+  width: 150px;
+}
+
+hr {
+  border-bottom: solid 1px #001178;
+}
+
+</style>
+</head>
+<body>
+
+<img class="right" src="logo.png"/>
+<div class="clear"></div>
+<h1>Facturation</h1>
+
+<p class="right">Numéro facture: ${currentTransaction.invoiceId}</p>
+<p>
+Date: ${currentTransaction.date?date?iso_utc}<br/>
+Client: ${client.name}<br/>
+</p>
+
+<table>
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th class="alignRight">Prix</th>
+</tr>
+<#list items as item>
+<tr>
+  <td>${item.date?date?iso_utc}</td>
+  <td>${item.description}</td>
+  <td class="alignRight">${item.priceFormatted}$</td>
+</tr>
+</#list>
+</table>
+
+<table class="total">
+  <tr><td>Total:</td><td>${totalPrice}$</td></tr>
+</table>
+
+<div class="clear"></div>
+
+<h1>État de compte</h1>
+
+<p>Les 5 plus récentes activitées:</p>
+<table>
+
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th class="alignRight">Montant</th>
+  <th class="alignRight">Cumulatif</th>
+</tr>
+
+<#list recentsTransactions as transaction>
+<tr>
+  <td>${transaction.date?date?iso_utc}</td>
+  <td>${transaction.description}</td>
+  <td class="alignRight">${transaction.priceFormatted}$</td>
+  <td class="alignRight">${transaction.balanceFormatted}$</td>
+</tr>
+</#list>
+</table>
+
+<#if accountBalance gt 0>
+<p>Votre montant à payer est de: ${accountBalanceFormatted}$</p>
+<#else>
+<p>Vous n'avez rien à payer. Il vous reste ${negativeAccountBalanceFormatted}$ dans votre compte.</p>
+</#if>
+
+<hr/>
+
+<p>
+Si vous avez un solde à payer ou vous désirez ajouter de l'argent dans votre compte, <br/> 
+<br/>
+vous pouvez faire un chèque au nom de "XXXXXXXX"<br/>
+et l'envoyer au<br/>
+XXXXXXXX<br/>
+XXXXXXXX<br/>
+XXXXXXXX<br/>
+<br/>
+Ou<br/>
+<br/>
+vous pouvez payer avec une carte de crédit via PayPal n'importe quel montant<br/>
+<a href="http://XXXXXXXX">http://XXXXXXXX</a><br/>
+<br/>
+Merci
+</p>
+
+</body>
+</html>

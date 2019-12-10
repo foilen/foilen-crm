@@ -1,0 +1,30 @@
+<div class="row">
+
+  <div class="col-12">
+
+    <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t('term.invoiceId') }}</th>
+          <th scope="col">{{ $t('term.client') }}</th>
+          <th scope="col">{{ $t('term.date') }}</th>
+          <th scope="col">{{ $t('term.description') }}</th>
+          <th scope="col">{{ $t('term.price') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items">
+          <td>{{item.invoiceId}}</td>
+          <td>{{item.client.name}} ({{item.client.email}}) ({{item.client.lang}})</td>
+          <td>{{item.dateFormatted}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.priceFormatted}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

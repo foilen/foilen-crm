@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Invoice</title>
+<style>
+
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+h1 {
+  color: #0011CE;
+  border-bottom: solid 3px #001178;
+  font-size: 16px;
+}
+
+table {
+  border: solid 1px #477EFF;
+  width: 100%;
+}
+
+th {
+  background-color: #BACFFF;
+  text-align: left;
+}
+
+tr:nth-child(odd) {
+  background-color: #F4F5FF;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+table.total {
+  border: solid 1px #477EFF;
+  float: right;
+  margin-top: 20px;
+  width: 150px;
+}
+
+hr {
+  border-bottom: solid 1px #001178;
+}
+
+</style>
+</head>
+<body>
+
+<img class="right" src="logo.png"/>
+<div class="clear"></div>
+<h1>Invoice</h1>
+
+<p class="right">Invoice number: ${currentTransaction.invoiceId}</p>
+<p>
+Date: ${currentTransaction.date?date?iso_utc}<br/>
+Client: ${client.name}<br/>
+</p>
+
+<table>
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th class="alignRight">Price</th>
+</tr>
+<#list items as item>
+<tr>
+  <td>${item.date?date?iso_utc}</td>
+  <td>${item.description}</td>
+  <td class="alignRight">${item.priceFormatted}$</td>
+</tr>
+</#list>
+</table>
+
+<table class="total">
+  <tr><td>Total:</td><td>${totalPrice}$</td></tr>
+</table>
+
+<div class="clear"></div>
+
+<h1>Account Status</h1>
+
+<p>Recent activities:</p>
+<table>
+
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th class="alignRight">Amount</th>
+  <th class="alignRight">Accumulative</th>
+</tr>
+
+<#list recentsTransactions as transaction>
+<tr>
+  <td>${transaction.date?date?iso_utc}</td>
+  <td>${transaction.description}</td>
+  <td class="alignRight">${transaction.priceFormatted}$</td>
+  <td class="alignRight">${transaction.balanceFormatted}$</td>
+</tr>
+</#list>
+</table>
+
+<#if accountBalance gt 0>
+<p>Your amount to pay is: ${accountBalanceFormatted}$</p>
+<#else>
+<p>You have nothing to pay. You still have ${negativeAccountBalanceFormatted}$ in your account.</p>
+</#if>
+
+<hr/>
+
+<p>
+If you have a balance to pay or you wish to add money in your account, <br/> 
+<br/>
+you can sign a check for "XXXXXXXX"<br/>
+and send it to<br/>
+XXXXXXXX<br/>
+XXXXXXXX<br/>
+XXXXXXXX<br/>
+<br/>
+Or<br/>
+<br/>
+you can pay any amount with a credit card via PayPal<br/>
+<a href="http://XXXXXXXX">http://XXXXXXXX</a><br/>
+<br/>
+Thank you
+</p>
+
+</body>
+</html>

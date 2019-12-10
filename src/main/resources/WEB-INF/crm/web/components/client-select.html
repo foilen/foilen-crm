@@ -1,0 +1,6 @@
+<div class="typeahead">
+  <input type="text" class="form-control" v-bind:id="id" v-bind:value="value" v-on:keyup="search" autocomplete="off">
+  <ul>
+    <li v-for="item in items" v-on:click="selected(item.shortName)">{{item.name}} ({{item.email}}) ({{item.lang}}) ({{item.shortName}})</li>
+  </ul>
+</div>

@@ -1,0 +1,24 @@
+<div class="row">
+
+  <div class="col-12">
+
+    <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t('term.sid') }}</th>
+          <th scope="col">{{ $t('term.pricePerHour') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items">
+          <td>{{item.sid}}</td>
+          <td>{{item.pricePerHourFormatted}}$</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

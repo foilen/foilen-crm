@@ -1,0 +1,49 @@
+[ {
+  "calendarUnit" : 2,
+  "calendarUnitCode" : "recurrence.monthly",
+  "category" : "hosting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "delta" : 1,
+  "description" : "Shared hosting - L1",
+  "nextGenerationDate" : 1564632000000,
+  "nextGenerationDateFormatted" : "2019-08-01",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "calendarUnit" : 2,
+  "calendarUnitCode" : "recurrence.monthly",
+  "category" : "hosting",
+  "client" : {
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "name" : "Bazar",
+    "shortName" : "bazar"
+  },
+  "delta" : 1,
+  "description" : "Shared hosting - L1",
+  "nextGenerationDate" : 1564632000000,
+  "nextGenerationDateFormatted" : "2019-08-01",
+  "price" : 500,
+  "priceFormatted" : "5.00"
+}, {
+  "calendarUnit" : 2,
+  "calendarUnitCode" : "recurrence.monthly",
+  "category" : "hosting",
+  "client" : {
+    "email" : "zeo@example.com",
+    "lang" : "FR",
+    "name" : "Zoo Alphonce",
+    "shortName" : "zooa"
+  },
+  "delta" : 1,
+  "description" : "Shared hosting - L2",
+  "nextGenerationDate" : 1564632000000,
+  "nextGenerationDateFormatted" : "2019-08-01",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+} ]

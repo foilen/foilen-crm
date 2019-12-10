@@ -1,0 +1,100 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+  }
+}
+plugins {
+  id 'org.springframework.boot' version '2.1.9.RELEASE'
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+
+group = 'com.foilen'
+version = System.getenv('VERSION')?:'master-SNAPSHOT'
+
+repositories {
+  mavenLocal()
+  jcenter()
+  mavenCentral()
+  maven {
+    url 'https://dl.bintray.com/foilen/maven'
+  }
+}
+
+sourceCompatibility = 1.11
+
+eclipse {
+  classpath {
+    downloadSources = true
+    downloadJavadoc = true
+  }
+}
+
+configurations {
+  testCompile.extendsFrom compileOnly
+}
+
+dependencies {
+
+  // Databases
+  compile "com.h2database:h2"
+  compile "mysql:mysql-connector-java"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+  implementation "org.springframework.boot:spring-boot-starter-jdbc"
+  
+  // Emails
+  compile 'com.sun.mail:javax.mail'
+  compile 'javax.activation:activation'
+  compile 'org.freemarker:freemarker'
+  compile 'org.xhtmlrenderer:flying-saucer-pdf:9.1.19'
+
+  // Web
+  compile "com.foilen:foilen-login-api:$foilenLoginApiVersion"
+  implementation "org.springframework.boot:spring-boot-starter-freemarker"
+  implementation "org.springframework.boot:spring-boot-starter-web"
+
+  // Spring
+  compile "io.springfox:springfox-swagger-ui:$springFoxSwaggerVersion"
+  compile "io.springfox:springfox-swagger2:$springFoxSwaggerVersion"
+  compile "org.springframework:spring-context"
+  compile "org.springframework.retry:spring-retry"
+  compile 'org.springframework.security:spring-security-web'
+
+  // Misc
+  compile "args4j:args4j:$argsVersion"
+  compile 'com.google.code.findbugs:jsr305:3.0.0'
+  compile "com.foilen:jl-smalltools:$smalltoolsVersion"
+  compile "commons-validator:commons-validator:$commonsValidatorVersion"
+  compile 'org.apache.commons:commons-text:1.6'
+  compile "javax.xml.bind:jaxb-api"
+  compile 'org.quartz-scheduler:quartz'
+
+  // Test
+  testCompileOnly 'junit:junit'
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitVersion"
+  testCompile 'org.junit.platform:junit-platform-commons:1.5.2'
+  testCompile 'org.junit.platform:junit-platform-engine:1.5.2'
+  testCompile "org.springframework:spring-test"
+  testCompile "org.springframework.boot:spring-boot-starter-test"
+  
+}
+
+test {
+  useJUnitPlatform()
+}
+
+
+apply plugin: 'application'
+mainClassName = 'com.foilen.crm.CrmApp'
+jar {
+  enabled = true
+}
+
+bootJar {
+ classifier = 'boot'
+}

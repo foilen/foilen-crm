@@ -1,0 +1,45 @@
+<div class="row">
+
+  <div class="col-12">
+
+    <h1>{{ $t('term.balanceByClient') }}</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t('term.client') }}</th>
+          <th scope="col">{{ $t('term.total') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in reports.balanceByClient">
+          <td>{{item.clientName}}</td>
+          <td>{{item.totalFormatted}}$</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>{{ $t('term.globalBalance') }}: {{reports.globalBalanceFormatted}}$</p>
+
+    <h1>{{ $t('term.itemsByCategory') }}</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">{{ $t('term.date') }}</th>
+          <th scope="col">{{ $t('term.category') }}</th>
+          <th scope="col">{{ $t('term.total') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in reports.itemsByCategory">
+          <td>{{item.monthDate}}</td>
+          <td>{{item.category}}</td>
+          <td>{{item.totalFormatted}}$</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
