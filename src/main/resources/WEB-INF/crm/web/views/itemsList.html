@@ -28,13 +28,6 @@
             </div>
 
             <div class="form-group">
-              <label for="invoiceId">{{ $t('term.invoiceId') }}</label> <input type="text" class="form-control" id="invoiceId" v-model="form.invoiceId" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.invoiceId">
-                <p v-for="errorCode in formResult.validationErrorsByField.invoiceId">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-
-            <div class="form-group">
               <label for="date">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date" v-model="form.date" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
                 <p v-for="errorCode in formResult.validationErrorsByField.date">{{ $t(errorCode) }}</p>
