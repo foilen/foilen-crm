@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
@@ -48,6 +49,7 @@ import com.foilen.smalltools.tools.DirectoryTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.PriceFormatTools;
 import com.foilen.smalltools.tools.ResourceTools;
+import com.google.common.base.Strings;
 import com.google.common.io.Files;
 
 import freemarker.template.Configuration;
@@ -70,6 +72,8 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
 
     @Value("${crm.company}")
     private String company;
+    @Value("${crm.emailTemplateDirectory:#{null}}")
+    private String emailTemplateDirectory;
     @Value("${crm.mailFrom}")
     private String mailFrom;
 
@@ -132,13 +136,37 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         model.put("negativeAccountBalanceFormatted", PriceFormatTools.toDigit(-accountBalance));
 
         File tmpFolder = Files.createTempDir();
+        String tmpFolderAbs = tmpFolder.getAbsolutePath();
         try {
             // Process template
             Template template = freemarkerConfiguration.getTemplate("invoice-" + client.getLang() + ".html");
-            FileOutputStream htmlOutputStream = new FileOutputStream(tmpFolder.getAbsolutePath() + "/index.html");
+            FileOutputStream htmlOutputStream = new FileOutputStream(tmpFolderAbs + "/index.html");
             template.process(model, new OutputStreamWriter(htmlOutputStream));
             htmlOutputStream.close();
-            ResourceTools.copyToFile("/com/foilen/crm/services/email/logo.png", new File(tmpFolder.getAbsolutePath() + "/logo.png"));
+
+            // Copy extra files
+            if (Strings.isNullOrEmpty(emailTemplateDirectory)) {
+                // Copy default
+                ResourceTools.copyToFile("/com/foilen/crm/services/email/logo.png", new File(tmpFolderAbs + "/logo.png"));
+            } else {
+                // Copy all files from the directory
+                DirectoryTools.listFilesAndFoldersRecursively(emailTemplateDirectory, false).forEach(fileOrDirName -> {
+                    File fileOrDir = new File(emailTemplateDirectory + "/" + fileOrDirName);
+                    String fileOrDirInTmp = tmpFolderAbs + "/" + fileOrDirName;
+                    if (fileOrDir.isDirectory()) {
+                        DirectoryTools.createPath(fileOrDirInTmp);
+                    } else {
+                        try {
+                            logger.debug("Copy {} -> {}", fileOrDir, fileOrDirInTmp);
+                            Files.copy(fileOrDir, new File(fileOrDirInTmp));
+                        } catch (IOException e) {
+                            logger.error("Problem copying files", e);
+                            throw new CrmException("Problem copying files", e);
+                        }
+                    }
+                });
+
+            }
 
             // Render invoice
             ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
