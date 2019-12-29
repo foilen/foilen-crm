@@ -42,8 +42,8 @@ public interface ItemDao extends JpaRepository<Item, Long> {
             + "  category, " //
             + "  sum(price)) " //
             + "FROM Item " //
-            + "GROUP BY date, category " //
-            + "ORDER BY date DESC")
+            + "GROUP BY CONCAT(YEAR(date), CONCAT('-', MONTH(date))), category " //
+            + "ORDER BY CONCAT(YEAR(date), CONCAT('-', MONTH(date))) DESC, category")
     List<ReportItemsByCategory> findAllItemsByCategory();
 
 }

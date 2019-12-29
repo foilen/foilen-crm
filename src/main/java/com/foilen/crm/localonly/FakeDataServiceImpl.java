@@ -127,7 +127,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         // Pending
         itemDao.save(new Item(clientAvez, null, DateTools.parseDateOnly("2019-06-01"), "Shared hosting - L1", 500, "hosting"));
         itemDao.save(new Item(clientAvez, null, DateTools.parseDateOnly("2019-06-05"), "Install Wordpress", 2000, "consulting"));
-        itemDao.save(new Item(clientBazar, null, DateTools.parseDateOnly("2019-06-01"), "Shared hosting - L1", 500, "hosting"));
+        itemDao.save(new Item(clientBazar, null, DateTools.parseDateOnly("2019-06-02"), "Shared hosting - L1", 500, "hosting"));
         itemDao.save(new Item(clientZooa, null, DateTools.parseDateOnly("2019-06-01"), "Shared hosting - L2", 1000, "hosting"));
 
         // Billed

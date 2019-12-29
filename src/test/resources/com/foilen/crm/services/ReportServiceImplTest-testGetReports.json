@@ -1,0 +1,41 @@
+{
+  "item" : {
+    "balanceByClient" : [ {
+      "clientName" : "Bazar",
+      "total" : 2500,
+      "totalFormatted" : "25.00"
+    }, {
+      "clientName" : "Zoo Alphonce",
+      "total" : 1000,
+      "totalFormatted" : "10.00"
+    }, {
+      "clientName" : "Avez",
+      "total" : 500,
+      "totalFormatted" : "5.00"
+    } ],
+    "globalBalance" : 4000,
+    "globalBalanceFormatted" : "40.00",
+    "itemsByCategory" : [ {
+      "category" : "consulting",
+      "monthDate" : "2019-6",
+      "total" : 2000,
+      "totalFormatted" : "20.00"
+    }, {
+      "category" : "hosting",
+      "monthDate" : "2019-6",
+      "total" : 2000,
+      "totalFormatted" : "20.00"
+    }, {
+      "category" : "consulting",
+      "monthDate" : "2019-5",
+      "total" : 2000,
+      "totalFormatted" : "20.00"
+    }, {
+      "category" : "hosting",
+      "monthDate" : "2019-5",
+      "total" : 2000,
+      "totalFormatted" : "20.00"
+    } ]
+  },
+  "success" : true
+}
