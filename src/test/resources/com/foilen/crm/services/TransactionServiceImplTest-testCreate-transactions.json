@@ -1,0 +1,14 @@
+{
+  "added" : [ {
+    "client" : {
+      "email" : "zeo@example.com",
+      "lang" : "FR",
+      "name" : "Zoo Alphonce",
+      "shortName" : "zooa"
+    },
+    "description" : "Paiement (Paypal)",
+    "price" : -1000,
+    "priceFormatted" : "-10.00"
+  } ],
+  "removed" : [ ]
+}

@@ -15,9 +15,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.Transaction;
+import com.foilen.crm.web.model.CreatePayment;
 import com.foilen.crm.web.model.TransactionList;
+import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface TransactionService {
+
+    FormResult create(String userId, CreatePayment form);
 
     /**
      * Create a transaction.

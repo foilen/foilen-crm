@@ -41,10 +41,12 @@ import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.exception.CrmException;
+import com.foilen.crm.web.model.CreatePayment;
 import com.foilen.crm.web.model.TransactionList;
 import com.foilen.crm.web.model.TransactionWithBalance;
 import com.foilen.smalltools.email.EmailBuilder;
 import com.foilen.smalltools.email.EmailService;
+import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.DirectoryTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.PriceFormatTools;
@@ -76,6 +78,36 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     private String emailTemplateDirectory;
     @Value("${crm.mailFrom}")
     private String mailFrom;
+
+    @Override
+    public FormResult create(String userId, CreatePayment form) {
+
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canCreatePaymentOrFail(userId);
+        validateMandatory(formResult, "clientShortName", form.getClientShortName());
+        validateDateOnly(formResult, "date", form.getDate());
+        validateMandatory(formResult, "date", form.getDate());
+        validateMandatory(formResult, "paymentType", form.getPaymentType());
+        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Create
+        String paymentMessage = messageSource.getMessage("transaction.create.paymentDescription", new Object[] { form.getPaymentType() }, client.getLangAsLocale());
+
+        Transaction entity = JsonTools.clone(form, Transaction.class);
+        entity.setClient(client);
+        entity.setDescription(paymentMessage);
+        entity.setPrice(entity.getPrice() * -1);
+        transactionDao.save(entity);
+
+        return formResult;
+
+    }
 
     @Override
     public Transaction createTransaction(Client client, List<Item> items, String invoicePrefix, AtomicLong nextInvoiceSuffix) {
@@ -193,7 +225,7 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         // Retrieve
         TransactionList result = new TransactionList();
         Page<Transaction> page = transactionDao
-                .findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Sort.by(Order.desc("invoiceId"), Order.asc("client.name"), Order.desc("date"), Order.asc("id"))));
+                .findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Sort.by(Order.desc("date"), Order.asc("client.name"), Order.desc("invoiceId"), Order.asc("id"))));
         paginationService.wrap(result, page, com.foilen.crm.web.model.Transaction.class);
         return result;
     }

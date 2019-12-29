@@ -326,11 +326,29 @@ const TransactionsList = Vue.component('transactions-list', function(resolve, re
             firstPage : true,
             lastPage : true,
           },
+          form : {
+            date : dateNowDayOnly(),
+          },
+          formResult : {},
         }
       },
       props : [],
       computed : {},
       methods : {
+        create : function() {
+          var c = this
+          c.formResult = {}
+          var clonedForm = JSON.parse(JSON.stringify(c.form))
+          clonedForm.price = priceToLong(clonedForm.price)
+          console.log('Transaction Payment - Create', clonedForm)
+          httpPost('/api/transaction/payment', clonedForm, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#createModal .btn-secondary').click()
+              c.refresh(c.queries.pageId)
+            }
+          })
+        },
         refresh : function(pageId) {
           if (pageId === undefined) {
             pageId = 1

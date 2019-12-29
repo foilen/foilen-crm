@@ -1,5 +1,58 @@
 <div class="row">
 
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createModal">{{ $t('button.createPayment') }}</button>
+
+  <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createModalLabel">{{ $t('button.create') }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <error-results v-bind:formResult="formResult"></error-results>
+
+          <div class="form-group">
+            <label for="clientShortName">{{ $t('term.clientShortName') }}</label>
+            <client-select id="clientShortName" v-model="form.clientShortName"></client-select>
+            <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
+              <p v-for="errorCode in formResult.validationErrorsByField.clientShortName">{{ $t(errorCode) }}</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="date">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date" v-model="form.date" autocomplete="off">
+            <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
+              <p v-for="errorCode in formResult.validationErrorsByField.date">{{ $t(errorCode) }}</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentType">{{ $t('term.paymentType') }}</label> <input type="text" class="form-control" id="paymentType" v-model="form.paymentType" autocomplete="off">
+            <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.paymentType">
+              <p v-for="errorCode in formResult.validationErrorsByField.paymentType">{{ $t(errorCode) }}</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="price">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price" v-model="form.price" autocomplete="off">
+            <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
+              <p v-for="errorCode in formResult.validationErrorsByField.price">{{ $t(errorCode) }}</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+          <button type="button" class="btn btn-success" v-on:click="create()">{{ $t('button.create') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="col-12">
 
     <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>

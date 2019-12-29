@@ -17,6 +17,8 @@ public interface EntitlementService {
 
     void canCreateItemOrFail(String userId);
 
+    void canCreatePaymentOrFail(String userId);
+
     void canViewClientOrFail(String userId);
 
     void canViewItemAllOrFail(String userId);
