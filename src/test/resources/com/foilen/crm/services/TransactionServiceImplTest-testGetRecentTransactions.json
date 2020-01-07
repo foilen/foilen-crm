@@ -1,0 +1,121 @@
+[ {
+  "version" : 0,
+  "client" : {
+    "name" : "Avez",
+    "shortName" : "avez",
+    "contactName" : "Alex Aubut",
+    "email" : "alex@example.com",
+    "address" : "2500 Alegria",
+    "tel" : "555-202-0202",
+    "mainSite" : "http://avez.example.com",
+    "lang" : "EN",
+    "technicalSupport" : {
+      "version" : 0,
+      "sid" : "S2",
+      "pricePerHour" : 2000
+    },
+    "langAsLocale" : "en"
+  },
+  "invoiceId" : "I16",
+  "date" : 1547614800000,
+  "description" : "TX 16",
+  "price" : 1600,
+  "balanceFormatted" : "136.00",
+  "priceFormatted" : "16.00"
+}, {
+  "version" : 0,
+  "client" : {
+    "name" : "Avez",
+    "shortName" : "avez",
+    "contactName" : "Alex Aubut",
+    "email" : "alex@example.com",
+    "address" : "2500 Alegria",
+    "tel" : "555-202-0202",
+    "mainSite" : "http://avez.example.com",
+    "lang" : "EN",
+    "technicalSupport" : {
+      "version" : 0,
+      "sid" : "S2",
+      "pricePerHour" : 2000
+    },
+    "langAsLocale" : "en"
+  },
+  "invoiceId" : "I17",
+  "date" : 1547701200000,
+  "description" : "TX 17",
+  "price" : 1700,
+  "balanceFormatted" : "153.00",
+  "priceFormatted" : "17.00"
+}, {
+  "version" : 0,
+  "client" : {
+    "name" : "Avez",
+    "shortName" : "avez",
+    "contactName" : "Alex Aubut",
+    "email" : "alex@example.com",
+    "address" : "2500 Alegria",
+    "tel" : "555-202-0202",
+    "mainSite" : "http://avez.example.com",
+    "lang" : "EN",
+    "technicalSupport" : {
+      "version" : 0,
+      "sid" : "S2",
+      "pricePerHour" : 2000
+    },
+    "langAsLocale" : "en"
+  },
+  "invoiceId" : "I18",
+  "date" : 1547787600000,
+  "description" : "TX 18",
+  "price" : 1800,
+  "balanceFormatted" : "171.00",
+  "priceFormatted" : "18.00"
+}, {
+  "version" : 0,
+  "client" : {
+    "name" : "Avez",
+    "shortName" : "avez",
+    "contactName" : "Alex Aubut",
+    "email" : "alex@example.com",
+    "address" : "2500 Alegria",
+    "tel" : "555-202-0202",
+    "mainSite" : "http://avez.example.com",
+    "lang" : "EN",
+    "technicalSupport" : {
+      "version" : 0,
+      "sid" : "S2",
+      "pricePerHour" : 2000
+    },
+    "langAsLocale" : "en"
+  },
+  "invoiceId" : "I19",
+  "date" : 1547874000000,
+  "description" : "TX 19",
+  "price" : 1900,
+  "balanceFormatted" : "190.00",
+  "priceFormatted" : "19.00"
+}, {
+  "version" : 0,
+  "client" : {
+    "name" : "Avez",
+    "shortName" : "avez",
+    "contactName" : "Alex Aubut",
+    "email" : "alex@example.com",
+    "address" : "2500 Alegria",
+    "tel" : "555-202-0202",
+    "mainSite" : "http://avez.example.com",
+    "lang" : "EN",
+    "technicalSupport" : {
+      "version" : 0,
+      "sid" : "S2",
+      "pricePerHour" : 2000
+    },
+    "langAsLocale" : "en"
+  },
+  "invoiceId" : "I20",
+  "date" : 1547960400000,
+  "description" : "TX 20",
+  "price" : 2000,
+  "balanceFormatted" : "210.00",
+  "priceFormatted" : "20.00"
+} ]

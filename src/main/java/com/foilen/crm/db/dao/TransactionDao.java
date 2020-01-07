@@ -11,8 +11,6 @@ package com.foilen.crm.db.dao;
 
 import java.util.List;
 
-import javax.persistence.OrderBy;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,8 +31,7 @@ public interface TransactionDao extends JpaRepository<Transaction, Long> {
 
     Transaction findByInvoiceId(String invoiceId);
 
-    @OrderBy("date DESC")
-    List<Transaction> findFirst5ByClient(Client client);
+    List<Transaction> findFirst5ByClientOrderByDateDesc(@Param("client") Client client);
 
     @Query("SELECT SUM(t.price) " //
             + "FROM Transaction t " //

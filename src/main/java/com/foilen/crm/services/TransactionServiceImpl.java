@@ -144,17 +144,8 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         // Get the extra details
         Client client = transaction.getClient();
         List<Item> items = itemDao.findAllByInvoiceId(transaction.getInvoiceId());
-        List<TransactionWithBalance> recentsTransactions = transactionDao.findFirst5ByClient(client) //
-                .stream() //
-                .map(it -> JsonTools.clone(it, TransactionWithBalance.class)) //
-                .collect(Collectors.toList());
+        List<TransactionWithBalance> recentsTransactions = getRecentTransactions(client);
         long accountBalance = transactionDao.findTotalByClient(client);
-        long cumulativePrice = accountBalance;
-        for (int i = recentsTransactions.size() - 1; i >= 0; --i) {
-            TransactionWithBalance transactionWithBalance = recentsTransactions.get(i);
-            transactionWithBalance.setBalanceFormatted(cumulativePrice);
-            cumulativePrice -= transactionWithBalance.getPrice();
-        }
 
         // Create the HTML
         Map<String, Object> model = new HashMap<>();
@@ -213,6 +204,22 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
             DirectoryTools.deleteFolder(tmpFolder);
         }
 
+    }
+
+    protected List<TransactionWithBalance> getRecentTransactions(Client client) {
+        List<TransactionWithBalance> recentsTransactions = transactionDao.findFirst5ByClientOrderByDateDesc(client) //
+                .stream() //
+                .map(it -> JsonTools.clone(it, TransactionWithBalance.class)) //
+                .sorted((a, b) -> a.getDate().compareTo(b.getDate())) //
+                .collect(Collectors.toList());
+        long accountBalance = transactionDao.findTotalByClient(client);
+        long cumulativePrice = accountBalance;
+        for (int i = recentsTransactions.size() - 1; i >= 0; --i) {
+            TransactionWithBalance transactionWithBalance = recentsTransactions.get(i);
+            transactionWithBalance.setBalanceFormatted(cumulativePrice);
+            cumulativePrice -= transactionWithBalance.getPrice();
+        }
+        return recentsTransactions;
     }
 
     @Override
