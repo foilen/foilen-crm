@@ -11,7 +11,9 @@ package com.foilen.crm.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -26,9 +28,11 @@ import com.foilen.crm.db.dao.ItemDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.Transaction;
+import com.foilen.crm.web.model.BillSomePendingItems;
 import com.foilen.crm.web.model.CreateItem;
 import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
+import com.foilen.smalltools.tools.CollectionsTools;
 import com.foilen.smalltools.tools.JsonTools;
 
 @Service
@@ -68,6 +72,58 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
             }
 
             Transaction transaction = transactionService.createTransaction(client, items, invoicePrefix, invoiceSuffix);
+            newTransactions.add(transaction);
+        }
+
+        // Send emails
+        newTransactions.forEach(transaction -> transactionService.sendInvoice(transaction));
+
+        return formResult;
+    }
+
+    @Override
+    public FormResult billSomePending(String userId, BillSomePendingItems form) {
+
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canBillItemOrFail(userId);
+        validateMandatory(formResult, "invoicePrefix", form.getInvoicePrefix());
+
+        // Get all items
+        List<Item> itemsToBill = itemDao.findAllById(form.getItemToBillIds());
+
+        // Ensure all found
+        if (itemsToBill.size() != form.getItemToBillIds().size()) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), "itemToBillIds", String.class).add("error.mandatory");
+        }
+
+        // Ensure all not billed
+        if (itemsToBill.stream().anyMatch(it -> it.getInvoiceId() != null)) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), "itemToBillIds", String.class).add("error.someAlreadyBilled");
+        }
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Put per client
+        Map<Client, List<Item>> itemsPerClient = itemsToBill.stream().collect(Collectors.groupingBy(Item::getClient));
+
+        // Per client
+        AtomicLong invoiceSuffix = new AtomicLong(1);
+        List<Transaction> newTransactions = new ArrayList<>();
+        for (Client client : itemsPerClient.keySet()) {
+            logger.info("Processing client {}", client);
+
+            // Create a transaction
+            List<Item> items = itemsPerClient.get(client);
+            logger.info("Client {} has {} pending items", client, items.size());
+            if (items.isEmpty()) {
+                continue;
+            }
+
+            Transaction transaction = transactionService.createTransaction(client, items, form.getInvoicePrefix(), invoiceSuffix);
             newTransactions.add(transaction);
         }
 

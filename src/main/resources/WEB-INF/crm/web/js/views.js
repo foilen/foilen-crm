@@ -199,6 +199,31 @@ const ItemsList = Vue.component('items-list', function(resolve, reject) {
             }
           })
         },
+        billSelected : function() {
+          var c = this
+          c.formResult = {}
+          console.log('Item - Bill Selected', c.form)
+          httpPost('/api/item/billSomePending', c.form, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#billSelectedModal .btn-secondary').click()
+              c.refresh()
+            }
+          })
+        },
+        showBillSelected : function() {
+          var c = this
+          c.form = {
+            itemToBillIds : []
+          }
+          c.pending.items.forEach(function(element) {
+            if (element.selected) {
+              c.form.itemToBillIds.push(element.id)
+            }
+          })
+          console.log(c.form.itemToBillIds)
+          jQuery('#billSelectedModal').modal()
+        },
       },
       mounted : function() {
         this.refresh()

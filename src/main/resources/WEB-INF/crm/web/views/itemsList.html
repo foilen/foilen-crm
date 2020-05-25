@@ -70,7 +70,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="cbillPendingModalLabel">{{ $t('button.create') }}</h5>
+            <h5 class="modal-title" id="cbillPendingModalLabel">{{ $t('button.billPending') }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -94,12 +94,44 @@
         </div>
       </div>
     </div>
+    
+    <div class="modal fade" id="billSelectedModal" tabindex="-1" role="dialog" aria-labelledby="billSelectedModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cbillSelectedModalLabel">{{ $t('button.billSelected') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <error-results v-bind:formResult="formResult"></error-results>
+
+            <div class="form-group">
+              <label for="invoicePrefix">{{ $t('term.invoicePrefix') }}</label> <input type="text" class="form-control" id="invoicePrefix" v-model="form.invoicePrefix" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.invoicePrefix">
+                <p v-for="errorCode in formResult.validationErrorsByField.invoicePrefix">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            
+            <p>{{form.itemToBillIds?.length}} {{$t('term.items')}}</p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+            <button type="button" class="btn btn-success" v-on:click="billSelected()">{{ $t('button.billSelected') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <pagination class="float-right" v-bind:pagination="pending.pagination" v-on:changePage="refreshPending($event.pageId)"></pagination>
 
     <table class="table table-striped">
       <thead>
         <tr>
+          <th></th>
           <th scope="col">{{ $t('term.client') }}</th>
           <th scope="col">{{ $t('term.date') }}</th>
           <th scope="col">{{ $t('term.category') }}</th>
@@ -109,6 +141,7 @@
       </thead>
       <tbody>
         <tr v-for="item in pending.items">
+          <td><input type="checkbox" v-model="item.selected"></td>
           <td>{{item.client.name}} ({{item.client.email}}) ({{item.client.lang}})</td>
           <td>{{item.dateFormatted}}</td>
           <td>{{item.category}}</td>
@@ -117,6 +150,10 @@
         </tr>
       </tbody>
     </table>
+
+    <button type="button" class="float-right btn btn-success" v-on:click="showBillSelected()">{{ $t('button.billSelected') }}</button>
+
+    <hr />
 
     <h1>{{ $t('term.billed') }}</h1>
 

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.foilen.crm.services.ItemService;
 import com.foilen.crm.web.model.BillPendingItems;
+import com.foilen.crm.web.model.BillSomePendingItems;
 import com.foilen.crm.web.model.CreateItem;
 import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
@@ -38,6 +39,13 @@ public class ItemApiController {
             @RequestBody BillPendingItems form //
     ) {
         return itemService.billPending(authentication.getName(), form.getInvoicePrefix());
+    }
+
+    @PostMapping("billSomePending")
+    public FormResult billSomePending(Authentication authentication, //
+            @RequestBody BillSomePendingItems form //
+    ) {
+        return itemService.billSomePending(authentication.getName(), form);
     }
 
     @PostMapping("")

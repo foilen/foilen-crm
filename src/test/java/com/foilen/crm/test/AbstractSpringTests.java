@@ -103,6 +103,7 @@ public abstract class AbstractSpringTests {
                 .map(e -> {
                     com.foilen.crm.web.model.Item t = JsonTools.clone(e, com.foilen.crm.web.model.Item.class);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
+                    t.setId(null);
                     t.setDate(null);
                     return t;
                 }) //

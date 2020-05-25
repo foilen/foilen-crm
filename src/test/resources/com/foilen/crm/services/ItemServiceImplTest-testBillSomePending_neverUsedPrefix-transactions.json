@@ -1,0 +1,26 @@
+{
+  "added" : [ {
+    "client" : {
+      "email" : "zeo@example.com",
+      "lang" : "FR",
+      "name" : "Zoo Alphonce",
+      "shortName" : "zooa"
+    },
+    "description" : "Facture I190701-1",
+    "invoiceId" : "I190701-1",
+    "price" : 1000,
+    "priceFormatted" : "10.00"
+  }, {
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "description" : "Invoice I190701-2",
+    "invoiceId" : "I190701-2",
+    "price" : 500,
+    "priceFormatted" : "5.00"
+  } ],
+  "removed" : [ ]
+}

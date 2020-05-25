@@ -17,6 +17,8 @@ import com.foilen.smalltools.tools.PriceFormatTools;
 
 public class Item extends AbstractApiBase {
 
+    private Long id;
+
     private ClientShort client;
 
     private String invoiceId;
@@ -49,6 +51,10 @@ public class Item extends AbstractApiBase {
         return description;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getInvoiceId() {
         return invoiceId;
     }
@@ -61,28 +67,39 @@ public class Item extends AbstractApiBase {
         return PriceFormatTools.toDigit(price);
     }
 
-    public void setCategory(String category) {
+    public Item setCategory(String category) {
         this.category = category;
+        return this;
     }
 
-    public void setClient(ClientShort client) {
+    public Item setClient(ClientShort client) {
         this.client = client;
+        return this;
     }
 
-    public void setDate(Date date) {
+    public Item setDate(Date date) {
         this.date = date;
+        return this;
     }
 
-    public void setDescription(String description) {
+    public Item setDescription(String description) {
         this.description = description;
+        return this;
     }
 
-    public void setInvoiceId(String invoiceId) {
+    public Item setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Item setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+        return this;
     }
 
-    public void setPrice(long price) {
+    public Item setPrice(long price) {
         this.price = price;
+        return this;
     }
 
 }

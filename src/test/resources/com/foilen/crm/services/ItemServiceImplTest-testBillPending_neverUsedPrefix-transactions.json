@@ -1,67 +1,37 @@
-[ {
-  "client" : {
-    "email" : "alex@example.com",
-    "lang" : "EN",
-    "name" : "Avez",
-    "shortName" : "avez"
-  },
-  "description" : "Invoice I190601-1",
-  "invoiceId" : "I190601-1",
-  "price" : 500,
-  "priceFormatted" : "5.00"
-}, {
-  "client" : {
-    "email" : "benoit@example.com",
-    "lang" : "FR",
-    "name" : "Bazar",
-    "shortName" : "bazar"
-  },
-  "description" : "Facture I190601-2",
-  "invoiceId" : "I190601-2",
-  "price" : 2500,
-  "priceFormatted" : "25.00"
-}, {
-  "client" : {
-    "email" : "zeo@example.com",
-    "lang" : "FR",
-    "name" : "Zoo Alphonce",
-    "shortName" : "zooa"
-  },
-  "description" : "Facture I190601-3",
-  "invoiceId" : "I190601-3",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
-}, {
-  "client" : {
-    "email" : "alex@example.com",
-    "lang" : "EN",
-    "name" : "Avez",
-    "shortName" : "avez"
-  },
-  "description" : "Invoice I190701-1",
-  "invoiceId" : "I190701-1",
-  "price" : 2500,
-  "priceFormatted" : "25.00"
-}, {
-  "client" : {
-    "email" : "benoit@example.com",
-    "lang" : "FR",
-    "name" : "Bazar",
-    "shortName" : "bazar"
-  },
-  "description" : "Facture I190701-2",
-  "invoiceId" : "I190701-2",
-  "price" : 500,
-  "priceFormatted" : "5.00"
-}, {
-  "client" : {
-    "email" : "zeo@example.com",
-    "lang" : "FR",
-    "name" : "Zoo Alphonce",
-    "shortName" : "zooa"
-  },
-  "description" : "Facture I190701-3",
-  "invoiceId" : "I190701-3",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
-} ]
+{
+  "added" : [ {
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "description" : "Invoice I190701-1",
+    "invoiceId" : "I190701-1",
+    "price" : 2500,
+    "priceFormatted" : "25.00"
+  }, {
+    "client" : {
+      "email" : "benoit@example.com",
+      "lang" : "FR",
+      "name" : "Bazar",
+      "shortName" : "bazar"
+    },
+    "description" : "Facture I190701-2",
+    "invoiceId" : "I190701-2",
+    "price" : 500,
+    "priceFormatted" : "5.00"
+  }, {
+    "client" : {
+      "email" : "zeo@example.com",
+      "lang" : "FR",
+      "name" : "Zoo Alphonce",
+      "shortName" : "zooa"
+    },
+    "description" : "Facture I190701-3",
+    "invoiceId" : "I190701-3",
+    "price" : 1000,
+    "priceFormatted" : "10.00"
+  } ],
+  "removed" : [ ]
+}
