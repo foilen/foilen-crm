@@ -5,7 +5,7 @@ buildscript {
   }
 }
 plugins {
-  id 'org.springframework.boot' version '2.1.9.RELEASE'
+  id 'org.springframework.boot' version '2.3.1.RELEASE'
 }
 
 apply plugin: 'eclipse'
@@ -47,10 +47,10 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-jdbc"
   
   // Emails
-  compile 'com.sun.mail:javax.mail'
-  compile 'javax.activation:activation'
+  compile 'com.sun.mail:javax.mail:1.6.2'
+  compile 'javax.activation:activation:1.1.1'
   compile 'org.freemarker:freemarker'
-  compile 'org.xhtmlrenderer:flying-saucer-pdf:9.1.19'
+  compile 'org.xhtmlrenderer:flying-saucer-pdf:9.1.20'
 
   // Web
   compile "com.foilen:foilen-login-api:$foilenLoginApiVersion"
@@ -66,10 +66,10 @@ dependencies {
 
   // Misc
   compile "args4j:args4j:$argsVersion"
-  compile 'com.google.code.findbugs:jsr305:3.0.0'
+  compile 'com.google.code.findbugs:jsr305:3.0.2'
   compile "com.foilen:jl-smalltools:$smalltoolsVersion"
   compile "commons-validator:commons-validator:$commonsValidatorVersion"
-  compile 'org.apache.commons:commons-text:1.6'
+  compile 'org.apache.commons:commons-text:1.8'
   compile "javax.xml.bind:jaxb-api"
   compile 'org.quartz-scheduler:quartz'
 
@@ -77,8 +77,8 @@ dependencies {
   testCompileOnly 'junit:junit'
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
   testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitVersion"
-  testCompile 'org.junit.platform:junit-platform-commons:1.5.2'
-  testCompile 'org.junit.platform:junit-platform-engine:1.5.2'
+  testCompile 'org.junit.platform:junit-platform-commons:1.6.2'
+  testCompile 'org.junit.platform:junit-platform-engine:1.6.2'
   testCompile "org.springframework:spring-test"
   testCompile "org.springframework.boot:spring-boot-starter-test"
   
