@@ -106,8 +106,8 @@ public class CrmApp {
 
                 config.setBaseUrl("http://127.0.0.1:8080");
 
-                config.setMysqlDatabaseUserName("notNeeded");
-                config.setMysqlDatabasePassword("notNeeded");
+                config.setMysqlDatabaseUserName("root");
+                config.setMysqlDatabasePassword("ABC");
 
                 config.setMailFrom("crm@example.com");
 
@@ -144,8 +144,6 @@ public class CrmApp {
 
             // Config per mode
             switch (mode) {
-            case "LOCAL":
-                break;
             case "PROD":
                 // Configure login service
                 File loginConfigFile = File.createTempFile("loginConfig", ".json");
@@ -153,6 +151,7 @@ public class CrmApp {
                 System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
                 System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
 
+            case "LOCAL": // And PROD
                 // Configure database
                 System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
                 System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());

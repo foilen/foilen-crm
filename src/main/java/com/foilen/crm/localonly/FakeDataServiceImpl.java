@@ -113,6 +113,12 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
                 .setAddress("300 Zenith").setTel("555-303-0303") //
                 .setMainSite("http://zoo.example.com") //
                 .setLang("FR").setTechnicalSupport(s2));
+        clientDao.saveAndFlush(new Client() //
+                .setName("Extra Vanilla").setShortName("extra") //
+                .setContactName("Extra Vanilla").setEmail("extra@example.com") //
+                .setAddress("300 Zenith").setTel("555-303-4444") //
+                .setMainSite("http://extra.example.com") //
+                .setLang("FR").setTechnicalSupport(s2));
 
     }
 
@@ -122,6 +128,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
 
         Client clientAvez = clientDao.findByShortName("avez");
         Client clientBazar = clientDao.findByShortName("bazar");
+        Client clientExtra = clientDao.findByShortName("extra");
         Client clientZooa = clientDao.findByShortName("zooa");
 
         // Pending
@@ -135,6 +142,14 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         itemDao.save(new Item(clientBazar, "I190601-2", DateTools.parseDateOnly("2019-05-05"), "Install Wordpress", 2000, "consulting"));
         itemDao.save(new Item(clientBazar, "I190601-2", DateTools.parseDateOnly("2019-05-01"), "Shared hosting - L1", 500, "hosting"));
         itemDao.save(new Item(clientZooa, "I190601-3", DateTools.parseDateOnly("2019-05-01"), "Shared hosting - L2", 1000, "hosting"));
+
+        for (int i = 1; i <= 12; ++i) {
+            String textMonth = String.valueOf(i);
+            if (textMonth.length() == 1) {
+                textMonth = "0" + textMonth;
+            }
+            itemDao.save(new Item(clientExtra, "I19" + textMonth + "01-5", DateTools.parseDateOnly("2019-" + textMonth + "-01"), "Delivery", 1000, "delivery"));
+        }
 
     }
 
@@ -166,11 +181,20 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
 
         Client clientAvez = clientDao.findByShortName("avez");
         Client clientBazar = clientDao.findByShortName("bazar");
+        Client clientExtra = clientDao.findByShortName("extra");
         Client clientZooa = clientDao.findByShortName("zooa");
 
         transactionDao.save(new Transaction(clientAvez, "I190601-1", DateTools.parseDateOnly("2019-06-01"), "Invoice I190601-1", 500));
         transactionDao.save(new Transaction(clientBazar, "I190601-2", DateTools.parseDateOnly("2019-06-01"), "Facture I190601-2", 2500));
         transactionDao.save(new Transaction(clientZooa, "I190601-3", DateTools.parseDateOnly("2019-06-01"), "Facture I190601-3", 1000));
+
+        for (int i = 1; i <= 12; ++i) {
+            String textMonth = String.valueOf(i);
+            if (textMonth.length() == 1) {
+                textMonth = "0" + textMonth;
+            }
+            transactionDao.save(new Transaction(clientExtra, "I19" + textMonth + "01-5", DateTools.parseDateOnly("2019-" + textMonth + "-01"), "Facture I19" + textMonth + "01-5", 1000));
+        }
 
     }
 

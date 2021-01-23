@@ -48,8 +48,6 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         recurrentItemService.generateReady(DateTools.parseFull("2019-07-01 00:45:00"));
 
-        // String finalRecurrentItems = JsonTools.prettyPrintWithoutNulls(recurrentItemDao.findAll(Sort.by("client.name", "description")));
-
         AssertTools.assertJsonComparisonWithoutNulls("RecurrentItemServiceImplTest-testGenerateReady_ok-items.json", getClass(), trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
         AssertTools.assertJsonComparisonWithoutNulls("RecurrentItemServiceImplTest-testGenerateReady_ok-recurrentItems.json", getClass(),
                 trimRecurrentItem(recurrentItemDao.findAll(Sort.by("client.name", "description"))));

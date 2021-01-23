@@ -76,6 +76,66 @@
   "price" : 1000,
   "priceFormatted" : "10.00"
 }, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190101-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190201-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190301-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190401-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190501-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
   "category" : "hosting",
   "client" : {
     "email" : "alex@example.com",
@@ -121,6 +181,90 @@
   },
   "description" : "Shared hosting - L2",
   "invoiceId" : "I190601-3",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190601-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190701-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190801-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I190901-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I191001-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I191101-5",
+  "price" : 1000,
+  "priceFormatted" : "10.00"
+}, {
+  "category" : "delivery",
+  "client" : {
+    "email" : "extra@example.com",
+    "lang" : "FR",
+    "name" : "Extra Vanilla",
+    "shortName" : "extra"
+  },
+  "description" : "Delivery",
+  "invoiceId" : "I191201-5",
   "price" : 1000,
   "priceFormatted" : "10.00"
 } ]
