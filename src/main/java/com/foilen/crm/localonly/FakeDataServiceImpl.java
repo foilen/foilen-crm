@@ -38,6 +38,9 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
     public static final String USER_ID_USER = "222222";
     public static final String USER_ID_TEST_1 = "333333";
 
+    public static final String CLIENT_SHORTNAME_BAZAR = "bazar";
+    public static final String CLIENT_SHORTNAME_EXTRA = "extra";
+
     @Autowired
     private ClientDao clientDao;
     @Autowired
@@ -96,7 +99,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         TechnicalSupport s2 = technicalSupportDao.findBySid("S2");
 
         clientDao.saveAndFlush(new Client() //
-                .setName("Bazar").setShortName("bazar") //
+                .setName("Bazar").setShortName(CLIENT_SHORTNAME_BAZAR) //
                 .setContactName("Benoit Bezos").setEmail("benoit@example.com") //
                 .setAddress("1010 Betancour").setTel("555-101-0101") //
                 .setMainSite("http://bazar.example.com") //
@@ -114,11 +117,11 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
                 .setMainSite("http://zoo.example.com") //
                 .setLang("FR").setTechnicalSupport(s2));
         clientDao.saveAndFlush(new Client() //
-                .setName("Extra Vanilla").setShortName("extra") //
+                .setName("Extra Vanilla").setShortName(CLIENT_SHORTNAME_EXTRA) //
                 .setContactName("Extra Vanilla").setEmail("extra@example.com") //
                 .setAddress("300 Zenith").setTel("555-303-4444") //
                 .setMainSite("http://extra.example.com") //
-                .setLang("FR").setTechnicalSupport(s2));
+                .setLang("FR"));
 
     }
 
@@ -127,8 +130,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         logger.info("createItems");
 
         Client clientAvez = clientDao.findByShortName("avez");
-        Client clientBazar = clientDao.findByShortName("bazar");
-        Client clientExtra = clientDao.findByShortName("extra");
+        Client clientBazar = clientDao.findByShortName(CLIENT_SHORTNAME_BAZAR);
+        Client clientExtra = clientDao.findByShortName(CLIENT_SHORTNAME_EXTRA);
         Client clientZooa = clientDao.findByShortName("zooa");
 
         // Pending
@@ -158,7 +161,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         logger.info("createRecurrentItems");
 
         Client clientAvez = clientDao.findByShortName("avez");
-        Client clientBazar = clientDao.findByShortName("bazar");
+        Client clientBazar = clientDao.findByShortName(CLIENT_SHORTNAME_BAZAR);
         Client clientZooa = clientDao.findByShortName("zooa");
 
         recurrentItemDao.save(new RecurrentItem(clientAvez, "Shared hosting - L1", 500, "hosting", Calendar.MONTH, 1, DateTools.parseDateOnly("2019-07-01")));
@@ -180,8 +183,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         logger.info("createTransactions");
 
         Client clientAvez = clientDao.findByShortName("avez");
-        Client clientBazar = clientDao.findByShortName("bazar");
-        Client clientExtra = clientDao.findByShortName("extra");
+        Client clientBazar = clientDao.findByShortName(CLIENT_SHORTNAME_BAZAR);
+        Client clientExtra = clientDao.findByShortName(CLIENT_SHORTNAME_EXTRA);
         Client clientZooa = clientDao.findByShortName("zooa");
 
         transactionDao.save(new Transaction(clientAvez, "I190601-1", DateTools.parseDateOnly("2019-06-01"), "Invoice I190601-1", 500));

@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.BillSomePendingItems;
+import com.foilen.crm.web.model.CreateItemWithTime;
+import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.test.asserts.AssertTools;
 
 public class ItemServiceImplTest extends AbstractSpringTests {
@@ -71,6 +73,61 @@ public class ItemServiceImplTest extends AbstractSpringTests {
                 trimTransaction(transactionDao.findAll(Sort.by("invoiceId"))));
         AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testBillSomePending_neverUsedPrefix-items.json", getClass(), initialItems,
                 trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testCreateWithTime() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        CreateItemWithTime form = new CreateItemWithTime();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
+        form.setCategory("technical support");
+        form.setDate("2019-08-08");
+        form.setDescription("Fixing a code 18");
+        form.setHours(2);
+        form.setMinutes(10);
+
+        FormResult result = itemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
+        AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testCreateWithTime_noTechSupport_FAIL() {
+
+        CreateItemWithTime form = new CreateItemWithTime();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_EXTRA);
+        form.setCategory("technical support");
+        form.setDate("2019-08-08");
+        form.setDescription("Fixing a code 18");
+        form.setHours(2);
+        form.setMinutes(10);
+
+        FormResult result = itemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
+        AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testCreateWithTime_noTechSupport_FAIL.json", getClass(), result);
+
+    }
+
+    @Test
+    public void testCreateWithTime_rolling() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        CreateItemWithTime form = new CreateItemWithTime();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
+        form.setCategory("technical support");
+        form.setDate("2019-08-08");
+        form.setDescription("Fixing a code 18");
+        form.setMinutes(130);
+
+        FormResult result = itemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
+        AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
 
     }
 

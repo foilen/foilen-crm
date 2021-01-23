@@ -81,7 +81,13 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
         bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-i18n-8.22.4.js");
 
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/errors.js");
-        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-ClientsList.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-Home.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-ItemsList.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-RecurrentItemsList.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-ReportsList.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-TransactionsList.js");
+        bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-TechnicalSupportsList.js");
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/components.js");
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/features.js");
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/app.js");

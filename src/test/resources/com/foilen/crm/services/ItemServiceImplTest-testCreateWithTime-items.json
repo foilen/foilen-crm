@@ -1,0 +1,15 @@
+{
+  "added" : [ {
+    "category" : "technical support",
+    "client" : {
+      "email" : "benoit@example.com",
+      "lang" : "FR",
+      "name" : "Bazar",
+      "shortName" : "bazar"
+    },
+    "description" : "Fixing a code 18 (2h 10m)",
+    "price" : 2167,
+    "priceFormatted" : "21.67"
+  } ],
+  "removed" : [ ]
+}

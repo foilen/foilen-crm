@@ -23,6 +23,7 @@ import com.foilen.crm.services.ItemService;
 import com.foilen.crm.web.model.BillPendingItems;
 import com.foilen.crm.web.model.BillSomePendingItems;
 import com.foilen.crm.web.model.CreateItem;
+import com.foilen.crm.web.model.CreateItemWithTime;
 import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
 
@@ -51,6 +52,13 @@ public class ItemApiController {
     @PostMapping("")
     public FormResult create(Authentication authentication, //
             @RequestBody CreateItem form //
+    ) {
+        return itemService.create(authentication.getName(), form);
+    }
+
+    @PostMapping("createWithTime")
+    public FormResult create(Authentication authentication, //
+            @RequestBody CreateItemWithTime form //
     ) {
         return itemService.create(authentication.getName(), form);
     }

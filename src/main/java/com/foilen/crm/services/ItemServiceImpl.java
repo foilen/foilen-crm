@@ -27,13 +27,16 @@ import org.springframework.stereotype.Service;
 import com.foilen.crm.db.dao.ItemDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
+import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.web.model.BillSomePendingItems;
 import com.foilen.crm.web.model.CreateItem;
+import com.foilen.crm.web.model.CreateItemWithTime;
 import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.CollectionsTools;
 import com.foilen.smalltools.tools.JsonTools;
+import com.foilen.smalltools.tools.TimeConverterTools;
 
 @Service
 @Transactional
@@ -153,6 +156,42 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         // Create
         Item entity = JsonTools.clone(form, Item.class);
         entity.setClient(client);
+        itemDao.save(entity);
+
+        return formResult;
+
+    }
+
+    @Override
+    public FormResult create(String userId, CreateItemWithTime form) {
+
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canCreateItemOrFail(userId);
+        validateMandatory(formResult, "clientShortName", form.getClientShortName());
+        validateDateOnly(formResult, "date", form.getDate());
+        validateMandatory(formResult, "date", form.getDate());
+        validateMandatory(formResult, "description", form.getDescription());
+        validateMandatory(formResult, "category", form.getCategory());
+        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+        TechnicalSupport technicalSupport = validateTechnicalSupportByClient(formResult, "clientShortName", client);
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Create
+        Item entity = JsonTools.clone(form, Item.class);
+        entity.setClient(client);
+
+        // Calculate time and price
+        long minutes = form.getHours() * 60 + form.getMinutes();
+        double price = minutes / 60d * technicalSupport.getPricePerHour();
+        entity.setPrice(Math.round(price));
+
+        entity.setDescription(entity.getDescription() + " (" + TimeConverterTools.convertToTextFromMin(minutes) + ")");
+
         itemDao.save(entity);
 
         return formResult;

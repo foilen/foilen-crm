@@ -141,4 +141,19 @@ public abstract class AbstractApiService extends AbstractBasics {
         return technicalSupport;
 
     }
+
+    protected TechnicalSupport validateTechnicalSupportByClient(FormResult formResult, String clientFieldName, Client client) {
+
+        if (client == null) {
+            return null;
+        }
+
+        TechnicalSupport technicalSupport = client.getTechnicalSupport();
+        if (technicalSupport == null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), clientFieldName, String.class).add("error.clientWithoutTechnicalSupport");
+            return null;
+        }
+
+        return technicalSupport;
+    }
 }
