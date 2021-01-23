@@ -67,18 +67,18 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
         BundleResourceResolver bundleResourceResolver = new BundleResourceResolver().setCache(isProd) //
                 .setGenerateGzip(true);
 
-        bundleResourceResolver.addBundleResource("all-vendors.css", "/WEB-INF/crm/web/css/vendors/bootstrap-4.3.1.min.css");
+        bundleResourceResolver.addBundleResource("all-vendors.css", "/WEB-INF/crm/web/css/vendors/bootstrap-4.6.0.min.css");
 
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/jquery-3.4.1.min.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/jquery-3.5.1.min.js");
         bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/js-cookie-2.2.1.min.js");
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/bootstrap-4.3.1.bundle.min.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/bootstrap-4.6.0.bundle.min.js");
         if (isProd) {
-            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.10.min.js");
+            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.12.min.js");
         } else {
-            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.10-dev.js");
+            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.12-dev.js");
         }
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-router-3.1.3.js");
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-i18n-8.15.0.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-router-3.4.9.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-i18n-8.22.4.js");
 
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/errors.js");
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views.js");
