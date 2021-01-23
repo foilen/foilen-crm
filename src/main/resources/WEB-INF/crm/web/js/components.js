@@ -115,37 +115,6 @@ Vue.component('pagination', function(resolve, reject) {
 
 })
 
-Vue.component('table-header-search', function(resolve, reject) {
-
-  const url = 'components/table-header-search.html'
-
-  jQuery.get(url).done(function(htmlTemplate) {
-
-    resolve({
-      data : function() {
-        return {}
-      },
-      props : [ 'title', 'value', 'width' ],
-      computed : {},
-      methods : {
-        changed : function(event) {
-          if (event.keyCode === 13) {
-            this.$emit('input', event.target.value)
-          }
-        }
-      },
-      template : htmlTemplate,
-    })
-
-  }).fail(function(jqXHR, textStatus, errorThrown) {
-    var escapedResponseText = new Option(jqXHR.responseText).innerHTML;
-    var error = 'Could not get the template ' + url + ' . Error: ' + textStatus + ' ' + errorThrown + '<br/>' + escapedResponseText;
-    errorShow(error)
-    reject(error)
-  })
-
-})
-
 Vue.component('technical-support-select', function(resolve, reject) {
 
   const url = 'components/technical-support-select.html'
