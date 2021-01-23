@@ -36,12 +36,12 @@ import com.foilen.smalltools.spring.resourceresolver.BundleResourceResolver;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @Configuration
-@EnableSwagger2WebMvc
+@EnableOpenApi
 @ComponentScan({ "com.foilen.crm.web" })
 public class CrmWebSpringConfig implements WebMvcConfigurer {
 
@@ -52,7 +52,7 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
+
         registry.addResourceHandler("/**").addResourceLocations("classpath:/WEB-INF/crm/web/");
 
         boolean isProd = "PROD".equals(System.getProperty("MODE"));

@@ -94,5 +94,5 @@ When done, cleanup by stopping the DB: `docker stop crm_db` .
 
 ## Swagger
 
-You can see the API documentation here: http://localhost:8888/swagger-ui.html
+You can see the API documentation here: http://localhost:8888/swagger-ui/index.html
 
