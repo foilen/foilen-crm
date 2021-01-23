@@ -27,7 +27,7 @@ Here is an example of the content:
 
 ```json
 {
-	"baseUrl" : "http://127.0.0.1:8080",
+	"baseUrl" : "http://127.0.0.1:8888",
 	
 	"mysqlHostName" : "127.0.0.1",
 	"mysqlPort" : 3306,
@@ -94,5 +94,5 @@ When done, cleanup by stopping the DB: `docker stop crm_db` .
 
 ## Swagger
 
-You can see the API documentation here: http://localhost:8080/swagger-ui.html
+You can see the API documentation here: http://localhost:8888/swagger-ui.html
 

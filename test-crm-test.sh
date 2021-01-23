@@ -49,7 +49,7 @@ fi
 # Config file
 cat > $FOLDER_DATA/config.json << _EOF
 {
-	"baseUrl" : "http://127.0.0.1:8080",
+	"baseUrl" : "http://127.0.0.1:8888",
 	
 	"mysqlDatabaseName" : "crm",
 	"mysqlDatabaseUserName" : "root",
@@ -80,7 +80,7 @@ docker run -ti \
   --env CONFIG_FILE=/data/config.json \
   --user $USER_ID \
   --volume $FOLDER_DATA:/data \
-  --publish 8080:8080 \
+  --publish 8888:8080 \
   --link ${INSTANCE}:mysql \
   foilen-crm:master-SNAPSHOT
 

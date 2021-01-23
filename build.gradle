@@ -5,13 +5,12 @@ buildscript {
   }
 }
 plugins {
-  id 'org.springframework.boot' version '2.3.1.RELEASE'
+  id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+  id 'org.springframework.boot' version "$springBootVersion"
 }
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-
 
 group = 'com.foilen'
 version = System.getenv('VERSION')?:'master-SNAPSHOT'
@@ -66,19 +65,19 @@ dependencies {
 
   // Misc
   compile "args4j:args4j:$argsVersion"
-  compile 'com.google.code.findbugs:jsr305:3.0.2'
+  compile "com.google.code.findbugs:jsr305:3.0.2"
   compile "com.foilen:jl-smalltools:$smalltoolsVersion"
   compile "commons-validator:commons-validator:$commonsValidatorVersion"
-  compile 'org.apache.commons:commons-text:1.8'
+  compile "org.apache.commons:commons-text:$commonsTextVersion"
   compile "javax.xml.bind:jaxb-api"
   compile 'org.quartz-scheduler:quartz'
 
   // Test
   testCompileOnly 'junit:junit'
-  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-  testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitVersion"
-  testCompile 'org.junit.platform:junit-platform-commons:1.6.2'
-  testCompile 'org.junit.platform:junit-platform-engine:1.6.2'
+  testImplementation "org.junit.jupiter:junit-jupiter-api"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+  testCompile 'org.junit.platform:junit-platform-commons'
+  testCompile 'org.junit.platform:junit-platform-engine'
   testCompile "org.springframework:spring-test"
   testCompile "org.springframework.boot:spring-boot-starter-test"
   
