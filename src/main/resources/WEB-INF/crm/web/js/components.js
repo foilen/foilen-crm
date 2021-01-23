@@ -13,9 +13,6 @@ Vue.component('client-select', function(resolve, reject) {
       props : [ 'id', 'value' ],
       computed : {},
       methods : {
-        changed : function(event) {
-          this.$emit('input', event.target.value)
-        },
         search : function(event) {
           var searchFor = null
           if (event) {
