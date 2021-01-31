@@ -23,7 +23,6 @@ public class SortPropertiesApp {
 
     public static void main(String[] args) throws Exception {
 
-        sort("gradle.properties");
         sort("src/main/resources/WEB-INF/crm/messages/messages_en.properties");
         sort("src/main/resources/WEB-INF/crm/messages/messages_fr.properties");
 
