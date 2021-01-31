@@ -21,6 +21,6 @@ USER_ID=$(id -u)
 docker run -ti \
   --rm \
   --user $USER_ID \
-  --publish 8888:8080 \
+  --publish 8888:8888 \
   foilen-crm:master-SNAPSHOT \
   --mode LOCAL

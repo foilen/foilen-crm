@@ -104,7 +104,7 @@ public class CrmApp {
             if ("LOCAL".equals(mode)) {
                 logger.info("Setting some random values for LOCAL mode");
 
-                config.setBaseUrl("http://127.0.0.1:8080");
+                config.setBaseUrl("http://127.0.0.1:8888");
 
                 config.setMysqlDatabaseUserName("root");
                 config.setMysqlDatabasePassword("ABC");

@@ -80,7 +80,7 @@ docker run -ti \
   --env CONFIG_FILE=/data/config.json \
   --user $USER_ID \
   --volume $FOLDER_DATA:/data \
-  --publish 8888:8080 \
+  --publish 8888:8888 \
   --link ${INSTANCE}:mysql \
   foilen-crm:master-SNAPSHOT
 
