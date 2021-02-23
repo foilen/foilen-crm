@@ -2,7 +2,7 @@
 
   <div class="col-12">
 
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createModal">{{ $t('button.create') }}</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="form = {}" data-target="#createModal">{{ $t('button.create') }}</button>
 
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -94,6 +94,96 @@
       </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">{{ $t('button.edit') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <error-results v-bind:formResult="formResult"></error-results>
+
+            <div class="form-group">
+              <label for="name">{{ $t('term.name') }}</label> <input type="text" class="form-control" id="name2" v-model="editForm.name" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.name">
+                <p v-for="errorCode in formResult.validationErrorsByField.name">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="shortName">{{ $t('term.shortName') }}</label> <input type="text" class="form-control" id="shortName2" v-model="editForm.shortName" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.shortName">
+                <p v-for="errorCode in formResult.validationErrorsByField.shortName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contactName">{{ $t('term.contactName') }}</label> <input type="text" class="form-control" id="contactName2" v-model="editForm.contactName" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.contactName">
+                <p v-for="errorCode in formResult.validationErrorsByField.contactName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">{{ $t('term.email') }}</label> <input type="text" class="form-control" id="email2" v-model="editForm.email" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.email">
+                <p v-for="errorCode in formResult.validationErrorsByField.email">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">{{ $t('term.address') }}</label> <input type="text" class="form-control" id="address2" v-model="editForm.address" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.address">
+                <p v-for="errorCode in formResult.validationErrorsByField.address">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tel">{{ $t('term.tel') }}</label> <input type="text" class="form-control" id="tel2" v-model="editForm.tel" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.tel">
+                <p v-for="errorCode in formResult.validationErrorsByField.tel">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="mainSite">{{ $t('term.mainSite') }}</label> <input type="text" class="form-control" id="mainSite2" v-model="editForm.mainSite" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.mainSite">
+                <p v-for="errorCode in formResult.validationErrorsByField.mainSite">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lang">{{ $t('term.lang') }}</label> <select class="form-control" id="lang2" v-model="editForm.lang" autocomplete="off">
+              <option value=""></option>
+              <option>FR</option>
+              <option>EN</option>
+            </select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.lang">
+                <p v-for="errorCode in formResult.validationErrorsByField.lang">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="technicalSupportSid2">{{ $t('term.technicalSupportSid') }}</label>
+              <technical-support-select id="technicalSupportSid2" v-model="editForm.technicalSupportSid"></technical-support-select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.technicalSupportSid">
+                <p v-for="errorCode in formResult.validationErrorsByField.technicalSupportSid">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+            <button type="button" class="btn btn-success" v-on:click="edit()">{{ $t('button.edit') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>
 
     <table class="table table-striped">
@@ -109,6 +199,7 @@
           <th scope="col">{{ $t('term.lang') }}</th>
           <th scope="col">{{ $t('term.sid') }}</th>
           <th scope="col">{{ $t('term.pricePerHour') }}</th>
+          <th scope="col">{{ $t('term.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -123,6 +214,12 @@
           <td>{{item.lang}}</td>
           <td>{{item.technicalSupport ? item.technicalSupport.sid : ''}}</td>
           <td>{{item.technicalSupport ? item.technicalSupport.pricePerHourFormatted + '$' : ''}}</td>
+          <td>
+            <div>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="setupEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
+              <button class="btn btn-sm btn-danger" data-toggle="modal" v-on:click="deleteOne(item)">{{ $t('button.delete') }}</button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -156,4 +156,16 @@ public abstract class AbstractApiService extends AbstractBasics {
 
         return technicalSupport;
     }
+
+    protected void validateTechnicalSupportSidNotUsed(FormResult formResult, String fieldName, String sid) {
+
+        if (Strings.isNullOrEmpty(sid)) {
+            return;
+        }
+
+        TechnicalSupport technicalSupport = technicalSupportDao.findBySid(sid);
+        if (technicalSupport != null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.alreadyTaken");
+        }
+    }
 }

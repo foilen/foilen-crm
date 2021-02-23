@@ -9,22 +9,13 @@
  */
 package com.foilen.crm.web.controller;
 
+import com.foilen.crm.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.foilen.crm.services.ItemService;
-import com.foilen.crm.web.model.BillPendingItems;
-import com.foilen.crm.web.model.BillSomePendingItems;
-import com.foilen.crm.web.model.CreateItem;
-import com.foilen.crm.web.model.CreateItemWithTime;
-import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/item", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -54,6 +45,16 @@ public class ItemApiController {
             @RequestBody CreateItem form //
     ) {
         return itemService.create(authentication.getName(), form);
+    }
+
+    @PutMapping("")
+    public FormResult update(Authentication authentication, @RequestBody UpdateItem form) {
+        return itemService.update(authentication.getName(), form);
+    }
+
+    @DeleteMapping("/{id}")
+    public FormResult delete(@PathVariable("id") long id) {
+        return itemService.delete(id);
     }
 
     @PostMapping("createWithTime")

@@ -13,6 +13,7 @@ import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
 public class Client extends AbstractApiBase {
 
+    private long id;
     private String name;
     private String shortName;
     private String contactName;
@@ -26,6 +27,14 @@ public class Client extends AbstractApiBase {
     private String lang;
 
     private TechnicalSupport technicalSupport;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getAddress() {
         return address;

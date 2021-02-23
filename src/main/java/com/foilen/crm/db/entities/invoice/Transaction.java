@@ -23,6 +23,8 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foilen.smalltools.tools.PriceFormatTools;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Entries for sent invoices and for cash-in.
@@ -39,7 +41,9 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Client client;
+
     @Column(unique = true, nullable = true)
     private String invoiceId;
 

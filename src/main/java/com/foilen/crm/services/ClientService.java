@@ -11,11 +11,14 @@ package com.foilen.crm.services;
 
 import com.foilen.crm.web.model.ClientList;
 import com.foilen.crm.web.model.CreateClient;
+import com.foilen.crm.web.model.UpdateClient;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface ClientService {
 
     FormResult create(String userId, CreateClient form);
+
+    FormResult update(String userId, long clientId, UpdateClient form);
 
     /**
      * Get the list of clients.
@@ -30,4 +33,5 @@ public interface ClientService {
      */
     ClientList listAll(String userId, int pageId, String search);
 
+    FormResult delete(long clientId);
 }

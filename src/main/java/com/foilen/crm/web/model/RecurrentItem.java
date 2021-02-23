@@ -18,6 +18,8 @@ import com.foilen.smalltools.tools.PriceFormatTools;
 
 public class RecurrentItem extends AbstractApiBase {
 
+    private long id;
+
     // Recurrence details
     private int calendarUnit; // the unit of the delta that is a constant on {@link Calendar}
     private int delta;
@@ -48,6 +50,14 @@ public class RecurrentItem extends AbstractApiBase {
         default:
             return "recurrence.unknown";
         }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCategory() {

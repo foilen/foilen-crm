@@ -11,6 +11,7 @@ package com.foilen.crm.services;
 
 import javax.transaction.Transactional;
 
+import com.foilen.crm.web.model.UpdateClient;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,8 @@ import com.foilen.crm.web.model.ClientList;
 import com.foilen.crm.web.model.CreateClient;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.JsonTools;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -59,6 +62,45 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
         Client entity = JsonTools.clone(form, Client.class);
         entity.setTechnicalSupport(technicalSupport);
         clientDao.save(entity);
+
+        return formResult;
+    }
+
+    @Override
+    public FormResult update(String userId, long clientId, UpdateClient form) {
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canCreateClientOrFail(userId);
+        validateMandatory(formResult, "name", form.getName());
+        validateMandatory(formResult, "shortName", form.getShortName());
+        validateMandatory(formResult, "contactName", form.getContactName());
+        validateMandatory(formResult, "email", form.getEmail());
+        validateEmail(formResult, "email", form.getEmail());
+        validateMandatory(formResult, "lang", form.getLang());
+        validateLanguage(formResult, "lang", form.getLang());
+        TechnicalSupport technicalSupport = validateTechnicalSupport(formResult, "technicalSupportSid",
+                form.getTechnicalSupportSid());
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        Optional<Client> entity = clientDao.findById(clientId);
+        if (entity.isPresent()) {
+            Client existingClient = JsonTools.clone(form, Client.class);
+            existingClient.setTechnicalSupport(technicalSupport);
+
+            clientDao.save(existingClient);
+        }
+
+        return formResult;
+    }
+
+    @Override
+    public FormResult delete(long clientId) {
+        FormResult formResult = new FormResult();
+        clientDao.deleteById(clientId);
 
         return formResult;
     }

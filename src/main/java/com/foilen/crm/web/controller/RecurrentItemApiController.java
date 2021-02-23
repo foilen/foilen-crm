@@ -9,13 +9,13 @@
  */
 package com.foilen.crm.web.controller;
 
+import com.foilen.crm.web.model.CreateRecurrentItem;
+import com.foilen.crm.web.model.UpdateRecurrentItem;
+import com.foilen.smalltools.restapi.model.FormResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.foilen.crm.services.RecurrentItemService;
 import com.foilen.crm.web.model.RecurrentItemList;
@@ -33,6 +33,21 @@ public class RecurrentItemApiController {
             @RequestParam(defaultValue = "1") int pageId //
     ) {
         return recurrentItemService.listAll(authentication.getName(), pageId);
+    }
+
+    @PostMapping("")
+    public FormResult create(Authentication authentication, @RequestBody CreateRecurrentItem form) {
+        return recurrentItemService.create(authentication.getName(), form);
+    }
+
+    @DeleteMapping("/{id}")
+    public FormResult delete(@PathVariable("id") long id) {
+        return recurrentItemService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public FormResult update(Authentication authentication, @PathVariable("id") long id, @RequestBody UpdateRecurrentItem form) {
+        return recurrentItemService.update(authentication.getName(), id, form);
     }
 
 }

@@ -4,7 +4,7 @@
 
     <h1>{{ $t('term.pending') }}</h1>
 
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createModal">{{ $t('button.create') }}</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="form = {}" data-target="#createModal">{{ $t('button.create') }}</button>
 
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -59,6 +59,64 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
             <button type="button" class="btn btn-success" v-on:click="create()">{{ $t('button.create') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">{{ $t('button.edit') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <error-results v-bind:formResult="formResult"></error-results>
+
+            <div class="form-group">
+              <label for="clientShortName2">{{ $t('term.clientShortName') }}</label>
+              <client-select id="clientShortName2" v-model="editForm.clientShortName"></client-select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
+                <p v-for="errorCode in formResult.validationErrorsByField.clientShortName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="date2">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date2" v-model="editForm.date" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
+                <p v-for="errorCode in formResult.validationErrorsByField.date">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="description2">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description2" v-model="editForm.description" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
+                <p v-for="errorCode in formResult.validationErrorsByField.description">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="price2">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price2" v-model="editForm.price" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
+                <p v-for="errorCode in formResult.validationErrorsByField.price">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="category2">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category2" v-model="editForm.category" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
+                <p v-for="errorCode in formResult.validationErrorsByField.category">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+            <button type="button" class="btn btn-success" v-on:click="edit()">{{ $t('button.edit') }}</button>
           </div>
         </div>
       </div>
@@ -204,6 +262,7 @@
           <th scope="col">{{ $t('term.category') }}</th>
           <th scope="col">{{ $t('term.description') }}</th>
           <th scope="col">{{ $t('term.price') }}</th>
+          <th scope="col">{{ $t('term.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -214,6 +273,12 @@
           <td>{{item.category}}</td>
           <td>{{item.description}}</td>
           <td>{{item.priceFormatted}}</td>
+          <td>
+            <div>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="setupEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
+              <button class="btn btn-sm btn-danger" data-toggle="modal" v-on:click="deleteOne(item)">{{ $t('button.delete') }}</button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

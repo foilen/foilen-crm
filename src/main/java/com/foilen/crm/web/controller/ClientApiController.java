@@ -9,15 +9,11 @@
  */
 package com.foilen.crm.web.controller;
 
+import com.foilen.crm.web.model.UpdateClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.foilen.crm.services.ClientService;
 import com.foilen.crm.web.model.ClientList;
@@ -47,4 +43,16 @@ public class ClientApiController {
         return clientService.listAll(authentication.getName(), pageId, search);
     }
 
+    @PutMapping("/{client-id}")
+    public FormResult update(Authentication authentication,
+             @PathVariable("client-id") long clientId,
+             @RequestBody UpdateClient form
+    ) {
+        return clientService.update(authentication.getName(), clientId, form);
+    }
+
+    @DeleteMapping("/{client-id}")
+    public FormResult delete(@PathVariable("client-id") long clientId) {
+        return clientService.delete(clientId);
+    }
 }

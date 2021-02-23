@@ -76,7 +76,6 @@ Vue.component('error-results', function(resolve, reject) {
       errorShow(error)
       reject(error)
     })
-    
 })
 
 Vue.component('pagination', function(resolve, reject) {

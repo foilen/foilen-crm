@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.foilen.crm.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,10 +30,6 @@ import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.invoice.Transaction;
-import com.foilen.crm.web.model.BillSomePendingItems;
-import com.foilen.crm.web.model.CreateItem;
-import com.foilen.crm.web.model.CreateItemWithTime;
-import com.foilen.crm.web.model.ItemList;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.CollectionsTools;
 import com.foilen.smalltools.tools.JsonTools;
@@ -196,6 +193,40 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         return formResult;
 
+    }
+
+    @Override
+    public FormResult update(String userId, UpdateItem form) {
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canCreateItemOrFail(userId);
+        validateMandatory(formResult, "clientShortName", form.getClientShortName());
+        validateDateOnly(formResult, "date", form.getDate());
+        validateMandatory(formResult, "date", form.getDate());
+        validateMandatory(formResult, "description", form.getDescription());
+        validateMandatory(formResult, "category", form.getCategory());
+        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        Item entity = JsonTools.clone(form, Item.class);
+        entity.setClient(client);
+
+        itemDao.save(entity);
+
+        return formResult;
+    }
+
+    @Override
+    public FormResult delete(long id) {
+        FormResult formResult = new FormResult();
+
+        itemDao.deleteById(id);
+
+        return formResult;
     }
 
     @Override

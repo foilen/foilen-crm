@@ -9,6 +9,9 @@
  */
 package com.foilen.crm.db.entities.invoice;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
@@ -33,6 +36,7 @@ public class RecurrentItem {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @Version
     private long version;
 
@@ -46,10 +50,14 @@ public class RecurrentItem {
     // Item details
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Client client;
+
     @Column(length = 2000)
     private String description;
+
     private long price = 0;// 1099 for 10.99$
+
     @Column(nullable = true)
     private String category;
 

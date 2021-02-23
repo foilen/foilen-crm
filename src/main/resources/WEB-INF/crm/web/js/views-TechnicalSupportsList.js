@@ -8,6 +8,9 @@ const TechnicalSupportsList = Vue.component('technical_support-list', function(r
       data : function() {
         return {
           queries : {},
+          formResult: {},
+          form: {},
+          editForm: {},
           items : [],
           pagination : {
             currentPageUi : 1,
@@ -34,6 +37,48 @@ const TechnicalSupportsList = Vue.component('technical_support-list', function(r
               c.items = []
             }
           })
+        },
+        create: function() {
+          var c =  this
+          c.formResult = {}
+          console.log('Technical Support - Create', c.form)
+          httpPost('/api/technicalSupport', c.form, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#createModal .btn-secondary').click()
+              c.refresh(c.queries.pageId)
+            }
+          })
+        },
+        setupEdit: function(item) {
+          var c = this
+          c.formResult = {}
+          c.editForm = JSON.parse(JSON.stringify(item))
+        },
+        edit : function() {
+          var c = this
+          c.formResult = {}
+          console.log('Technical Support - Edit', c.editForm)
+
+          httpPut('/api/technicalSupport/' + c.editForm.sid, c.editForm, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#editModal .btn-secondary').click()
+              successShow(c.$t('prompt.edit.success', [ c.editForm.sid ]))
+              c.refresh(c.queries.pageId)
+            }
+          })
+        },
+        deleteOne: function(item) {
+          if (confirm(this.$t('prompt.delete.confirm', [ item.sid ]))) {
+            var c = this
+            console.log('Technical Support - Delete', item.sid)
+
+            httpDelete('/api/technicalSupport/' + item.sid, function() {
+              successShow(c.$t('prompt.delete.success', [item.sid ]))
+              c.refresh(c.queries.pageId)
+            })
+          }
         }
       },
       mounted : function() {

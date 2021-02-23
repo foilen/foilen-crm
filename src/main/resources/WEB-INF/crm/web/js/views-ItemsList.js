@@ -10,6 +10,7 @@ const ItemsList = Vue.component('items-list', function(resolve, reject) {
           form : {
             date : dateNowDayOnly(),
           },
+          editForm: {},
           formResult : {},
           billed : {
             queries : {},
@@ -143,6 +144,36 @@ const ItemsList = Vue.component('items-list', function(resolve, reject) {
           console.log(c.form.itemToBillIds)
           jQuery('#billSelectedModal').modal()
         },
+        setupEdit: function(item) {
+          var c = this
+          c.formResult = {}
+          c.editForm = JSON.parse(JSON.stringify(item))
+        },
+        edit : function() {
+          var c = this
+          c.formResult = {}
+          console.log('Item - Pending - Edit', c.editForm)
+
+          httpPut('/api/item/', c.editForm, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#editModal .btn-secondary').click()
+              successShow(c.$t('prompt.edit.success', [ c.editForm.id ]))
+              c.refresh()
+            }
+          })
+        },
+        deleteOne: function(item) {
+          if (confirm(this.$t('prompt.delete.confirm', [ item.id ]))) {
+            var c = this
+            console.log('Item - Pending - Delete', item.id)
+
+            httpDelete('/api/item/' + item.id, function() {
+              successShow(c.$t('prompt.delete.success', [ item.id ]))
+              c.refresh()
+            })
+          }
+        }
       },
       mounted : function() {
         this.refresh()

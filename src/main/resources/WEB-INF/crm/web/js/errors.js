@@ -15,6 +15,20 @@ function errorShow(message) {
   console.log(message)
 }
 
+function successShow(message) {
+  const successes = document.getElementById("successes");
+
+  const success = document.createElement('div');
+  success.innerHTML = message + '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+  success.setAttribute('class', 'alert alert-success alert-dismissible fade show')
+
+  successes.appendChild(success);
+
+  jQuery(success).delay(20000).fadeOut();
+
+  console.log('SUCCESS', message)
+}
+
 function httpDelete(url, successCallback) {
   ++app.pendingAjax
 
@@ -22,6 +36,10 @@ function httpDelete(url, successCallback) {
     type : "DELETE",
     url : url,
     dataType : 'json',
+    headers : {
+      'X-XSRF-TOKEN' : Cookies.get('XSRF-TOKEN'),
+      'Content-Type' : 'application/json',
+    },
     success : function(data) {
       --app.pendingAjax
       if (data.error) {
@@ -64,6 +82,35 @@ function httpGetQueries(url, queries, successCallback) {
     url : url,
     data : queries,
     success : function(data) {
+      --app.pendingAjax
+      if (data.error) {
+        errorShow(data.error)
+      } else {
+        successCallback(data)
+      }
+    },
+    error : function(jqXHR, textStatus, errorThrown) {
+      --app.pendingAjax
+      var escapedResponseText = new Option(jqXHR.responseText).innerHTML;
+      var error = 'Could not call ' + url + ' . Error: ' + textStatus + ' ' + errorThrown + '<br/>' + escapedResponseText;
+      errorShow(error)
+    }
+  })
+}
+
+function httpPut(url, form, successCallback) {
+  ++app.pendingAjax
+
+  jQuery.ajax({
+    type : "PUT",
+    url : url,
+    data: JSON.stringify(form),
+    dataType : 'json',
+    headers : {
+      'X-XSRF-TOKEN' : Cookies.get('XSRF-TOKEN'),
+      'Content-Type' : 'application/json',
+    },
+    success: function(data) {
       --app.pendingAjax
       if (data.error) {
         errorShow(data.error)

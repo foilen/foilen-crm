@@ -16,6 +16,8 @@ const ClientsList = Vue.component('clients-list', function(resolve, reject) {
             lastPage : true,
           },
           form : {},
+          editForm: {},
+          tempForm: {},
           formResult : {},
         }
       },
@@ -49,6 +51,36 @@ const ClientsList = Vue.component('clients-list', function(resolve, reject) {
             }
           })
         },
+        setupEdit: function(item) {
+          var c = this
+          c.formResult = {}
+          c.editForm = JSON.parse(JSON.stringify(item))
+        },
+        edit : function() {
+          var c = this
+          c.formResult = {}
+          console.log('Clients - Edit', c.editForm)
+
+          httpPut('/api/client/' + c.editForm.id, c.editForm, function(data) {
+            c.formResult = data
+            if (data.success) {
+              jQuery('#editModal .btn-secondary').click()
+              successShow(c.$t('prompt.delete.success', [ c.editForm.name ]))
+              c.refresh(c.queries.pageId)
+            }
+          })
+        },
+        deleteOne: function(item) {
+          if (confirm(this.$t('prompt.delete.confirm', [ item.name ]))) {
+            var c = this
+            console.log('Client - Delete', item.name)
+
+            httpDelete('/api/client/' + item.id, function() {
+              successShow(c.$t('prompt.delete.success', [item.name ]))
+              c.refresh(c.queries.pageId)
+            })
+          }
+        }
       },
       mounted : function() {
         this.refresh()

@@ -20,7 +20,6 @@ import javax.persistence.Version;
 /**
  * Technical support contract.
  */
-// TODO UI - TechnicalSupport - Create
 // TODO UI - TechnicalSupport - Edit
 // TODO UI - TechnicalSupport - Delete
 @Entity
@@ -29,6 +28,7 @@ public class TechnicalSupport {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @Version
     private long version;
 

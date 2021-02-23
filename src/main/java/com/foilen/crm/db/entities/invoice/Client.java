@@ -26,8 +26,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * A client.
  */
-// TODO UI - Client - Edit
-// TODO UI - Client - Delete
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Client {
@@ -35,18 +33,24 @@ public class Client {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @Version
     private long version;
 
     @Column(unique = true, nullable = false)
     private String name;
+
     @Column(unique = true, nullable = false)
     private String shortName;
+
     @Column(nullable = true)
     private String contactName;
+
     private String email;
+
     @Column(nullable = true)
     private String address;
+
     @Column(nullable = true)
     private String tel;
 
