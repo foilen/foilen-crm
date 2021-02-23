@@ -9,15 +9,23 @@
  */
 package com.foilen.crm.web.controller;
 
-import com.foilen.crm.web.model.UpdateClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.foilen.crm.services.ClientService;
 import com.foilen.crm.web.model.ClientList;
 import com.foilen.crm.web.model.CreateClient;
+import com.foilen.crm.web.model.UpdateClient;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/client", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -35,6 +43,11 @@ public class ClientApiController {
         return clientService.create(authentication.getName(), form);
     }
 
+    @DeleteMapping("/{client-id}")
+    public FormResult delete(@PathVariable("client-id") long clientId) {
+        return clientService.delete(clientId);
+    }
+
     @GetMapping("listAll")
     public ClientList listAll(Authentication authentication, //
             @RequestParam(defaultValue = "1") int pageId, //
@@ -44,15 +57,7 @@ public class ClientApiController {
     }
 
     @PutMapping("/{client-id}")
-    public FormResult update(Authentication authentication,
-             @PathVariable("client-id") long clientId,
-             @RequestBody UpdateClient form
-    ) {
+    public FormResult update(Authentication authentication, @PathVariable("client-id") long clientId, @RequestBody UpdateClient form) {
         return clientService.update(authentication.getName(), clientId, form);
-    }
-
-    @DeleteMapping("/{client-id}")
-    public FormResult delete(@PathVariable("client-id") long clientId) {
-        return clientService.delete(clientId);
     }
 }

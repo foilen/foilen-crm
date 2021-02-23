@@ -114,6 +114,7 @@ public abstract class AbstractSpringTests {
         return entities.stream() //
                 .map(e -> {
                     com.foilen.crm.web.model.RecurrentItem t = JsonTools.clone(e, com.foilen.crm.web.model.RecurrentItem.class);
+                    t.setId(null);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     return t;
                 }) //

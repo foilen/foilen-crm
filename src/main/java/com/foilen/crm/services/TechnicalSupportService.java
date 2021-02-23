@@ -16,6 +16,10 @@ import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface TechnicalSupportService {
 
+    FormResult create(String userId, CreateTechnicalSupport form);
+
+    FormResult delete(String sid);
+
     /**
      * Get the list of technical supports.
      *
@@ -29,9 +33,5 @@ public interface TechnicalSupportService {
      */
     TechnicalSupportList listAll(String userId, int pageId, String search);
 
-    FormResult create(String userId, CreateTechnicalSupport form);
-
     FormResult update(String userId, String sid, UpdateTechnicalSupport form);
-
-    FormResult delete(String sid);
 }

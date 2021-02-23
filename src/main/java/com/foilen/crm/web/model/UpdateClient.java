@@ -1,3 +1,12 @@
+/*
+    Foilen CRM
+    https://github.com/foilen/foilen-crm
+    Copyright (c) 2015-2021 Foilen (https://foilen.com)
+
+    The MIT License
+    http://opensource.org/licenses/MIT
+
+ */
 package com.foilen.crm.web.model;
 
 public class UpdateClient {
@@ -14,99 +23,89 @@ public class UpdateClient {
     private String lang;
     private String technicalSupportSid;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public String getAddress() {
+        return address;
     }
 
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public String getMainSite() {
-        return mainSite;
-    }
-
-    public void setMainSite(String mainSite) {
-        this.mainSite = mainSite;
+    public Long getId() {
+        return id;
     }
 
     public String getLang() {
         return lang;
     }
 
-    public void setLang(String lang) {
-        this.lang = lang;
+    public String getMainSite() {
+        return mainSite;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 
     public String getTechnicalSupportSid() {
         return technicalSupportSid;
     }
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public void setMainSite(String mainSite) {
+        this.mainSite = mainSite;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
     public void setTechnicalSupportSid(String technicalSupportSid) {
         this.technicalSupportSid = technicalSupportSid;
     }
 
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     @Override
     public String toString() {
-        return "UpdateClient{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", shortName='" + shortName + '\'' +
-                ", contactName='" + contactName + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", tel='" + tel + '\'' +
-                ", mainSite='" + mainSite + '\'' +
-                ", lang='" + lang + '\'' +
-                ", technicalSupportSid='" + technicalSupportSid + '\'' +
-                '}';
+        return "UpdateClient{" + "id=" + id + ", name='" + name + '\'' + ", shortName='" + shortName + '\'' + ", contactName='" + contactName + '\'' + ", email='" + email + '\'' + ", address='"
+                + address + '\'' + ", tel='" + tel + '\'' + ", mainSite='" + mainSite + '\'' + ", lang='" + lang + '\'' + ", technicalSupportSid='" + technicalSupportSid + '\'' + '}';
     }
 }

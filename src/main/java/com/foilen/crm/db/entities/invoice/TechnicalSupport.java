@@ -20,8 +20,6 @@ import javax.persistence.Version;
 /**
  * Technical support contract.
  */
-// TODO UI - TechnicalSupport - Edit
-// TODO UI - TechnicalSupport - Delete
 @Entity
 public class TechnicalSupport {
 

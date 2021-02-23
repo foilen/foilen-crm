@@ -1,3 +1,12 @@
+/*
+    Foilen CRM
+    https://github.com/foilen/foilen-crm
+    Copyright (c) 2015-2021 Foilen (https://foilen.com)
+
+    The MIT License
+    http://opensource.org/licenses/MIT
+
+ */
 package com.foilen.crm.web.model;
 
 import com.foilen.smalltools.tools.PriceFormatTools;
@@ -29,6 +38,14 @@ public class UpdateRecurrentItem {
         return description;
     }
 
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public long getId() {
+        return id;
+    }
+
     public String getNextGenerationDate() {
         return nextGenerationDate;
     }
@@ -57,27 +74,19 @@ public class UpdateRecurrentItem {
         this.description = description;
     }
 
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setNextGenerationDate(String nextGenerationDate) {
         this.nextGenerationDate = nextGenerationDate;
     }
 
     public void setPrice(long price) {
         this.price = price;
-    }
-
-    public String getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

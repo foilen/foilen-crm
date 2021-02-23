@@ -28,14 +28,6 @@ public class Client extends AbstractApiBase {
 
     private TechnicalSupport technicalSupport;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -46,6 +38,10 @@ public class Client extends AbstractApiBase {
 
     public String getEmail() {
         return email;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getLang() {
@@ -82,6 +78,10 @@ public class Client extends AbstractApiBase {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setLang(String lang) {

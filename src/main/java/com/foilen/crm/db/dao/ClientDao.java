@@ -9,7 +9,8 @@
  */
 package com.foilen.crm.db.dao;
 
-import com.foilen.crm.db.entities.invoice.TechnicalSupport;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +19,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.foilen.crm.db.entities.invoice.Client;
-
-import java.util.List;
+import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 
 @Repository
 public interface ClientDao extends JpaRepository<Client, Long> {

@@ -18,6 +18,10 @@ import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface RecurrentItemService {
 
+    FormResult create(String userId, CreateRecurrentItem form);
+
+    FormResult delete(long id);
+
     void generateReady(Date now);
 
     /**
@@ -30,10 +34,6 @@ public interface RecurrentItemService {
      * @return the list of recurrentItems
      */
     RecurrentItemList listAll(String userId, int pageId);
-
-    FormResult create(String userId, CreateRecurrentItem form);
-
-    FormResult delete(long id);
 
     FormResult update(String userId, long id, UpdateRecurrentItem form);
 }

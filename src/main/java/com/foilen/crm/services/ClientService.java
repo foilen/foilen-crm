@@ -18,7 +18,7 @@ public interface ClientService {
 
     FormResult create(String userId, CreateClient form);
 
-    FormResult update(String userId, long clientId, UpdateClient form);
+    FormResult delete(long clientId);
 
     /**
      * Get the list of clients.
@@ -33,5 +33,5 @@ public interface ClientService {
      */
     ClientList listAll(String userId, int pageId, String search);
 
-    FormResult delete(long clientId);
+    FormResult update(String userId, long clientId, UpdateClient form);
 }

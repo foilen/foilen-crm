@@ -9,9 +9,6 @@
  */
 package com.foilen.crm.db.entities.invoice;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
@@ -24,12 +21,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 /**
  * An Item to bill recurrently.
  */
-// TODO UI - RecurrentItem - Create
-// TODO UI - RecurrentItem - Edit
-// TODO UI - RecurrentItem - Delete
 @Entity
 public class RecurrentItem {
 
