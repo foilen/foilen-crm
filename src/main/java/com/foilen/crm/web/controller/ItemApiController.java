@@ -25,10 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.foilen.crm.services.ItemService;
 import com.foilen.crm.web.model.BillPendingItems;
 import com.foilen.crm.web.model.BillSomePendingItems;
-import com.foilen.crm.web.model.CreateItem;
 import com.foilen.crm.web.model.CreateItemWithTime;
+import com.foilen.crm.web.model.CreateOrUpdateItem;
 import com.foilen.crm.web.model.ItemList;
-import com.foilen.crm.web.model.UpdateItem;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/item", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -53,13 +52,6 @@ public class ItemApiController {
         return itemService.billSomePending(authentication.getName(), form);
     }
 
-    @PostMapping("")
-    public FormResult create(Authentication authentication, //
-            @RequestBody CreateItem form //
-    ) {
-        return itemService.create(authentication.getName(), form);
-    }
-
     @PostMapping("createWithTime")
     public FormResult create(Authentication authentication, //
             @RequestBody CreateItemWithTime form //
@@ -67,9 +59,18 @@ public class ItemApiController {
         return itemService.create(authentication.getName(), form);
     }
 
-    @DeleteMapping("/{id}")
-    public FormResult delete(@PathVariable("id") long id) {
-        return itemService.delete(id);
+    @PostMapping
+    public FormResult create(Authentication authentication, //
+            @RequestBody CreateOrUpdateItem form //
+    ) {
+        return itemService.create(authentication.getName(), form);
+    }
+
+    @DeleteMapping("{id}")
+    public FormResult delete(Authentication authentication, //
+            @PathVariable("id") long id //
+    ) {
+        return itemService.delete(authentication.getName(), id);
     }
 
     @GetMapping("listBilled")
@@ -88,9 +89,12 @@ public class ItemApiController {
         return itemService.listPending(authentication.getName(), pageId);
     }
 
-    @PutMapping("")
-    public FormResult update(Authentication authentication, @RequestBody UpdateItem form) {
-        return itemService.update(authentication.getName(), form);
+    @PutMapping("{id}")
+    public FormResult update(Authentication authentication, //
+            @PathVariable("id") long id, //
+            @RequestBody CreateOrUpdateItem form //
+    ) {
+        return itemService.update(authentication.getName(), id, form);
     }
 
 }

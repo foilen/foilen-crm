@@ -11,16 +11,22 @@ package com.foilen.crm.services;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.BillSomePendingItems;
 import com.foilen.crm.web.model.CreateItemWithTime;
+import com.foilen.crm.web.model.CreateOrUpdateItem;
 import com.foilen.smalltools.restapi.model.FormResult;
+import com.foilen.smalltools.test.asserts.AssertDiff;
 import com.foilen.smalltools.test.asserts.AssertTools;
+import com.foilen.smalltools.tools.DateTools;
 
 public class ItemServiceImplTest extends AbstractSpringTests {
 
@@ -128,6 +134,116 @@ public class ItemServiceImplTest extends AbstractSpringTests {
         AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
         AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testDelete_notAdmin_FAIL() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findByClientAndInvoiceIdNullAndDescription(clientDao.findByShortName("avez"), "Shared hosting - L1").getId();
+
+        expectNotAdmin(() -> {
+            itemService.delete(FakeDataServiceImpl.USER_ID_USER, itemId);
+        });
+
+        AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testDelete_notPending_FAIL() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().get(0).getId();
+
+        FormResult result = itemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, itemId);
+        AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testDelete_notPending_FAIL.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testDelete_OK() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findByClientAndInvoiceIdNullAndDescription(clientDao.findByShortName("avez"), "Shared hosting - L1").getId();
+
+        FormResult result = itemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, itemId);
+        AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testDelete_OK-items.json", getClass(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testUpdate_notAdmin_FAIL() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findByClientAndInvoiceIdNullAndDescription(clientDao.findByShortName("avez"), "Shared hosting - L1").getId();
+
+        CreateOrUpdateItem form = new CreateOrUpdateItem();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
+        form.setDate("2020-01-01");
+        form.setDescription("New description");
+        form.setPrice(1234);
+        form.setCategory("new category");
+
+        expectNotAdmin(() -> {
+            itemService.update(FakeDataServiceImpl.USER_ID_USER, itemId, form);
+        });
+
+        AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testUpdate_notPending_FAIL() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().get(0).getId();
+
+        CreateOrUpdateItem form = new CreateOrUpdateItem();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
+        form.setDate("2020-01-01");
+        form.setDescription("New description");
+        form.setPrice(1234);
+        form.setCategory("new category");
+
+        FormResult result = itemService.update(FakeDataServiceImpl.USER_ID_ADMIN, itemId, form);
+        AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testUpdate_notPending_FAIL.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+    }
+
+    @Test
+    public void testUpdate_OK() {
+
+        List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
+
+        long itemId = itemDao.findByClientAndInvoiceIdNullAndDescription(clientDao.findByShortName("avez"), "Shared hosting - L1").getId();
+
+        CreateOrUpdateItem form = new CreateOrUpdateItem();
+        form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
+        form.setDate("2020-01-01");
+        form.setDescription("New description");
+        form.setPrice(1234);
+        form.setCategory("new category");
+
+        FormResult result = itemService.update(FakeDataServiceImpl.USER_ID_ADMIN, itemId, form);
+        AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
+
+        AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testUpdate_OK-items.json", getClass(), initialItems, trimItem(itemDao.findAll(Sort.by("invoiceId", "description"))));
+
+        Item item = itemDao.findById(itemId).get();
+        Assert.assertEquals("2020-01-01", DateTools.formatDateOnly(item.getDate()));
 
     }
 

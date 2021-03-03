@@ -9,11 +9,8 @@
  */
 package com.foilen.crm.services;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +21,12 @@ import com.foilen.crm.db.dao.ClientDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.web.model.ClientList;
-import com.foilen.crm.web.model.CreateClient;
-import com.foilen.crm.web.model.UpdateClient;
+import com.foilen.crm.web.model.CreateOrUpdateClientForm;
+import com.foilen.smalltools.reflection.BeanPropertiesCopierTools;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.JsonTools;
+import com.foilen.smalltools.tools.StringTools;
+import com.google.common.base.Strings;
 
 @Service
 @Transactional
@@ -37,14 +36,13 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
     private ClientDao clientDao;
 
     @Override
-    public FormResult create(String userId, CreateClient form) {
+    public FormResult create(String userId, CreateOrUpdateClientForm form) {
 
         FormResult formResult = new FormResult();
 
         // Validation
         entitlementService.canCreateClientOrFail(userId);
         validateMandatory(formResult, "name", form.getName());
-        validateClientNameNotUsed(formResult, "name", form.getName());
         validateMandatory(formResult, "shortName", form.getShortName());
         validateClientShortNameNotUsed(formResult, "shortName", form.getShortName());
         validateMandatory(formResult, "contactName", form.getContactName());
@@ -67,9 +65,20 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
     }
 
     @Override
-    public FormResult delete(long clientId) {
+    public FormResult delete(String userId, String clientShortName) {
+
         FormResult formResult = new FormResult();
-        clientDao.deleteById(clientId);
+
+        // Validation
+        entitlementService.canDeleteClientOrFail(userId);
+        Client client = validateClientByShortName(formResult, "clientShortName", clientShortName);
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Delete
+        clientDao.delete(client);
 
         return formResult;
     }
@@ -81,7 +90,7 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
         validatePageId(pageId);
         entitlementService.canViewClientOrFail(userId);
 
-        if (Strings.isBlank(search)) {
+        if (Strings.isNullOrEmpty(search)) {
             search = null;
         }
 
@@ -99,13 +108,17 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
     }
 
     @Override
-    public FormResult update(String userId, long clientId, UpdateClient form) {
+    public FormResult update(String userId, String clientShortName, CreateOrUpdateClientForm form) {
         FormResult formResult = new FormResult();
 
         // Validation
-        entitlementService.canCreateClientOrFail(userId);
+        entitlementService.canUpdateClientOrFail(userId);
+        Client client = validateClientByShortName(formResult, "clientShortName", clientShortName);
         validateMandatory(formResult, "name", form.getName());
         validateMandatory(formResult, "shortName", form.getShortName());
+        if (!Strings.isNullOrEmpty(form.getShortName()) && !StringTools.safeEquals(clientShortName, form.getShortName())) {
+            validateClientShortNameNotUsed(formResult, "shortName", form.getShortName());
+        }
         validateMandatory(formResult, "contactName", form.getContactName());
         validateMandatory(formResult, "email", form.getEmail());
         validateEmail(formResult, "email", form.getEmail());
@@ -117,13 +130,11 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
             return formResult;
         }
 
-        Optional<Client> entity = clientDao.findById(clientId);
-        if (entity.isPresent()) {
-            Client existingClient = JsonTools.clone(form, Client.class);
-            existingClient.setTechnicalSupport(technicalSupport);
+        // Update
+        new BeanPropertiesCopierTools(form, client).copyAllSameProperties();
+        client.setTechnicalSupport(technicalSupport);
 
-            clientDao.save(existingClient);
-        }
+        clientDao.save(client);
 
         return formResult;
     }

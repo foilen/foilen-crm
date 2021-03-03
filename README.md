@@ -76,6 +76,14 @@ The translations are in:
 
 And when you add more, you can easily sort them by running `SortMessagesApp.launch`.
 
+## To modify UI vendor libraries  
+
+Edit `src/main/resources/WEB-INF/crm/web/js/vendor/package.json`.
+
+Run `./update-ui-libraries.sh`.
+
+If you are adding or removing dependencies, you can then edit `CrmWebSpringConfig`.
+
 ## Local in Eclipse
 
 Run *CrmApp - LOCAL.launch*

@@ -19,7 +19,25 @@ public interface EntitlementService {
 
     void canCreatePaymentOrFail(String userId);
 
+    void canCreateRecurrentItemOrFail(String userId);
+
     void canCreateTechnicalSupportOrFail(String userId);
+
+    void canDeleteClientOrFail(String userId);
+
+    void canDeleteItemOrFail(String userId);
+
+    void canDeleteRecurrentItemOrFail(String userId);
+
+    void canDeleteTechnicalSupportOrFail(String userId);
+
+    void canUpdateClientOrFail(String userId);
+
+    void canUpdateItemOrFail(String userId);
+
+    void canUpdateRecurrentItemOrFail(String userId);
+
+    void canUpdateTechnicalSupportOrFail(String userId);
 
     void canViewClientOrFail(String userId);
 

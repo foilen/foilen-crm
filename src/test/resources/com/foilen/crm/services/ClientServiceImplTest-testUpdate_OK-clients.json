@@ -1,0 +1,32 @@
+{
+  "added" : [ {
+    "address" : "1020 Betancour",
+    "contactName" : "Benoit Banana",
+    "email" : "benoit@example2.com",
+    "lang" : "EN",
+    "mainSite" : "http://bazar.here.com",
+    "name" : "Bazar Yay",
+    "shortName" : "bazar",
+    "technicalSupport" : {
+      "pricePerHour" : 2000,
+      "pricePerHourFormatted" : "20.00",
+      "sid" : "S2"
+    },
+    "tel" : "555-202-0101"
+  } ],
+  "removed" : [ {
+    "address" : "1010 Betancour",
+    "contactName" : "Benoit Bezos",
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "mainSite" : "http://bazar.example.com",
+    "name" : "Bazar",
+    "shortName" : "bazar",
+    "technicalSupport" : {
+      "pricePerHour" : 1000,
+      "pricePerHourFormatted" : "10.00",
+      "sid" : "S1"
+    },
+    "tel" : "555-101-0101"
+  } ]
+}

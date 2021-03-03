@@ -72,6 +72,11 @@ cat > $FOLDER_DATA/config.json << _EOF
 }
 _EOF
 
+echo '###[ Start phpMyAdmin ]###'
+docker run --rm --name ${INSTANCE}_phpmyadmin -d --link ${INSTANCE}:db -p 12345:80 phpmyadmin/phpmyadmin
+echo 'phpMyAdmin on http://127.0.0.1:12345/ with user "root" and password "ABC"'
+
+
 # Start
 echo '###[ Start UI ]###'
 USER_ID=$(id -u)

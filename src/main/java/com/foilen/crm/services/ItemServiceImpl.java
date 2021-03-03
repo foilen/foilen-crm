@@ -30,12 +30,13 @@ import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.web.model.BillSomePendingItems;
-import com.foilen.crm.web.model.CreateItem;
 import com.foilen.crm.web.model.CreateItemWithTime;
+import com.foilen.crm.web.model.CreateOrUpdateItem;
 import com.foilen.crm.web.model.ItemList;
-import com.foilen.crm.web.model.UpdateItem;
+import com.foilen.smalltools.reflection.BeanPropertiesCopierTools;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.CollectionsTools;
+import com.foilen.smalltools.tools.DateTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.TimeConverterTools;
 
@@ -138,32 +139,6 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
     }
 
     @Override
-    public FormResult create(String userId, CreateItem form) {
-        FormResult formResult = new FormResult();
-
-        // Validation
-        entitlementService.canCreateItemOrFail(userId);
-        validateMandatory(formResult, "clientShortName", form.getClientShortName());
-        validateDateOnly(formResult, "date", form.getDate());
-        validateMandatory(formResult, "date", form.getDate());
-        validateMandatory(formResult, "description", form.getDescription());
-        validateMandatory(formResult, "category", form.getCategory());
-        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
-
-        if (!formResult.isSuccess()) {
-            return formResult;
-        }
-
-        // Create
-        Item entity = JsonTools.clone(form, Item.class);
-        entity.setClient(client);
-        itemDao.save(entity);
-
-        return formResult;
-
-    }
-
-    @Override
     public FormResult create(String userId, CreateItemWithTime form) {
 
         FormResult formResult = new FormResult();
@@ -200,10 +175,46 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
     }
 
     @Override
-    public FormResult delete(long id) {
+    public FormResult create(String userId, CreateOrUpdateItem form) {
         FormResult formResult = new FormResult();
 
-        itemDao.deleteById(id);
+        // Validation
+        entitlementService.canCreateItemOrFail(userId);
+        validateMandatory(formResult, "clientShortName", form.getClientShortName());
+        validateDateOnly(formResult, "date", form.getDate());
+        validateMandatory(formResult, "date", form.getDate());
+        validateMandatory(formResult, "description", form.getDescription());
+        validateMandatory(formResult, "category", form.getCategory());
+        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Create
+        Item entity = JsonTools.clone(form, Item.class);
+        entity.setClient(client);
+        itemDao.save(entity);
+
+        return formResult;
+
+    }
+
+    @Override
+    public FormResult delete(String userId, long id) {
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canDeleteItemOrFail(userId);
+        Item item = validateItemById(formResult, "id", id);
+        validateItemIsPending(formResult, "id", item);
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Delete
+        itemDao.delete(item);
 
         return formResult;
     }
@@ -238,26 +249,30 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
     }
 
     @Override
-    public FormResult update(String userId, UpdateItem form) {
+    public FormResult update(String userId, long id, CreateOrUpdateItem form) {
         FormResult formResult = new FormResult();
 
         // Validation
-        entitlementService.canCreateItemOrFail(userId);
+        entitlementService.canUpdateItemOrFail(userId);
         validateMandatory(formResult, "clientShortName", form.getClientShortName());
         validateDateOnly(formResult, "date", form.getDate());
         validateMandatory(formResult, "date", form.getDate());
         validateMandatory(formResult, "description", form.getDescription());
         validateMandatory(formResult, "category", form.getCategory());
         Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+        Item item = validateItemById(formResult, "id", id);
+        validateItemIsPending(formResult, "id", item);
 
         if (!formResult.isSuccess()) {
             return formResult;
         }
 
-        Item entity = JsonTools.clone(form, Item.class);
-        entity.setClient(client);
+        // Update
+        new BeanPropertiesCopierTools(form, item).copyAllSameProperties();
+        item.setClient(client);
+        item.setDate(DateTools.parseDateOnly(form.getDate()));
 
-        itemDao.save(entity);
+        itemDao.save(item);
 
         return formResult;
     }

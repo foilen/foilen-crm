@@ -10,10 +10,9 @@
 package com.foilen.crm.services;
 
 import com.foilen.crm.web.model.BillSomePendingItems;
-import com.foilen.crm.web.model.CreateItem;
 import com.foilen.crm.web.model.CreateItemWithTime;
+import com.foilen.crm.web.model.CreateOrUpdateItem;
 import com.foilen.crm.web.model.ItemList;
-import com.foilen.crm.web.model.UpdateItem;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface ItemService {
@@ -22,11 +21,11 @@ public interface ItemService {
 
     FormResult billSomePending(String userId, BillSomePendingItems form);
 
-    FormResult create(String userId, CreateItem form);
-
     FormResult create(String userId, CreateItemWithTime form);
 
-    FormResult delete(long id);
+    FormResult create(String userId, CreateOrUpdateItem form);
+
+    FormResult delete(String userId, long id);
 
     /**
      * Get the list of items that were billed.
@@ -50,5 +49,5 @@ public interface ItemService {
      */
     ItemList listPending(String userId, int pageId);
 
-    FormResult update(String userId, UpdateItem form);
+    FormResult update(String userId, long id, CreateOrUpdateItem form);
 }

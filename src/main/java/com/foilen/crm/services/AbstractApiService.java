@@ -18,8 +18,12 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.foilen.crm.db.dao.ClientDao;
+import com.foilen.crm.db.dao.ItemDao;
+import com.foilen.crm.db.dao.RecurrentItemDao;
 import com.foilen.crm.db.dao.TechnicalSupportDao;
 import com.foilen.crm.db.entities.invoice.Client;
+import com.foilen.crm.db.entities.invoice.Item;
+import com.foilen.crm.db.entities.invoice.RecurrentItem;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.smalltools.restapi.model.FormResult;
@@ -38,7 +42,11 @@ public abstract class AbstractApiService extends AbstractBasics {
     @Autowired
     protected EntitlementService entitlementService;
     @Autowired
+    protected ItemDao itemDao;
+    @Autowired
     protected PaginationService paginationService;
+    @Autowired
+    protected RecurrentItemDao recurrentItemDao;
     @Autowired
     protected TechnicalSupportDao technicalSupportDao;
 
@@ -55,19 +63,6 @@ public abstract class AbstractApiService extends AbstractBasics {
         }
 
         return client;
-    }
-
-    protected void validateClientNameNotUsed(FormResult formResult, String fieldName, String clientName) {
-
-        if (Strings.isNullOrEmpty(clientName)) {
-            return;
-        }
-
-        Client client = clientDao.findByName(clientName);
-        if (client != null) {
-            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.alreadyTaken");
-        }
-
     }
 
     protected void validateClientShortNameNotUsed(FormResult formResult, String fieldName, String clientShortName) {
@@ -108,6 +103,29 @@ public abstract class AbstractApiService extends AbstractBasics {
         }
     }
 
+    protected Item validateItemById(FormResult formResult, String fieldName, long id) {
+
+        Item item = itemDao.findById(id).orElse(null);
+        if (item == null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.itemNotExist");
+            return null;
+        }
+
+        return item;
+    }
+
+    protected void validateItemIsPending(FormResult formResult, String fieldName, Item item) {
+
+        if (item == null) {
+            return;
+        }
+
+        if (item.getInvoiceId() != null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.itemIsNotPending");
+        }
+
+    }
+
     protected void validateLanguage(FormResult formResult, String fieldName, String value) {
         if (!Strings.isNullOrEmpty(value) && !VALID_LANGS.contains(value)) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.notValidLanguage");
@@ -126,19 +144,31 @@ public abstract class AbstractApiService extends AbstractBasics {
         }
     }
 
-    protected TechnicalSupport validateTechnicalSupport(FormResult formResult, String fieldName, String technicalSupportSid) {
+    protected RecurrentItem validateRecurrentItem(FormResult formResult, String fieldName, long id) {
 
-        if (Strings.isNullOrEmpty(technicalSupportSid)) {
+        RecurrentItem entity = recurrentItemDao.findById(id).orElse(null);
+        if (entity == null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.recurrentItemNotExist");
             return null;
         }
 
-        TechnicalSupport technicalSupport = technicalSupportDao.findBySid(technicalSupportSid);
-        if (technicalSupport == null) {
+        return entity;
+
+    }
+
+    protected TechnicalSupport validateTechnicalSupport(FormResult formResult, String fieldName, String sid) {
+
+        if (Strings.isNullOrEmpty(sid)) {
+            return null;
+        }
+
+        TechnicalSupport entity = technicalSupportDao.findBySid(sid);
+        if (entity == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.technicalSupportNotExist");
             return null;
         }
 
-        return technicalSupport;
+        return entity;
 
     }
 

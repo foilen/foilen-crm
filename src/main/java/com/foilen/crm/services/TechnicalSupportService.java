@@ -9,16 +9,15 @@
  */
 package com.foilen.crm.services;
 
-import com.foilen.crm.web.model.CreateTechnicalSupport;
+import com.foilen.crm.web.model.CreateOrUpdateTechnicalSupportForm;
 import com.foilen.crm.web.model.TechnicalSupportList;
-import com.foilen.crm.web.model.UpdateTechnicalSupport;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 public interface TechnicalSupportService {
 
-    FormResult create(String userId, CreateTechnicalSupport form);
+    FormResult create(String userId, CreateOrUpdateTechnicalSupportForm form);
 
-    FormResult delete(String sid);
+    FormResult delete(String userId, String technicalSupportSid);
 
     /**
      * Get the list of technical supports.
@@ -33,5 +32,5 @@ public interface TechnicalSupportService {
      */
     TechnicalSupportList listAll(String userId, int pageId, String search);
 
-    FormResult update(String userId, String sid, UpdateTechnicalSupport form);
+    FormResult update(String userId, String technicalSupportSid, CreateOrUpdateTechnicalSupportForm form);
 }

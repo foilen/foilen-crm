@@ -1,0 +1,6 @@
+{
+  "success" : false,
+  "validationErrorsByField" : {
+    "id" : [ "error.itemIsNotPending" ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "added" : [ {
+    "category" : "new category",
+    "client" : {
+      "email" : "benoit@example.com",
+      "lang" : "FR",
+      "name" : "Bazar",
+      "shortName" : "bazar"
+    },
+    "description" : "New description",
+    "price" : 1234,
+    "priceFormatted" : "12.34"
+  } ],
+  "removed" : [ {
+    "category" : "hosting",
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "description" : "Shared hosting - L1",
+    "price" : 500,
+    "priceFormatted" : "5.00"
+  } ]
+}

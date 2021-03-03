@@ -40,6 +40,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
 
     public static final String CLIENT_SHORTNAME_BAZAR = "bazar";
     public static final String CLIENT_SHORTNAME_EXTRA = "extra";
+    public static final String SID_1 = "S1";
+    public static final String SID_2 = "S2";
 
     @Autowired
     private ClientDao clientDao;
@@ -95,8 +97,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
 
         logger.info("createClients");
 
-        TechnicalSupport s1 = technicalSupportDao.findBySid("S1");
-        TechnicalSupport s2 = technicalSupportDao.findBySid("S2");
+        TechnicalSupport s1 = technicalSupportDao.findBySid(SID_1);
+        TechnicalSupport s2 = technicalSupportDao.findBySid(SID_2);
 
         clientDao.saveAndFlush(new Client() //
                 .setName("Bazar").setShortName(CLIENT_SHORTNAME_BAZAR) //
@@ -173,8 +175,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
     private void createTechnicalSupports() {
         logger.info("createTechnicalSupports");
 
-        technicalSupportDao.saveAndFlush(new TechnicalSupport("S1", 1000));
-        technicalSupportDao.saveAndFlush(new TechnicalSupport("S2", 2000));
+        technicalSupportDao.saveAndFlush(new TechnicalSupport(SID_1, 1000));
+        technicalSupportDao.saveAndFlush(new TechnicalSupport(SID_2, 2000));
 
     }
 

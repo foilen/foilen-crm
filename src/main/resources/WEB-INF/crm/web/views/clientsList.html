@@ -2,7 +2,7 @@
 
   <div class="col-12">
 
-    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="form = {}" data-target="#createModal">{{ $t('button.create') }}</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="showCreate()" data-target="#createModal">{{ $t('button.create') }}</button>
 
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -18,56 +18,56 @@
             <error-results v-bind:formResult="formResult"></error-results>
 
             <div class="form-group">
-              <label for="name">{{ $t('term.name') }}</label> <input type="text" class="form-control" id="name" v-model="form.name" autocomplete="off">
+              <label for="name">{{ $t('term.name') }}</label> <input type="text" class="form-control" id="name" v-model="createForm.name" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.name">
                 <p v-for="errorCode in formResult.validationErrorsByField.name">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="shortName">{{ $t('term.shortName') }}</label> <input type="text" class="form-control" id="shortName" v-model="form.shortName" autocomplete="off">
+              <label for="shortName">{{ $t('term.shortName') }}</label> <input type="text" class="form-control" id="shortName" v-model="createForm.shortName" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.shortName">
                 <p v-for="errorCode in formResult.validationErrorsByField.shortName">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="contactName">{{ $t('term.contactName') }}</label> <input type="text" class="form-control" id="contactName" v-model="form.contactName" autocomplete="off">
+              <label for="contactName">{{ $t('term.contactName') }}</label> <input type="text" class="form-control" id="contactName" v-model="createForm.contactName" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.contactName">
                 <p v-for="errorCode in formResult.validationErrorsByField.contactName">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="email">{{ $t('term.email') }}</label> <input type="text" class="form-control" id="email" v-model="form.email" autocomplete="off">
+              <label for="email">{{ $t('term.email') }}</label> <input type="text" class="form-control" id="email" v-model="createForm.email" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.email">
                 <p v-for="errorCode in formResult.validationErrorsByField.email">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="address">{{ $t('term.address') }}</label> <input type="text" class="form-control" id="address" v-model="form.address" autocomplete="off">
+              <label for="address">{{ $t('term.address') }}</label> <input type="text" class="form-control" id="address" v-model="createForm.address" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.address">
                 <p v-for="errorCode in formResult.validationErrorsByField.address">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="tel">{{ $t('term.tel') }}</label> <input type="text" class="form-control" id="tel" v-model="form.tel" autocomplete="off">
+              <label for="tel">{{ $t('term.tel') }}</label> <input type="text" class="form-control" id="tel" v-model="createForm.tel" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.tel">
                 <p v-for="errorCode in formResult.validationErrorsByField.tel">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="mainSite">{{ $t('term.mainSite') }}</label> <input type="text" class="form-control" id="mainSite" v-model="form.mainSite" autocomplete="off">
+              <label for="mainSite">{{ $t('term.mainSite') }}</label> <input type="text" class="form-control" id="mainSite" v-model="createForm.mainSite" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.mainSite">
                 <p v-for="errorCode in formResult.validationErrorsByField.mainSite">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="lang">{{ $t('term.lang') }}</label> <select class="form-control" id="lang" v-model="form.lang" autocomplete="off">
+              <label for="lang">{{ $t('term.lang') }}</label> <select class="form-control" id="lang" v-model="createForm.lang" autocomplete="off">
                 <option value=""></option>
                 <option>FR</option>
                 <option>EN</option>
@@ -79,7 +79,7 @@
 
             <div class="form-group">
               <label for="technicalSupportSid">{{ $t('term.technicalSupportSid') }}</label>
-              <technical-support-select id="technicalSupportSid" v-model="form.technicalSupportSid"></technical-support-select>
+              <technical-support-select id="technicalSupportSid" v-model="createForm.technicalSupportSid"></technical-support-select>
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.technicalSupportSid">
                 <p v-for="errorCode in formResult.validationErrorsByField.technicalSupportSid">{{ $t(errorCode) }}</p>
               </div>
@@ -216,7 +216,7 @@
           <td>{{item.technicalSupport ? item.technicalSupport.pricePerHourFormatted + '$' : ''}}</td>
           <td>
             <div>
-              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="setupEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="showEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
               <button class="btn btn-sm btn-danger" data-toggle="modal" v-on:click="deleteOne(item)">{{ $t('button.delete') }}</button>
             </div>
           </td>

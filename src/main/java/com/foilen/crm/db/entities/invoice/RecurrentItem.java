@@ -24,9 +24,12 @@ import javax.persistence.Version;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * An Item to bill recurrently.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class RecurrentItem {
 

@@ -1,0 +1,21 @@
+{
+  "items" : [ {
+    "pricePerHour" : 1000,
+    "pricePerHourFormatted" : "10.00",
+    "sid" : "S1"
+  }, {
+    "pricePerHour" : 2000,
+    "pricePerHourFormatted" : "20.00",
+    "sid" : "S2"
+  } ],
+  "pagination" : {
+    "currentPage" : 0,
+    "currentPageUi" : 1,
+    "firstPage" : true,
+    "itemsPerPage" : 100,
+    "lastPage" : true,
+    "totalItems" : 2,
+    "totalPages" : 1
+  },
+  "success" : true
+}

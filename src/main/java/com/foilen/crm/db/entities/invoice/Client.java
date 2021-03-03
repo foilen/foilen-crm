@@ -37,7 +37,7 @@ public class Client {
     @Version
     private long version;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true, nullable = false)

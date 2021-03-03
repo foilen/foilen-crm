@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.foilen.crm.services.ClientService;
 import com.foilen.crm.web.model.ClientList;
-import com.foilen.crm.web.model.CreateClient;
-import com.foilen.crm.web.model.UpdateClient;
+import com.foilen.crm.web.model.CreateOrUpdateClientForm;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/client", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -36,16 +35,18 @@ public class ClientApiController {
     @Autowired
     private ClientService clientService;
 
-    @PostMapping("")
+    @PostMapping
     public FormResult create(Authentication authentication, //
-            @RequestBody CreateClient form //
+            @RequestBody CreateOrUpdateClientForm form //
     ) {
         return clientService.create(authentication.getName(), form);
     }
 
-    @DeleteMapping("/{client-id}")
-    public FormResult delete(@PathVariable("client-id") long clientId) {
-        return clientService.delete(clientId);
+    @DeleteMapping("{clientShortName}")
+    public FormResult delete(Authentication authentication, //
+            @PathVariable String clientShortName //
+    ) {
+        return clientService.delete(authentication.getName(), clientShortName);
     }
 
     @GetMapping("listAll")
@@ -56,8 +57,11 @@ public class ClientApiController {
         return clientService.listAll(authentication.getName(), pageId, search);
     }
 
-    @PutMapping("/{client-id}")
-    public FormResult update(Authentication authentication, @PathVariable("client-id") long clientId, @RequestBody UpdateClient form) {
-        return clientService.update(authentication.getName(), clientId, form);
+    @PutMapping("{clientShortName}")
+    public FormResult update(Authentication authentication, //
+            @PathVariable String clientShortName, //
+            @RequestBody CreateOrUpdateClientForm form //
+    ) {
+        return clientService.update(authentication.getName(), clientShortName, form);
     }
 }

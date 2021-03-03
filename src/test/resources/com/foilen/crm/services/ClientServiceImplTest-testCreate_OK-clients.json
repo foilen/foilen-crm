@@ -1,0 +1,18 @@
+{
+  "added" : [ {
+    "address" : "555 Betancour",
+    "contactName" : "Abc Def",
+    "email" : "abc@example.com",
+    "lang" : "EN",
+    "mainSite" : "http://abc.here.com",
+    "name" : "ABC",
+    "shortName" : "abc",
+    "technicalSupport" : {
+      "pricePerHour" : 2000,
+      "pricePerHourFormatted" : "20.00",
+      "sid" : "S2"
+    },
+    "tel" : "555-202-0101"
+  } ],
+  "removed" : [ ]
+}

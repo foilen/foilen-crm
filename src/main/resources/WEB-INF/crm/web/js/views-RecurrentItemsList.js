@@ -1,100 +1,120 @@
 const RecurrentItemsList = Vue.component('recurrent_items-list', function(resolve, reject) {
 
-  const url = 'views/recurrentItemsList.html'
+	const url = 'views/recurrentItemsList.html'
 
-  jQuery.get(url).done(function(htmlTemplate) {
+	jQuery.get(url).done(function(htmlTemplate) {
 
-    resolve({
-      data : function() {
-        return {
-          queries : {},
-          formResult: {},
-          form: {},
-          editForm: {},
-          items : [],
-          frequencies: ['Monthly', 'Yearly', 'Unknown'],
-          pagination : {
-            currentPageUi : 1,
-            totalPages : 1,
-            firstPage : true,
-            lastPage : true,
-          },
-        }
-      },
-      props : [],
-      computed : {},
-      methods : {
-        refresh : function(pageId) {
-          if (pageId === undefined) {
-            pageId = 1
-          }
-          var c = this
-          c.queries.pageId = pageId
-          console.log('Recurrent Items - Load', c.queries)
-          httpGetQueries('/api/recurrentItem/listAll', c.queries, function(data) {
-            c.pagination = data.pagination
-            c.items = data.items
-            if (c.items == null) {
-              c.items = []
-            }
-          })
-        },
-        create: function() {
-          var c =  this
-          c.formResult = {}
-          console.log('Recurrent Item - Create', c.form)
-          httpPost('/api/recurrentItem', c.form, function(data) {
-            c.formResult = data
-            if (data.success) {
-              jQuery('#createModal .btn-secondary').click()
-              successShow(c.$t('prompt.create.success', [ 'Recurrent Item' ]))
-              c.refresh(c.queries.pageId)
-            }
-          })
-        },
-        setupEdit: function(item) {
-          var c = this
-          c.formResult = {}
-          c.editForm = JSON.parse(JSON.stringify(item))
-        },
-        edit : function() {
-          var c = this
-          c.formResult = {}
-          console.log('Recurrent Item - Edit', c.editForm)
+		resolve({
+			data: function() {
+				return {
+					queries: {},
+					items: [],
+					frequencies: [
+						[2, 'recurrence.monthly'],
+						[1, 'recurrence.yearly'],
+					],
+					pagination: {
+						currentPageUi: 1,
+						totalPages: 1,
+						firstPage: true,
+						lastPage: true,
+					},
+					createForm: {
+						nextGenerationDate: dateNowDayOnly(),
+					},
+					editForm: {
+						clientShortName: null,
+					},
+					formResult: {},
+				}
+			},
+			props: [],
+			computed: {},
+			methods: {
+				refresh: function(pageId) {
+					if (pageId === undefined) {
+						pageId = 1
+					}
+					var c = this
+					c.queries.pageId = pageId
+					console.log('Recurrent Items - Load', c.queries)
 
-          httpPut('/api/recurrentItem/' + c.editForm.id, c.editForm, function(data) {
-            c.formResult = data
-            if (data.success) {
-              jQuery('#editModal .btn-secondary').click()
-              successShow(c.$t('prompt.edit.success', [ c.editForm.id ]))
-              c.refresh()
-            }
-          })
-        },
-        deleteOne: function(item) {
-          console.log(item)
-          if (confirm(this.$t('prompt.delete.confirm', [ item.id ]))) {
-            var c = this
-            console.log('Recurrent Item - Delete', item.id)
+					httpGetQueries('/api/recurrentItem/listAll', c.queries, function(data) {
+						c.pagination = data.pagination
+						c.items = data.items
+						if (c.items == null) {
+							c.items = []
+						}
+					})
+				},
+				showCreate: function() {
+					this.formResult = {}
+				},
+				create: function() {
+					var c = this
+					c.formResult = {}
+					var clonedForm = JSON.parse(JSON.stringify(c.createForm))
+					clonedForm.price = priceToLong(clonedForm.price)
+					console.log('Recurrent Item - Create', clonedForm)
 
-            httpDelete('/api/recurrentItem/' + item.id, function() {
-              successShow(c.$t('prompt.delete.success', [ item.id ]))
-              c.refresh()
-            })
-          }
-        }
-      },
-      mounted : function() {
-        this.refresh()
-      },
-      template : htmlTemplate
-    })
+					httpPost('/api/recurrentItem', clonedForm, function(data) {
+						c.formResult = data
+						if (data.success) {
+							jQuery('#createModal .btn-secondary').click()
+							successShow(c.$t('prompt.create.success', [c.createForm.description]))
+							c.refresh(c.queries.pageId)
+						}
+					})
+				},
+				deleteOne: function(item) {
+					if (confirm(this.$t('prompt.delete.confirm', [item.id]))) {
+						var c = this
+						console.log('Recurrent Item - Delete', item.id)
 
-  }).fail(function(jqXHR, textStatus, errorThrown) {
-    var escapedResponseText = new Option(jqXHR.responseText).innerHTML;
-    var error = 'Could not get the template ' + url + ' . Error: ' + textStatus + ' ' + errorThrown + '<br/>' + escapedResponseText;
-    errorShow(error)
-    reject(error)
-  })
+						httpDelete('/api/recurrentItem/' + item.id, function() {
+							successShow(c.$t('prompt.delete.success', [item.description]))
+							c.refresh()
+						})
+					}
+				},
+				showEdit: function(item) {
+					this.formResult = {}
+					Object.assign(this.editForm, item)
+					this.editForm.id = item.id
+					this.editForm.nextGenerationDate = item.nextGenerationDateFormatted
+					this.editForm.price = this.editForm.priceFormatted
+					if (item.client) {
+						this.editForm.clientShortName = item.client.shortName
+					}
+				},
+				edit: function() {
+					var c = this
+					c.formResult = {}
+					var clonedForm = JSON.parse(JSON.stringify(c.editForm))
+					clonedForm.price = priceToLong(clonedForm.price)
+					console.log('Recurrent Item - Edit', clonedForm)
+
+					httpPut('/api/recurrentItem/' + clonedForm.id, clonedForm, function(data) {
+						c.formResult = data
+						if (data.success) {
+							jQuery('#editModal .btn-secondary').click()
+							successShow(c.$t('prompt.edit.success', [c.editForm.description]))
+							c.refresh()
+						}
+					})
+				},
+			},
+			mounted: function() {
+				this.refresh()
+			},
+			template: htmlTemplate
+		})
+
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		var escapedResponseText = new Option(jqXHR.responseText).innerHTML;
+		var error = 'Could not get the template ' + url + ' . Error: ' + textStatus + ' ' + errorThrown + '<br/>' + escapedResponseText;
+		errorShow(error)
+		reject(error)
+	})
 
 })

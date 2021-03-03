@@ -20,6 +20,8 @@ import com.foilen.crm.db.entities.invoice.RecurrentItem;
 @Repository
 public interface RecurrentItemDao extends JpaRepository<RecurrentItem, Long> {
 
+    List<RecurrentItem> findAllByClientShortName(String clientShortName);
+
     List<RecurrentItem> findAllByNextGenerationDateLessThanEqual(Date date);
 
 }

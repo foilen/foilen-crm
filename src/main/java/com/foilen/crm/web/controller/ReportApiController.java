@@ -27,7 +27,7 @@ public class ReportApiController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping("")
+    @GetMapping
     public ReportsResponse reports(Authentication authentication) {
         return reportService.getReports(authentication.getName());
     }

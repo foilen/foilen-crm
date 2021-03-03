@@ -2,7 +2,7 @@
 
   <div class="col-12">
 
-    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="form = {}" data-target="#createModal">{{ $t('button.create') }}</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="showCreate()" data-target="#createModal">{{ $t('button.create') }}</button>
 
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -18,14 +18,14 @@
             <error-results v-bind:formResult="formResult"></error-results>
 
             <div class="form-group">
-              <label for="sid">{{ $t('term.sid') }}</label> <input type="text" class="form-control" id="sid" v-model="form.sid" autocomplete="off">
+              <label for="sid">{{ $t('term.sid') }}</label> <input type="text" class="form-control" id="sid" v-model="createForm.sid" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.sid">
                 <p v-for="errorCode in formResult.validationErrorsByField.sid">{{ $t(errorCode) }}</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="pricePerHour">{{ $t('term.pricePerHour') }}</label> <input type="text" class="form-control" id="pricePerHour" v-model="form.pricePerHour" autocomplete="off">
+              <label for="pricePerHour">{{ $t('term.pricePerHour') }}</label> <input type="text" class="form-control" id="pricePerHour" v-model="createForm.pricePerHour" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour">
                 <p v-for="errorCode in formResult.validationErrorsByField.pricePerHour">{{ $t(errorCode) }}</p>
               </div>
@@ -89,7 +89,7 @@
           <td>{{item.pricePerHourFormatted}}$</td>
           <td>
             <div>
-              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="setupEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="showEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
               <button class="btn btn-sm btn-danger" data-toggle="modal" v-on:click="deleteOne(item)">{{ $t('button.delete') }}</button>
             </div>
           </td>

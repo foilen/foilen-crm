@@ -1,0 +1,32 @@
+{
+  "added" : [ {
+    "address" : "1010 Betancour",
+    "contactName" : "Benoit Bezos",
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "mainSite" : "http://bazar.example.com",
+    "name" : "Bazar",
+    "shortName" : "bbb",
+    "technicalSupport" : {
+      "pricePerHour" : 1000,
+      "pricePerHourFormatted" : "10.00",
+      "sid" : "S1"
+    },
+    "tel" : "555-101-0101"
+  } ],
+  "removed" : [ {
+    "address" : "1010 Betancour",
+    "contactName" : "Benoit Bezos",
+    "email" : "benoit@example.com",
+    "lang" : "FR",
+    "mainSite" : "http://bazar.example.com",
+    "name" : "Bazar",
+    "shortName" : "bazar",
+    "technicalSupport" : {
+      "pricePerHour" : 1000,
+      "pricePerHourFormatted" : "10.00",
+      "sid" : "S1"
+    },
+    "tel" : "555-101-0101"
+  } ]
+}

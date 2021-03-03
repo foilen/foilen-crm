@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +23,13 @@ import com.foilen.crm.db.dao.ClientDao;
 import com.foilen.crm.db.dao.TechnicalSupportDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
-import com.foilen.crm.web.model.CreateTechnicalSupport;
+import com.foilen.crm.web.model.CreateOrUpdateTechnicalSupportForm;
 import com.foilen.crm.web.model.TechnicalSupportList;
-import com.foilen.crm.web.model.UpdateTechnicalSupport;
+import com.foilen.smalltools.reflection.BeanPropertiesCopierTools;
 import com.foilen.smalltools.restapi.model.FormResult;
+import com.foilen.smalltools.tools.JsonTools;
+import com.foilen.smalltools.tools.StringTools;
+import com.google.common.base.Strings;
 
 @Service
 @Transactional
@@ -40,39 +42,48 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
     private ClientDao clientDao;
 
     @Override
-    public FormResult create(String name, CreateTechnicalSupport form) {
+    public FormResult create(String userId, CreateOrUpdateTechnicalSupportForm form) {
+
         FormResult formResult = new FormResult();
 
         // Validation
-        entitlementService.canCreateTechnicalSupportOrFail(name);
+        entitlementService.canCreateTechnicalSupportOrFail(userId);
         validateMandatory(formResult, "sid", form.getSid());
         validateTechnicalSupportSidNotUsed(formResult, "sid", form.getSid());
-        validateMandatory(formResult, "pricePerHour", form.getPricePerHourFormatted());
-
-        TechnicalSupport technicalSupport = new TechnicalSupport();
-        technicalSupport.setSid(form.getSid());
-        technicalSupport.setPricePerHour(form.getPricePerHour());
-
-        technicalSupportDao.save(technicalSupport);
 
         if (!formResult.isSuccess()) {
             return formResult;
         }
 
+        // Create
+        TechnicalSupport entity = JsonTools.clone(form, TechnicalSupport.class);
+        technicalSupportDao.save(entity);
+
         return formResult;
     }
 
     @Override
-    public FormResult delete(String sid) {
-        FormResult formResult = new FormResult();
-        TechnicalSupport technicalSupport = technicalSupportDao.findBySid(sid);
+    public FormResult delete(String userId, String technicalSupportSid) {
 
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canDeleteTechnicalSupportOrFail(userId);
+        TechnicalSupport technicalSupport = validateTechnicalSupport(formResult, "technicalSupportSid", technicalSupportSid);
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Detach from clients
         List<Client> clients = clientDao.findByTechnicalSupport(technicalSupport);
         clients.forEach(client -> client.setTechnicalSupport(null));
 
+        // Delete
         technicalSupportDao.delete(technicalSupport);
 
         return formResult;
+
     }
 
     @Override
@@ -82,7 +93,7 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
         validatePageId(pageId);
         entitlementService.canViewTechnicalSupportOrFail(userId);
 
-        if (Strings.isBlank(search)) {
+        if (Strings.isNullOrEmpty(search)) {
             search = null;
         }
 
@@ -100,19 +111,23 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
     }
 
     @Override
-    public FormResult update(String name, String sid, UpdateTechnicalSupport form) {
+    public FormResult update(String userId, String technicalSupportSid, CreateOrUpdateTechnicalSupportForm form) {
         FormResult formResult = new FormResult();
 
-        entitlementService.canCreateTechnicalSupportOrFail(name);
+        // Validation
+        entitlementService.canUpdateTechnicalSupportOrFail(userId);
+        TechnicalSupport technicalSupport = validateTechnicalSupport(formResult, "technicalSupportSid", technicalSupportSid);
         validateMandatory(formResult, "sid", form.getSid());
-        validateMandatory(formResult, "pricePerHour", form.getPricePerHourFormatted());
+        if (!Strings.isNullOrEmpty(form.getSid()) && !StringTools.safeEquals(technicalSupportSid, form.getSid())) {
+            validateTechnicalSupportSidNotUsed(formResult, "sid", form.getSid());
+        }
 
         if (!formResult.isSuccess()) {
             return formResult;
         }
 
-        TechnicalSupport technicalSupport = technicalSupportDao.findBySid(sid);
-        technicalSupport.setPricePerHour(form.getPricePerHour());
+        // Update
+        new BeanPropertiesCopierTools(form, technicalSupport).copyAllSameProperties();
 
         technicalSupportDao.save(technicalSupport);
 

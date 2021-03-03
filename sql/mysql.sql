@@ -68,9 +68,6 @@
     ) engine=InnoDB;
 
     alter table client 
-       add constraint UK_dn5jasds5r1j3ewo5k3nhwkkq unique (name);
-
-    alter table client 
        add constraint UK_epk5nw87ng8rnd46cs3eb2dm3 unique (short_name);
 
     alter table technical_support 
@@ -90,14 +87,17 @@
     alter table item 
        add constraint FKpxnjeqy0c2uq7xqdt6t76flj6 
        foreign key (client_id) 
-       references client (id);
+       references client (id) 
+       on delete cascade;
 
     alter table recurrent_item 
        add constraint FK4gtjj1276txn1630xwc778g22 
        foreign key (client_id) 
-       references client (id);
+       references client (id) 
+       on delete cascade;
 
     alter table transaction 
        add constraint FK7j4eee09p60fngm038fc4oxj2 
        foreign key (client_id) 
-       references client (id);
+       references client (id) 
+       on delete cascade;

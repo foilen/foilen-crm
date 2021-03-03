@@ -9,47 +9,41 @@
  */
 package com.foilen.crm.services;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.RecurrentItemDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
-import com.foilen.crm.web.model.CreateRecurrentItem;
+import com.foilen.crm.web.model.CreateOrUpdateRecurrentItemForm;
 import com.foilen.crm.web.model.RecurrentItemList;
-import com.foilen.crm.web.model.UpdateRecurrentItem;
+import com.foilen.smalltools.reflection.BeanPropertiesCopierTools;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.DateTools;
+import com.foilen.smalltools.tools.JsonTools;
 
 @Service
 @Transactional
 public class RecurrentItemServiceImpl extends AbstractApiService implements RecurrentItemService {
 
-    @Autowired
-    private ItemDao itemDao;
-    @Autowired
-    private RecurrentItemDao recurrentItemDao;
-
     @Override
-    public FormResult create(String userId, CreateRecurrentItem form) {
+    public FormResult create(String userId, CreateOrUpdateRecurrentItemForm form) {
+
         FormResult formResult = new FormResult();
+
         // Validation
-        entitlementService.canCreateItemOrFail(userId);
+        entitlementService.canCreateRecurrentItemOrFail(userId);
         validateMandatory(formResult, "clientShortName", form.getClientShortName());
-        validateDateOnly(formResult, "nextGenerationDate", form.getNextGenerationDate());
         validateMandatory(formResult, "nextGenerationDate", form.getNextGenerationDate());
+        validateDateOnly(formResult, "nextGenerationDate", form.getNextGenerationDate());
         validateMandatory(formResult, "description", form.getDescription());
         validateMandatory(formResult, "category", form.getCategory());
         Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
@@ -58,17 +52,31 @@ public class RecurrentItemServiceImpl extends AbstractApiService implements Recu
             return formResult;
         }
 
-        RecurrentItem entity = getRecurrentItemFromCreate(form, client);
+        // Create
+        RecurrentItem entity = JsonTools.clone(form, RecurrentItem.class);
+        entity.setClient(client);
+        entity.setNextGenerationDate(DateTools.parseDateOnly(form.getNextGenerationDate()));
         recurrentItemDao.save(entity);
 
         return formResult;
+
     }
 
     @Override
-    public FormResult delete(long id) {
+    public FormResult delete(String userId, long recurrentItemId) {
+
         FormResult formResult = new FormResult();
 
-        recurrentItemDao.deleteById(id);
+        // Validation
+        entitlementService.canDeleteRecurrentItemOrFail(userId);
+        RecurrentItem recurrentItem = validateRecurrentItem(formResult, "recurrentItemId", recurrentItemId);
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Delete
+        recurrentItemDao.delete(recurrentItem);
 
         return formResult;
     }
@@ -89,30 +97,6 @@ public class RecurrentItemServiceImpl extends AbstractApiService implements Recu
         });
     }
 
-    private int getCalendarUnit(String frequency) {
-        switch (frequency) {
-        case "Monthly":
-            return Calendar.MONTH;
-        case "Yearly":
-            return Calendar.YEAR;
-        default:
-            return Calendar.WEEK_OF_YEAR;
-        }
-    }
-
-    private RecurrentItem getRecurrentItemFromCreate(CreateRecurrentItem form, Client client) {
-        RecurrentItem entity = new RecurrentItem();
-        entity.setDelta(form.getDelta());
-        entity.setDescription(form.getDescription());
-        entity.setPrice(form.getPrice());
-        entity.setCategory(form.getCategory());
-        entity.setCalendarUnit(getCalendarUnit(form.getFrequency()));
-        entity.setClient(client);
-        entity.setNextGenerationDate(DateTools.parseDateOnly(form.getNextGenerationDate()));
-
-        return entity;
-    }
-
     @Override
     public RecurrentItemList listAll(String userId, int pageId) {
 
@@ -129,39 +113,31 @@ public class RecurrentItemServiceImpl extends AbstractApiService implements Recu
     }
 
     @Override
-    public FormResult update(String userId, long id, UpdateRecurrentItem form) {
+    public FormResult update(String userId, long recurrentItemId, CreateOrUpdateRecurrentItemForm form) {
+
         FormResult formResult = new FormResult();
+
         // Validation
-        entitlementService.canCreateItemOrFail(userId);
+        entitlementService.canUpdateRecurrentItemOrFail(userId);
         validateMandatory(formResult, "clientShortName", form.getClientShortName());
-        validateDateOnly(formResult, "nextGenerationDate", form.getNextGenerationDate());
         validateMandatory(formResult, "nextGenerationDate", form.getNextGenerationDate());
+        validateDateOnly(formResult, "nextGenerationDate", form.getNextGenerationDate());
         validateMandatory(formResult, "description", form.getDescription());
         validateMandatory(formResult, "category", form.getCategory());
+        RecurrentItem recurrentItem = validateRecurrentItem(formResult, "recurrentItemId", recurrentItemId);
         Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
 
         if (!formResult.isSuccess()) {
             return formResult;
         }
 
-        RecurrentItem entity = recurrentItemDao.getOne(id);
-        updateRecurrentItem(entity, form, client);
-
-        recurrentItemDao.save(entity);
+        // Update
+        new BeanPropertiesCopierTools(form, recurrentItem).copyAllSameProperties();
+        recurrentItem.setClient(client);
+        recurrentItem.setNextGenerationDate(DateTools.parseDateOnly(form.getNextGenerationDate()));
+        recurrentItemDao.save(recurrentItem);
 
         return formResult;
-    }
-
-    private RecurrentItem updateRecurrentItem(RecurrentItem entity, UpdateRecurrentItem form, Client client) {
-        entity.setDelta(form.getDelta());
-        entity.setDescription(form.getDescription());
-        entity.setPrice(form.getPrice());
-        entity.setCategory(form.getCategory());
-        entity.setCalendarUnit(getCalendarUnit(form.getFrequency()));
-        entity.setClient(client);
-        entity.setNextGenerationDate(DateTools.parseDateOnly(form.getNextGenerationDate()));
-
-        return entity;
     }
 
 }

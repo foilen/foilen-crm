@@ -1,0 +1,15 @@
+{
+  "added" : [ ],
+  "removed" : [ {
+    "category" : "hosting",
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "description" : "Shared hosting - L1",
+    "price" : 500,
+    "priceFormatted" : "5.00"
+  } ]
+}

@@ -17,11 +17,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.foilen.smalltools.tools.AbstractBasics;
+
 /**
  * Technical support contract.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class TechnicalSupport {
+public class TechnicalSupport extends AbstractBasics {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

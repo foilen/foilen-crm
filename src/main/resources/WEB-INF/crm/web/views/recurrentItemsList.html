@@ -2,7 +2,7 @@
 
   <div class="col-12">
 
-    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="form = {}" data-target="#createModal">{{ $t('button.create') }}</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" v-on:click="showCreate()" data-target="#createModal">{{ $t('button.create') }}</button>
 
     <pagination class="float-right" v-bind:pagination="pagination" v-on:changePage="refresh($event.pageId)"></pagination>
 
@@ -20,46 +20,49 @@
             <error-results v-bind:formResult="formResult"></error-results>
 
             <div class="form-group">
-              <label for="clientShortName">{{ $t('term.clientShortName') }}</label>
-              <client-select id="clientShortName" v-model="form.clientShortName"></client-select>
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
-                <p v-for="errorCode in formResult.validationErrorsByField.clientShortName">{{ $t(errorCode) }}</p>
+              <label for="calendarUnit">{{ $t('term.frequency') }}</label> 
+              <select class="form-control" id="calendarUnit" v-model="createForm.calendarUnit">
+                <option v-for="frequency in frequencies" v-bind:value="frequency[0]">{{ $t(frequency[1]) }}</option>
+              </select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.calendarUnit">
+                <p v-for="errorCode in formResult.validationErrorsByField.calendarUnit">{{ $t(errorCode) }}</p>
               </div>
             </div>
             <div class="form-group">
-              <label for="category">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category" v-model="form.category" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
-                <p v-for="errorCode in formResult.validationErrorsByField.category">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="description">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description" v-model="form.description" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
-                <p v-for="errorCode in formResult.validationErrorsByField.description">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="price">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price" v-model="form.price" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
-                <p v-for="errorCode in formResult.validationErrorsByField.price">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="frequency">{{ $t('term.frequency') }}</label> <input type="text" class="form-control" id="frequency" v-model="form.frequency" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.frequency">
-                <p v-for="errorCode in formResult.validationErrorsByField.frequency">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="delta">{{ $t('term.delta') }}</label> <input type="text" class="form-control" id="delta" v-model="form.delta" autocomplete="off">
+              <label for="delta">{{ $t('term.delta') }}</label> <input type="text" class="form-control" id="delta" v-model="createForm.delta" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.delta">
                 <p v-for="errorCode in formResult.validationErrorsByField.delta">{{ $t(errorCode) }}</p>
               </div>
             </div>
             <div class="form-group">
-              <label for="nextGenerationDate">{{ $t('term.nextGenerationDate') }}</label> <input type="text" class="form-control" id="nextGenerationDate" v-model="form.nextGenerationDate" autocomplete="off">
+              <label for="nextGenerationDate">{{ $t('term.nextGenerationDate') }}</label> <input type="text" class="form-control" id="nextGenerationDate" v-model="createForm.nextGenerationDate" autocomplete="off">
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.nextGenerationDate">
                 <p v-for="errorCode in formResult.validationErrorsByField.nextGenerationDate">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="clientShortName">{{ $t('term.clientShortName') }}</label>
+              <client-select id="clientShortName" v-model="createForm.clientShortName"></client-select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
+                <p v-for="errorCode in formResult.validationErrorsByField.clientShortName">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description" v-model="createForm.description" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
+                <p v-for="errorCode in formResult.validationErrorsByField.description">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="price">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price" v-model="createForm.price" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
+                <p v-for="errorCode in formResult.validationErrorsByField.price">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="category">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category" v-model="createForm.category" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
+                <p v-for="errorCode in formResult.validationErrorsByField.category">{{ $t(errorCode) }}</p>
               </div>
             </div>
           </div>
@@ -85,16 +88,31 @@
             <error-results v-bind:formResult="formResult"></error-results>
 
             <div class="form-group">
+              <label for="calendarUnit2">{{ $t('term.frequency') }}</label> 
+              <select class="form-control" id="calendarUnit2" v-model="editForm.calendarUnit">
+                <option v-for="frequency in frequencies" v-bind:value="frequency[0]">{{ $t(frequency[1]) }}</option>
+              </select>
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.calendarUnit">
+                <p v-for="errorCode in formResult.validationErrorsByField.calendarUnit">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="delta2">{{ $t('term.delta') }}</label> <input type="text" class="form-control" id="delta2" v-model="editForm.delta" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.delta">
+                <p v-for="errorCode in formResult.validationErrorsByField.delta">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="nextGenerationDate2">{{ $t('term.nextGenerationDate') }}</label> <input type="text" class="form-control" id="nextGenerationDate2" v-model="editForm.nextGenerationDate" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.nextGenerationDate">
+                <p v-for="errorCode in formResult.validationErrorsByField.nextGenerationDate">{{ $t(errorCode) }}</p>
+              </div>
+            </div>
+            <div class="form-group">
               <label for="clientShortName2">{{ $t('term.clientShortName') }}</label>
               <client-select id="clientShortName2" v-model="editForm.clientShortName"></client-select>
               <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
                 <p v-for="errorCode in formResult.validationErrorsByField.clientShortName">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="category2">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category2" v-model="editForm.category" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
-                <p v-for="errorCode in formResult.validationErrorsByField.category">{{ $t(errorCode) }}</p>
               </div>
             </div>
             <div class="form-group">
@@ -110,21 +128,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="frequency2">{{ $t('term.frequency') }}</label> <input type="text" class="form-control" id="frequency2" v-model="editForm.frequency" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.frequency">
-                <p v-for="errorCode in formResult.validationErrorsByField.frequency">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="delta2">{{ $t('term.delta') }}</label> <input type="text" class="form-control" id="delta2" v-model="editForm.delta" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.delta">
-                <p v-for="errorCode in formResult.validationErrorsByField.delta">{{ $t(errorCode) }}</p>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="nextGenerationDate2">{{ $t('term.nextGenerationDate') }}</label> <input type="text" class="form-control" id="nextGenerationDate2" v-model="editForm.nextGenerationDate" autocomplete="off">
-              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.nextGenerationDate">
-                <p v-for="errorCode in formResult.validationErrorsByField.nextGenerationDate">{{ $t(errorCode) }}</p>
+              <label for="category2">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category2" v-model="editForm.category" autocomplete="off">
+              <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
+                <p v-for="errorCode in formResult.validationErrorsByField.category">{{ $t(errorCode) }}</p>
               </div>
             </div>
           </div>
@@ -160,7 +166,7 @@
           <td>{{item.nextGenerationDateFormatted}}</td>
           <td>
             <div>
-              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="setupEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" v-on:click="showEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
               <button class="btn btn-sm btn-danger" data-toggle="modal" v-on:click="deleteOne(item)">{{ $t('button.delete') }}</button>
             </div>
           </td>

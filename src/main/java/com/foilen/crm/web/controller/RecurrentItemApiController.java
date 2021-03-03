@@ -23,9 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foilen.crm.services.RecurrentItemService;
-import com.foilen.crm.web.model.CreateRecurrentItem;
+import com.foilen.crm.web.model.CreateOrUpdateRecurrentItemForm;
 import com.foilen.crm.web.model.RecurrentItemList;
-import com.foilen.crm.web.model.UpdateRecurrentItem;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/recurrentItem", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -36,14 +35,18 @@ public class RecurrentItemApiController {
     @Autowired
     private RecurrentItemService recurrentItemService;
 
-    @PostMapping("")
-    public FormResult create(Authentication authentication, @RequestBody CreateRecurrentItem form) {
+    @PostMapping
+    public FormResult create(Authentication authentication, //
+            @RequestBody CreateOrUpdateRecurrentItemForm form //
+    ) {
         return recurrentItemService.create(authentication.getName(), form);
     }
 
-    @DeleteMapping("/{id}")
-    public FormResult delete(@PathVariable("id") long id) {
-        return recurrentItemService.delete(id);
+    @DeleteMapping("{id}")
+    public FormResult delete(Authentication authentication, //
+            @PathVariable("id") long id //
+    ) {
+        return recurrentItemService.delete(authentication.getName(), id);
     }
 
     @GetMapping("listAll")
@@ -53,8 +56,11 @@ public class RecurrentItemApiController {
         return recurrentItemService.listAll(authentication.getName(), pageId);
     }
 
-    @PutMapping("/{id}")
-    public FormResult update(Authentication authentication, @PathVariable("id") long id, @RequestBody UpdateRecurrentItem form) {
+    @PutMapping("{id}")
+    public FormResult update(Authentication authentication, //
+            @PathVariable("id") long id, //
+            @RequestBody CreateOrUpdateRecurrentItemForm form //
+    ) {
         return recurrentItemService.update(authentication.getName(), id, form);
     }
 

@@ -54,7 +54,52 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
     }
 
     @Override
+    public void canCreateRecurrentItemOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
     public void canCreateTechnicalSupportOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canDeleteClientOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canDeleteItemOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canDeleteRecurrentItemOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canDeleteTechnicalSupportOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canUpdateClientOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canUpdateItemOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canUpdateRecurrentItemOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
+    public void canUpdateTechnicalSupportOrFail(String userId) {
         isAdminOrFail(userId);
     }
 

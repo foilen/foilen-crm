@@ -23,9 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foilen.crm.services.TechnicalSupportService;
-import com.foilen.crm.web.model.CreateTechnicalSupport;
+import com.foilen.crm.web.model.CreateOrUpdateTechnicalSupportForm;
 import com.foilen.crm.web.model.TechnicalSupportList;
-import com.foilen.crm.web.model.UpdateTechnicalSupport;
 import com.foilen.smalltools.restapi.model.FormResult;
 
 @RequestMapping(value = "api/technicalSupport", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
@@ -37,13 +36,17 @@ public class TechnicalSupportApiController {
     private TechnicalSupportService technicalSupportService;
 
     @PostMapping
-    public FormResult create(Authentication authentication, @RequestBody CreateTechnicalSupport form) {
+    public FormResult create(Authentication authentication, //
+            @RequestBody CreateOrUpdateTechnicalSupportForm form //
+    ) {
         return technicalSupportService.create(authentication.getName(), form);
     }
 
-    @DeleteMapping("/{sid}")
-    public FormResult delete(@PathVariable("sid") String sid) {
-        return technicalSupportService.delete(sid);
+    @DeleteMapping("{sid}")
+    public FormResult delete(Authentication authentication, //
+            @PathVariable("sid") String sid //
+    ) {
+        return technicalSupportService.delete(authentication.getName(), sid);
     }
 
     @GetMapping("listAll")
@@ -54,8 +57,11 @@ public class TechnicalSupportApiController {
         return technicalSupportService.listAll(authentication.getName(), pageId, search);
     }
 
-    @PutMapping("/{sid}")
-    public FormResult update(Authentication authentication, @PathVariable("sid") String sid, @RequestBody UpdateTechnicalSupport form) {
-        return technicalSupportService.update(authentication.getName(), sid, form);
+    @PutMapping("{technicalSupportSid}")
+    public FormResult update(Authentication authentication, //
+            @PathVariable("technicalSupportSid") String technicalSupportSid, //
+            @RequestBody CreateOrUpdateTechnicalSupportForm form //
+    ) {
+        return technicalSupportService.update(authentication.getName(), technicalSupportSid, form);
     }
 }

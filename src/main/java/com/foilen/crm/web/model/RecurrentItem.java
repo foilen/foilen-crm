@@ -29,12 +29,8 @@ public class RecurrentItem extends AbstractApiBase {
 
     // Item details
     private ClientShort client;
-
     private String description;
-
-    // 1099 for 10.99$
-    private long price = 0;
-
+    private long price = 0; // 1099 for 10.99$
     private String category;
 
     public int getCalendarUnit() {

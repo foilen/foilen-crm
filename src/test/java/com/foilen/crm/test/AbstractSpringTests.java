@@ -12,6 +12,7 @@ package com.foilen.crm.test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,12 @@ import com.foilen.crm.db.dao.RecurrentItemDao;
 import com.foilen.crm.db.dao.TechnicalSupportDao;
 import com.foilen.crm.db.dao.TransactionDao;
 import com.foilen.crm.db.dao.UserDao;
+import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
+import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.invoice.Transaction;
+import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
 import com.foilen.login.spring.client.security.FoilenAuthentication;
@@ -91,11 +95,29 @@ public abstract class AbstractSpringTests {
         }
     }
 
+    protected void expectNotAdmin(Runnable runnable) {
+        try {
+            runnable.run();
+            Assert.fail("Expecting failure as not admin");
+        } catch (ErrorMessageException e) {
+            Assert.assertEquals("error.notAdmin", e.getMessage());
+        }
+    }
+
     protected void setFoilenAuth(String userId, String email) {
         SecurityContext securityContext = new SecurityContextImpl();
         UserDetails userDetails = new FoilenLoginUserDetails(userId, email);
         securityContext.setAuthentication(new FoilenAuthentication(userDetails));
         SecurityContextHolder.setContext(securityContext);
+    }
+
+    protected List<com.foilen.crm.web.model.Client> trimClient(List<Client> entities) {
+        return entities.stream() //
+                .map(e -> {
+                    com.foilen.crm.web.model.Client c = JsonTools.clone(e, com.foilen.crm.web.model.Client.class);
+                    return c;
+                }) //
+                .collect(Collectors.toList());
     }
 
     protected List<com.foilen.crm.web.model.Item> trimItem(List<Item> entities) {
@@ -117,6 +139,15 @@ public abstract class AbstractSpringTests {
                     t.setId(null);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     return t;
+                }) //
+                .collect(Collectors.toList());
+    }
+
+    protected List<com.foilen.crm.web.model.TechnicalSupport> trimTechnicalSupport(List<TechnicalSupport> entities) {
+        return entities.stream() //
+                .map(e -> {
+                    com.foilen.crm.web.model.TechnicalSupport c = JsonTools.clone(e, com.foilen.crm.web.model.TechnicalSupport.class);
+                    return c;
                 }) //
                 .collect(Collectors.toList());
     }

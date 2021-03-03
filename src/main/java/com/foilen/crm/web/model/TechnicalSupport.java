@@ -15,6 +15,7 @@ import com.foilen.smalltools.tools.PriceFormatTools;
 public class TechnicalSupport extends AbstractApiBase {
 
     private String sid;
+    // 1099 for 10.99$
     private long pricePerHour;
 
     public long getPricePerHour() {

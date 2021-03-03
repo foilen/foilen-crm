@@ -1,0 +1,20 @@
+{
+  "added" : [ ],
+  "removed" : [ {
+    "calendarUnit" : 2,
+    "calendarUnitCode" : "recurrence.monthly",
+    "category" : "hosting",
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "delta" : 1,
+    "description" : "Shared hosting - L1",
+    "nextGenerationDate" : 1561953600000,
+    "nextGenerationDateFormatted" : "2019-07-01",
+    "price" : 500,
+    "priceFormatted" : "5.00"
+  } ]
+}

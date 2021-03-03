@@ -45,6 +45,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 @ComponentScan({ "com.foilen.crm.web" })
 public class CrmWebSpringConfig implements WebMvcConfigurer {
 
+    private static final String VENDOR_DIST = "/WEB-INF/crm/web/js/vendor/dist/";
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
@@ -65,20 +67,21 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
             chain.addResolver(new CachingResourceResolver(new ConcurrentMapCache("bundles")));
         }
         BundleResourceResolver bundleResourceResolver = new BundleResourceResolver().setCache(isProd) //
-                .setGenerateGzip(true);
+                .setGenerateGzip(true) //
+                .setAppendLineReturnBetweenFiles(true);
 
-        bundleResourceResolver.addBundleResource("all-vendors.css", "/WEB-INF/crm/web/css/vendors/bootstrap-4.6.0.min.css");
+        bundleResourceResolver.addBundleResource("all-vendors.css", VENDOR_DIST + "css/bootstrap.min.css");
 
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/jquery-3.5.1.min.js");
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/js-cookie-2.2.1.min.js");
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/bootstrap-4.6.0.bundle.min.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "jquery.min.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "js.cookie.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "js/bootstrap.min.js");
         if (isProd) {
-            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.12.min.js");
+            bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "vue.min.js");
         } else {
-            bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-2.6.12-dev.js");
+            bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "vue.js");
         }
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-router-3.4.9.js");
-        bundleResourceResolver.addBundleResource("all-vendors.js", "/WEB-INF/crm/web/js/vendors/vue-i18n-8.22.4.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "vue-router.js");
+        bundleResourceResolver.addBundleResource("all-vendors.js", VENDOR_DIST + "vue-i18n.min.js");
 
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/errors.js");
         bundleResourceResolver.addBundleResource("all-app.js", "/WEB-INF/crm/web/js/views-ClientsList.js");
