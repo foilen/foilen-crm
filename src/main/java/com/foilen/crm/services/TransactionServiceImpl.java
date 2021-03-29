@@ -158,9 +158,11 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         model.put("accountBalanceFormatted", PriceFormatTools.toDigit(accountBalance));
         model.put("negativeAccountBalanceFormatted", PriceFormatTools.toDigit(-accountBalance));
 
-        File tmpFolder = Files.createTempDir();
-        String tmpFolderAbs = tmpFolder.getAbsolutePath();
+        File tmpFolder = null;
         try {
+            tmpFolder = java.nio.file.Files.createTempDirectory("invoice").toFile();
+            String tmpFolderAbs = tmpFolder.getAbsolutePath();
+
             // Process template
             Template template = freemarkerConfiguration.getTemplate("invoice-" + client.getLang() + ".html");
             FileOutputStream htmlOutputStream = new FileOutputStream(tmpFolderAbs + "/index.html");
@@ -201,7 +203,9 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         } catch (Exception e) {
             throw new CrmException("Problem generating the html invoice", e);
         } finally {
-            DirectoryTools.deleteFolder(tmpFolder);
+            if (tmpFolder != null) {
+                DirectoryTools.deleteFolder(tmpFolder);
+            }
         }
 
     }
