@@ -9,13 +9,11 @@
  */
 package com.foilen.crm;
 
-import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.foilen.login.spring.client.security.FoilenLoginSecurityConfig;
+import com.foilen.login.stub.spring.client.security.FoilenLoginSecurityStubConfig;
+import com.foilen.smalltools.reflection.ReflectionTools;
+import com.foilen.smalltools.tools.*;
+import com.google.common.base.Strings;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
@@ -32,17 +30,11 @@ import org.springframework.retry.policy.AlwaysRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
-import com.foilen.login.spring.client.security.FoilenLoginSecurityConfig;
-import com.foilen.login.stub.spring.client.security.FoilenLoginSecurityStubConfig;
-import com.foilen.smalltools.reflection.ReflectionTools;
-import com.foilen.smalltools.tools.DirectoryTools;
-import com.foilen.smalltools.tools.FileTools;
-import com.foilen.smalltools.tools.JsonTools;
-import com.foilen.smalltools.tools.LogbackTools;
-import com.foilen.smalltools.tools.ResourceTools;
-import com.foilen.smalltools.tools.SecureRandomTools;
-import com.foilen.smalltools.tools.SpringTools;
-import com.google.common.base.Strings;
+import javax.annotation.Nullable;
+import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CrmApp {
 
@@ -144,23 +136,23 @@ public class CrmApp {
 
             // Config per mode
             switch (mode) {
-            case "PROD":
-                // Configure login service
-                File loginConfigFile = File.createTempFile("loginConfig", ".json");
-                JsonTools.writeToFile(loginConfigFile, config.getLoginConfigDetails());
-                System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
-                System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
+                case "PROD":
+                    // Configure login service
+                    File loginConfigFile = File.createTempFile("loginConfig", ".json");
+                    JsonTools.writeToFile(loginConfigFile, config.getLoginConfigDetails());
+                    System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
+                    System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
 
-            case "LOCAL": // And PROD
-                // Configure database
-                System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
-                System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());
-                System.setProperty("spring.datasource.password", config.getMysqlDatabasePassword());
-                break;
-            default:
-                System.out.println("Invalid mode: " + mode);
-                showUsage();
-                return;
+                case "LOCAL": // And PROD
+                    // Configure database
+                    System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
+                    System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());
+                    System.setProperty("spring.datasource.password", config.getMysqlDatabasePassword());
+                    break;
+                default:
+                    System.out.println("Invalid mode: " + mode);
+                    showUsage();
+                    return;
             }
 
             List<Class<?>> sources = new ArrayList<>();
@@ -207,17 +199,17 @@ public class CrmApp {
 
             // Beans per mode
             switch (mode) {
-            case "LOCAL":
-                sources.add(FoilenLoginSecurityStubConfig.class);
-                break;
-            case "PROD":
-                // foilen-login-api
-                sources.add(FoilenLoginSecurityConfig.class);
-                break;
-            default:
-                System.out.println("Invalid mode: " + mode);
-                showUsage();
-                return;
+                case "LOCAL":
+                    sources.add(FoilenLoginSecurityStubConfig.class);
+                    break;
+                case "PROD":
+                    // foilen-login-api
+                    sources.add(FoilenLoginSecurityConfig.class);
+                    break;
+                default:
+                    System.out.println("Invalid mode: " + mode);
+                    showUsage();
+                    return;
             }
 
             // Start
@@ -241,6 +233,10 @@ public class CrmApp {
         ConfigurableEnvironment environment = new StandardServletEnvironment();
         environment.addActiveProfile(mode);
         System.setProperty("MODE", mode);
+
+        // Get the port to use
+        var port = SystemTools.getPropertyOrEnvironment("HTTP_PORT", "8080");
+        System.setProperty("server.port", port);
 
         SpringApplication springApplication = new SpringApplication();
         springApplication.addPrimarySources(sources);

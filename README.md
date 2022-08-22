@@ -15,6 +15,7 @@ A simple CRM system.
 
 Some configuration options can be overridden with the environment variables:
 
+* `HTTP_PORT` : The port to listen on (default 8080)
 * `CONFIG_FILE` : The path to the config file
 * `MYSQL_PORT_3306_TCP_ADDR` : To change `mysqlHostName` (used by Docker Links)
 * `MYSQL_PORT_3306_TCP_PORT` : To change `mysqlPort` (used by Docker Links)
