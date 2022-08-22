@@ -16,15 +16,10 @@ group = 'com.foilen'
 version = System.getenv('VERSION')?:'master-SNAPSHOT'
 
 repositories {
-  mavenLocal()
-  jcenter()
   mavenCentral()
-  maven {
-    url 'https://dl.bintray.com/foilen/maven'
-  }
 }
 
-sourceCompatibility = 1.11
+sourceCompatibility = 11
 
 eclipse {
   classpath {
@@ -33,51 +28,43 @@ eclipse {
   }
 }
 
-configurations {
-  testCompile.extendsFrom compileOnly
-}
-
 dependencies {
 
   // Databases
-  compile "mysql:mysql-connector-java"
+  implementation "mysql:mysql-connector-java"
   implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   implementation "org.springframework.boot:spring-boot-starter-jdbc"
-  
+
   // Emails
-  compile 'com.sun.mail:javax.mail:1.6.2'
-  compile 'javax.activation:activation:1.1.1'
-  compile 'org.freemarker:freemarker'
-  compile 'org.xhtmlrenderer:flying-saucer-pdf:9.1.20'
+  implementation 'com.sun.mail:javax.mail:1.6.2'
+  implementation 'javax.activation:activation:1.1.1'
+  implementation 'org.freemarker:freemarker'
+  implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.20'
 
   // Web
-  compile "com.foilen:foilen-login-api:$foilenLoginApiVersion"
+  implementation "com.foilen:foilen-login-api:$foilenLoginApiVersion"
   implementation "org.springframework.boot:spring-boot-starter-freemarker"
   implementation "org.springframework.boot:spring-boot-starter-web"
 
   // Spring
-  compile "io.springfox:springfox-boot-starter:$springFoxSwaggerVersion"
-  compile "org.springframework:spring-context"
-  compile "org.springframework.retry:spring-retry"
-  compile 'org.springframework.security:spring-security-web'
+  implementation "io.springfox:springfox-boot-starter:$springFoxSwaggerVersion"
+  implementation "org.springframework:spring-context"
+  implementation "org.springframework.retry:spring-retry"
+  implementation 'org.springframework.security:spring-security-web'
 
   // Misc
-  compile "args4j:args4j:$argsVersion"
-  compile "com.google.code.findbugs:jsr305:3.0.2"
-  compile "com.foilen:jl-smalltools:$smalltoolsVersion"
-  compile "commons-validator:commons-validator:$commonsValidatorVersion"
-  compile "org.apache.commons:commons-text:$commonsTextVersion"
-  compile "javax.xml.bind:jaxb-api"
-  compile 'org.quartz-scheduler:quartz'
+  implementation "args4j:args4j:$argsVersion"
+  implementation "com.google.code.findbugs:jsr305:3.0.2"
+  implementation "com.foilen:jl-smalltools:$smalltoolsVersion"
+  implementation "commons-validator:commons-validator:$commonsValidatorVersion"
+  implementation "org.apache.commons:commons-text:$commonsTextVersion"
+  implementation "javax.xml.bind:jaxb-api"
+  implementation 'org.quartz-scheduler:quartz'
 
   // Test
-  testCompileOnly 'junit:junit'
-  testImplementation "org.junit.jupiter:junit-jupiter-api"
-  testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
-  testCompile 'org.junit.platform:junit-platform-commons'
-  testCompile 'org.junit.platform:junit-platform-engine'
-  testCompile "org.springframework:spring-test"
-  testCompile "org.springframework.boot:spring-boot-starter-test"
+  testImplementation 'junit:junit'
+  testImplementation "org.springframework:spring-test"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
   
 }
 
