@@ -5,6 +5,7 @@ buildscript {
   }
 }
 plugins {
+  id "com.github.ben-manes.versions" version "$versionsVersion"
   id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
   id 'org.springframework.boot' version "$springBootVersion"
 }
@@ -39,7 +40,7 @@ dependencies {
   implementation 'com.sun.mail:javax.mail:1.6.2'
   implementation 'javax.activation:activation:1.1.1'
   implementation 'org.freemarker:freemarker'
-  implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.20'
+  implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
 
   // Web
   implementation "com.foilen:foilen-login-api:$foilenLoginApiVersion"
@@ -55,7 +56,7 @@ dependencies {
   // Misc
   implementation "args4j:args4j:$argsVersion"
   implementation "com.google.code.findbugs:jsr305:3.0.2"
-  implementation "com.foilen:jl-smalltools:$smalltoolsVersion"
+  implementation "com.foilen:jl-smalltools-main:$smalltoolsVersion"
   implementation "commons-validator:commons-validator:$commonsValidatorVersion"
   implementation "org.apache.commons:commons-text:$commonsTextVersion"
   implementation "javax.xml.bind:jaxb-api"
