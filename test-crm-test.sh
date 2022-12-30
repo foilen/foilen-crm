@@ -22,14 +22,6 @@ mkdir -p $FOLDER_DATA
 INSTANCE=crm_db
 DBNAME=crm
 
-cat > $FOLDER_DATA/createDb.sh << _EOF
-#!/bin/bash
-mysql -uroot -pABC << _EOFF
-  CREATE DATABASE $DBNAME;
-_EOFF
-_EOF
-chmod +x $FOLDER_DATA/createDb.sh
-
 if ! docker ps | grep $INSTANCE ; then
 	echo '###[ Start mariadb ]###'
 	docker run \
@@ -38,18 +30,23 @@ if ! docker ps | grep $INSTANCE ; then
 	  --env MYSQL_ROOT_PASSWORD=ABC \
 	  --env DBNAME=$DBNAME \
 	  --volume $FOLDER_DATA:/data \
-	  -d mariadb:10.3.6
+	  -d mariadb:10.5.8
   
   echo '###[ Wait 20 seconds ]###'
   sleep 20s
-  echo '###[ Create the MariaDB database ]###'
-  docker exec -ti $INSTANCE /data/createDb.sh
 fi
+echo '###[ Create the MariaDB database ]###'
+until docker exec -i $INSTANCE mysql -uroot -pABC << _EOF
+  CREATE DATABASE IF NOT EXISTS $DBNAME;
+_EOF
+do
+sleep 5
+done
 
 # Config file
 cat > $FOLDER_DATA/config.json << _EOF
 {
-	"baseUrl" : "http://127.0.0.1:8888",
+	"baseUrl" : "http://127.0.0.1:8080",
 	
 	"mysqlDatabaseName" : "crm",
 	"mysqlDatabaseUserName" : "root",
@@ -64,7 +61,7 @@ cat > $FOLDER_DATA/config.json << _EOF
 	
 	"loginConfigDetails" : {
 		"appId" : "AAAAA",
-		"baseUrl" : "https://login.foilen-lab.com"
+		"baseUrl" : "https://sso.foilen.com"
 	},
 	"loginCookieSignatureSalt" : "AAA",
 	
@@ -76,7 +73,6 @@ echo '###[ Start phpMyAdmin ]###'
 docker run --rm --name ${INSTANCE}_phpmyadmin -d --link ${INSTANCE}:db -p 12345:80 phpmyadmin/phpmyadmin
 echo 'phpMyAdmin on http://127.0.0.1:12345/ with user "root" and password "ABC"'
 
-
 # Start
 echo '###[ Start UI ]###'
 USER_ID=$(id -u)
@@ -85,7 +81,6 @@ docker run -ti \
   --env CONFIG_FILE=/data/config.json \
   --user $USER_ID \
   --volume $FOLDER_DATA:/data \
-  --publish 8888:8888 \
+  --publish 8080:8080 \
   --link ${INSTANCE}:mysql \
   foilen-crm:master-SNAPSHOT
-

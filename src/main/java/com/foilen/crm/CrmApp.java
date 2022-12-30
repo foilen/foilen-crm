@@ -10,7 +10,6 @@
 package com.foilen.crm;
 
 import com.foilen.login.spring.client.security.FoilenLoginSecurityConfig;
-import com.foilen.login.stub.spring.client.security.FoilenLoginSecurityStubConfig;
 import com.foilen.smalltools.reflection.ReflectionTools;
 import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
@@ -24,7 +23,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.retry.RetryCallback;
-import org.springframework.retry.RetryContext;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.AlwaysRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
@@ -76,9 +74,8 @@ public class CrmApp {
             }
 
             // Set the environment
-            String mode = options.mode;
             ConfigurableEnvironment environment = new StandardServletEnvironment();
-            environment.addActiveProfile(mode);
+            environment.addActiveProfile("PROD");
 
             // Get the configuration from options or environment
             String configFile = options.configFile;
@@ -92,25 +89,6 @@ public class CrmApp {
                 config = JsonTools.readFromFile(configFile, CrmConfig.class);
             }
 
-            // Local -> Add some mock values
-            if ("LOCAL".equals(mode)) {
-                logger.info("Setting some random values for LOCAL mode");
-
-                config.setBaseUrl("http://127.0.0.1:8888");
-
-                config.setMysqlDatabaseUserName("root");
-                config.setMysqlDatabasePassword("ABC");
-
-                config.setMailFrom("crm@example.com");
-
-                config.setCompany("MyCompany");
-
-                config.getLoginConfigDetails().setBaseUrl("http://login.example.com");
-
-                config.setLoginCookieSignatureSalt(SecureRandomTools.randomBase64String(10));
-
-            }
-
             // Override some database configuration if provided via environment
             String overrideMysqlHostName = System.getenv("MYSQL_PORT_3306_TCP_ADDR");
             if (!Strings.isNullOrEmpty(overrideMysqlHostName)) {
@@ -118,7 +96,7 @@ public class CrmApp {
             }
             String overrideMysqlPort = System.getenv("MYSQL_PORT_3306_TCP_PORT");
             if (!Strings.isNullOrEmpty(overrideMysqlPort)) {
-                config.setMysqlPort(Integer.valueOf(overrideMysqlPort));
+                config.setMysqlPort(Integer.parseInt(overrideMysqlPort));
             }
 
             // Check needed config and add it to the known properties
@@ -134,55 +112,37 @@ public class CrmApp {
                 ResourceTools.copyToFile("/com/foilen/crm/services/email/logo.png", CrmApp.class, new File(emailTemplateDirectory + "/logo.png"));
             }
 
-            // Config per mode
-            switch (mode) {
-                case "PROD":
-                    // Configure login service
-                    File loginConfigFile = File.createTempFile("loginConfig", ".json");
-                    JsonTools.writeToFile(loginConfigFile, config.getLoginConfigDetails());
-                    System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
-                    System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
+            // Configure login service
+            File loginConfigFile = File.createTempFile("loginConfig", ".json");
+            JsonTools.writeToFile(loginConfigFile, config.getLoginConfigDetails());
+            System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
+            System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
 
-                case "LOCAL": // And PROD
-                    // Configure database
-                    System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
-                    System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());
-                    System.setProperty("spring.datasource.password", config.getMysqlDatabasePassword());
-                    break;
-                default:
-                    System.out.println("Invalid mode: " + mode);
-                    showUsage();
-                    return;
-            }
+            // Configure database
+            System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
+            System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());
+            System.setProperty("spring.datasource.password", config.getMysqlDatabasePassword());
 
             List<Class<?>> sources = new ArrayList<>();
 
             // Run the upgrader
-            if ("LOCAL".equals(mode)) {
-                logger.info("Skipping UPGRADE MODE");
-            } else {
-                logger.info("Begin UPGRADE MODE");
-                sources.add(CrmUpgradesSpringConfig.class);
+            logger.info("Begin UPGRADE MODE");
+            sources.add(CrmUpgradesSpringConfig.class);
 
-                RetryTemplate infiniteRetryTemplate = new RetryTemplate();
+            RetryTemplate infiniteRetryTemplate = new RetryTemplate();
 
-                FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
-                fixedBackOffPolicy.setBackOffPeriod(10000L);// 10 seconds
-                infiniteRetryTemplate.setBackOffPolicy(fixedBackOffPolicy);
+            FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
+            fixedBackOffPolicy.setBackOffPeriod(10000L);// 10 seconds
+            infiniteRetryTemplate.setBackOffPolicy(fixedBackOffPolicy);
 
-                infiniteRetryTemplate.setRetryPolicy(new AlwaysRetryPolicy());
+            infiniteRetryTemplate.setRetryPolicy(new AlwaysRetryPolicy());
 
-                infiniteRetryTemplate.execute(new RetryCallback<Void, RuntimeException>() {
+            infiniteRetryTemplate.execute((RetryCallback<Void, RuntimeException>) context -> {
+                runApp(springBootArgs, sources, true);
+                return null;
+            });
 
-                    @Override
-                    public Void doWithRetry(RetryContext context) throws RuntimeException {
-                        runApp(springBootArgs, sources, mode, true);
-                        return null;
-                    }
-                });
-
-                logger.info("End UPGRADE MODE");
-            }
+            logger.info("End UPGRADE MODE");
 
             // Run the main app
             logger.info("Will start the main app");
@@ -196,24 +156,10 @@ public class CrmApp {
             sources.add(CrmSpringConfig.class);
             sources.add(CrmDbLiveSpringConfig.class);
             sources.add(CrmWebSpringConfig.class);
-
-            // Beans per mode
-            switch (mode) {
-                case "LOCAL":
-                    sources.add(FoilenLoginSecurityStubConfig.class);
-                    break;
-                case "PROD":
-                    // foilen-login-api
-                    sources.add(FoilenLoginSecurityConfig.class);
-                    break;
-                default:
-                    System.out.println("Invalid mode: " + mode);
-                    showUsage();
-                    return;
-            }
+            sources.add(FoilenLoginSecurityConfig.class);
 
             // Start
-            runApp(springBootArgs, sources, mode, false);
+            runApp(springBootArgs, sources, false);
 
             // Check if debug
             if (options.debug) {
@@ -227,12 +173,12 @@ public class CrmApp {
 
     }
 
-    private static ConfigurableApplicationContext runApp(List<String> springBootArgs, List<Class<?>> sources, String mode, boolean closeAtEnd) {
+    private static ConfigurableApplicationContext runApp(List<String> springBootArgs, List<Class<?>> sources, boolean closeAtEnd) {
 
         // Set the environment
         ConfigurableEnvironment environment = new StandardServletEnvironment();
-        environment.addActiveProfile(mode);
-        System.setProperty("MODE", mode);
+        environment.addActiveProfile("PROD");
+        System.setProperty("MODE", "PROD");
 
         // Get the port to use
         var port = SystemTools.getPropertyOrEnvironment("HTTP_PORT", "8080");
@@ -241,7 +187,7 @@ public class CrmApp {
         SpringApplication springApplication = new SpringApplication();
         springApplication.addPrimarySources(sources);
         springApplication.setEnvironment(environment);
-        ConfigurableApplicationContext appCtx = springApplication.run(springBootArgs.toArray(new String[springBootArgs.size()]));
+        ConfigurableApplicationContext appCtx = springApplication.run(springBootArgs.toArray(new String[0]));
         if (closeAtEnd) {
             appCtx.close();
         }

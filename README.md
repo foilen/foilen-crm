@@ -28,7 +28,7 @@ Here is an example of the content:
 
 ```json
 {
-	"baseUrl" : "http://127.0.0.1:8888",
+	"baseUrl" : "http://127.0.0.1:8080",
 	
 	"mysqlHostName" : "127.0.0.1",
 	"mysqlPort" : 3306,
@@ -47,7 +47,7 @@ Here is an example of the content:
 	
 	"loginConfigDetails" : {
 		"appId" : "AAAAA",
-		"baseUrl" : "https://login.foilen-lab.com"
+		"baseUrl" : "https://sso.foilen.com"
 	},
 	"loginCookieSignatureSalt" : "AAA",
 	
@@ -85,23 +85,22 @@ Run `./update-ui-libraries.sh`.
 
 If you are adding or removing dependencies, you can then edit `CrmWebSpringConfig`.
 
-## Local in Eclipse
+## TEST in IntelliJ
 
-Run *CrmApp - LOCAL.launch*
+Run `./mariadb-start.sh`
 
-## Local in Docker
-
-Simply execute `./test-crm-local.sh` .
+Then run "CrmApp" in IntelliJ.
 
 ## TEST in Docker
 
 Simply execute `./test-crm-test.sh` .
 
-When done, cleanup by stopping the DB: `docker stop crm_db` .
+Then go on http://127.0.0.1:8080/ .
+
+When done, cleanup by stopping the DB: `docker stop crm_db crm_db_phpmyadmin` .
 
 # More
 
 ## Swagger
 
 You can see the API documentation here: http://localhost:8888/swagger-ui/index.html
-

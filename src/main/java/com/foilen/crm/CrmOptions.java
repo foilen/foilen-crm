@@ -22,7 +22,4 @@ public class CrmOptions {
     @Option(name = "--configFile", usage = "The config file path (default: none since using the CONFIG_FILE environment variable)")
     public String configFile;
 
-    @Option(name = "--mode", usage = "The mode: LOCAL, PROD (default: PROD)")
-    public String mode = "PROD";
-
 }

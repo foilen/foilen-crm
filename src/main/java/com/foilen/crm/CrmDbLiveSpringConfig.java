@@ -19,19 +19,19 @@ import com.foilen.crm.CrmDbLiveSpringConfig.ConfigUiDbLiveConfigLocal;
 import com.foilen.crm.CrmDbLiveSpringConfig.ConfigUiDbLiveConfigProd;
 
 @Configuration
-@Import({ ConfigUiDbLiveConfigLocal.class, ConfigUiDbLiveConfigProd.class })
+@Import({ConfigUiDbLiveConfigLocal.class, ConfigUiDbLiveConfigProd.class})
 @EnableTransactionManagement
 public class CrmDbLiveSpringConfig {
 
     @Configuration
-    @Profile({ "JUNIT", "LOCAL" })
+    @Profile({"JUNIT"})
     public static class ConfigUiDbLiveConfigLocal {
         // Uses Spring Boot datasource
     }
 
     @Configuration
-    @Profile({ "PROD" })
-    @PropertySource({ "classpath:/com/foilen/crm/application-common.properties", "classpath:/com/foilen/crm/application-${MODE}.properties" })
+    @Profile({"PROD"})
+    @PropertySource({"classpath:/com/foilen/crm/application-common.properties", "classpath:/com/foilen/crm/application-${MODE}.properties"})
     public static class ConfigUiDbLiveConfigProd {
         // Uses Spring Boot datasource
     }
