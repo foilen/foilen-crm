@@ -28,8 +28,6 @@ import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.web.model.ApplicationDetails;
 import com.foilen.crm.web.model.ApplicationDetailsResult;
-import com.foilen.login.spring.client.security.FoilenLoginUserDetails;
-import com.foilen.login.spring.services.FoilenLoginService;
 import com.foilen.smalltools.tools.AbstractBasics;
 import com.foilen.smalltools.tools.CharsetTools;
 import com.foilen.smalltools.tools.CloseableTools;
@@ -40,8 +38,6 @@ import com.foilen.smalltools.tools.ResourceTools;
 @Transactional
 public class ApplicationServiceImpl extends AbstractBasics implements ApplicationService {
 
-    @Autowired
-    private FoilenLoginService foilenLoginService;
     @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
     @Autowired
@@ -81,14 +77,10 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
         ;
 
         // Logged in user
-        FoilenLoginUserDetails userDetails = foilenLoginService.getLoggedInUserDetails();
-        if (userDetails != null) {
-            applicationDetails.setUserEmail(userDetails.getEmail());
-
-            User user = userDao.findByUserId(userDetails.getUsername());
-            if (user != null) {
-                applicationDetails.setUserAdmin(user.isAdmin());
-            }
+        User user = userDao.findByUserId(userId);
+        if (user != null) {
+            applicationDetails.setUserEmail(user.getEmail());
+            applicationDetails.setUserAdmin(user.isAdmin());
         }
 
         return new ApplicationDetailsResult(applicationDetails);

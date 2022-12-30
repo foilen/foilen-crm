@@ -12,7 +12,6 @@ package com.foilen.crm;
 import javax.annotation.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.foilen.login.api.LoginConfigDetails;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CrmConfig {
@@ -40,8 +39,7 @@ public class CrmConfig {
 
     private String company;
 
-    // Login
-    private LoginConfigDetails loginConfigDetails = new LoginConfigDetails();
+    private LoginAzureConfig loginAzureConfig = new LoginAzureConfig();
     private String loginCookieSignatureSalt;
 
     // Template
@@ -58,10 +56,6 @@ public class CrmConfig {
 
     public String getEmailTemplateDirectory() {
         return emailTemplateDirectory;
-    }
-
-    public LoginConfigDetails getLoginConfigDetails() {
-        return loginConfigDetails;
     }
 
     public String getLoginCookieSignatureSalt() {
@@ -120,10 +114,6 @@ public class CrmConfig {
         this.emailTemplateDirectory = emailTemplateDirectory;
     }
 
-    public void setLoginConfigDetails(LoginConfigDetails loginConfigDetails) {
-        this.loginConfigDetails = loginConfigDetails;
-    }
-
     public void setLoginCookieSignatureSalt(String loginCookieSignatureSalt) {
         this.loginCookieSignatureSalt = loginCookieSignatureSalt;
     }
@@ -168,4 +158,11 @@ public class CrmConfig {
         this.mysqlPort = mysqlPort;
     }
 
+    public LoginAzureConfig getLoginAzureConfig() {
+        return loginAzureConfig;
+    }
+
+    public void setLoginAzureConfig(LoginAzureConfig loginAzureConfig) {
+        this.loginAzureConfig = loginAzureConfig;
+    }
 }

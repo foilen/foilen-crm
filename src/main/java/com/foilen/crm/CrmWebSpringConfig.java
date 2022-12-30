@@ -9,14 +9,14 @@
  */
 package com.foilen.crm;
 
-import java.util.List;
-
+import com.foilen.crm.web.controller.GeneralHandlerExceptionResolver;
+import com.foilen.crm.web.controller.SwaggerExpose;
+import com.foilen.crm.web.interceptor.ProcessUserInterceptor;
+import com.foilen.smalltools.spring.resourceresolver.BundleResourceResolver;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,26 +29,24 @@ import org.springframework.web.servlet.resource.CachingResourceResolver;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
-
-import com.foilen.crm.web.controller.GeneralHandlerExceptionResolver;
-import com.foilen.crm.web.controller.SwaggerExpose;
-import com.foilen.smalltools.spring.resourceresolver.BundleResourceResolver;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.List;
+
 @Configuration
 @EnableOpenApi
-@ComponentScan({ "com.foilen.crm.web" })
+@ComponentScan({"com.foilen.crm.web"})
 public class CrmWebSpringConfig implements WebMvcConfigurer {
 
     private static final String VENDOR_DIST = "/WEB-INF/crm/web/js/vendor/dist/";
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(processUserInterceptor());
         registry.addInterceptor(localeChangeInterceptor());
     }
 
@@ -99,7 +97,7 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
 
         bundleResourceResolver.primeCache();
         chain.addResolver(new VersionResourceResolver() //
-                .addContentVersionStrategy("/**")) //
+                        .addContentVersionStrategy("/**")) //
                 .addResolver(bundleResourceResolver //
                 );
 
@@ -117,13 +115,6 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
         resolvers.add(generalHandlerExceptionResolver());
-    }
-
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
-        CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
-        tokenRepository.setCookieHttpOnly(false);
-        return tokenRepository;
     }
 
     @Bean
@@ -150,6 +141,11 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
         cookieLocaleResolver.setCookieMaxAge(2 * 7 * 24 * 60 * 60);// 2 weeks
         cookieLocaleResolver.setCookieName("lang");
         return cookieLocaleResolver;
+    }
+
+    @Bean
+    public ProcessUserInterceptor processUserInterceptor() {
+        return new ProcessUserInterceptor();
     }
 
     @Bean

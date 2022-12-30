@@ -59,9 +59,10 @@ cat > $FOLDER_DATA/config.json << _EOF
 	
 	"company" : "MyCompany",
 	
-	"loginConfigDetails" : {
-		"appId" : "AAAAA",
-		"baseUrl" : "https://sso.foilen.com"
+	"loginAzureConfig" : {
+		"clientId" : "XXXXX",
+		"clientSecret" : "XXXXX",
+		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
 	},
 	"loginCookieSignatureSalt" : "AAA",
 	

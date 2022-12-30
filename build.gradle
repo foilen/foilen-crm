@@ -43,7 +43,6 @@ dependencies {
   implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
 
   // Web
-  implementation "com.foilen:foilen-login-api:$foilenLoginApiVersion"
   implementation "org.springframework.boot:spring-boot-starter-freemarker"
   implementation "org.springframework.boot:spring-boot-starter-web"
 
@@ -53,10 +52,15 @@ dependencies {
   implementation "org.springframework.retry:spring-retry"
   implementation 'org.springframework.security:spring-security-web'
 
+  // Login
+  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
   // Misc
   implementation "args4j:args4j:$argsVersion"
   implementation "com.google.code.findbugs:jsr305:3.0.2"
-  implementation "com.foilen:jl-smalltools-main:$smalltoolsVersion"
+  implementation "com.foilen:jl-smalltools-hibernate52:$smalltoolsVersion"
+  implementation "com.foilen:jl-smalltools-spring:$smalltoolsVersion"
   implementation "commons-validator:commons-validator:$commonsValidatorVersion"
   implementation "org.apache.commons:commons-text:$commonsTextVersion"
   implementation "javax.xml.bind:jaxb-api"
@@ -69,10 +73,11 @@ dependencies {
   
 }
 
-test {
-  useJUnitPlatform()
+dependencyManagement {
+  imports {
+    mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+  }
 }
-
 
 apply plugin: 'application'
 mainClassName = 'com.foilen.crm.CrmApp'

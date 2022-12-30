@@ -9,6 +9,9 @@
  */
 package com.foilen.crm.services;
 
+import com.foilen.crm.db.entities.user.User;
+import org.springframework.security.core.Authentication;
+
 public interface EntitlementService {
 
     void canBillItemOrFail(String userId);
@@ -51,4 +54,5 @@ public interface EntitlementService {
 
     void canViewTransactionOrFail(String userId);
 
+    User getUserOrFail(Authentication authentication);
 }

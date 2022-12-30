@@ -9,25 +9,22 @@
  */
 package com.foilen.crm.services;
 
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
-import com.foilen.login.spring.client.security.FoilenLoginUserDetails;
-import com.foilen.login.spring.services.FoilenLoginService;
 import com.foilen.smalltools.tools.AbstractBasics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 @Service
 @Transactional
 public class EntitlementServiceImpl extends AbstractBasics implements EntitlementService {
 
-    @Autowired
-    private FoilenLoginService foilenLoginService;
     @Autowired
     private UserDao userDao;
 
@@ -133,16 +130,30 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
         isAdminOrFail(userId);
     }
 
-    private User getOrCreateUser(String userId) {
+    private User getUserOrFail(String userId) {
         User user = userDao.findByUserId(userId);
         if (user == null) {
-            logger.info("User {} is unknown. Creating it. As admin? {}", isFirstUser);
-            FoilenLoginUserDetails loginUserDetails = foilenLoginService.getLoggedInUserDetails();
-            user = new User(loginUserDetails.getUsername(), isFirstUser);
-            user.setEmail(loginUserDetails.getEmail());
-            isFirstUser = false;
-            userDao.save(user);
+            throw new RuntimeException("User does not exist");
         }
+        return user;
+    }
+
+    @Override
+    public User getUserOrFail(Authentication authentication) {
+        var userId = authentication.getName();
+        User user = userDao.findByUserId(userId);
+        if (user == null) {
+            if (authentication instanceof OAuth2AuthenticationToken) {
+                var authenticationToken = (OAuth2AuthenticationToken) authentication;
+                user = new User(userId, isFirstUser);
+                user.setEmail(authenticationToken.getPrincipal().getAttribute("email"));
+                isFirstUser = false;
+                userDao.save(user);
+            } else {
+                throw new RuntimeException("Not OAuth2");
+            }
+        }
+
         return user;
     }
 
@@ -153,7 +164,7 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
     }
 
     protected boolean isAdmin(String userId) {
-        User user = getOrCreateUser(userId);
+        User user = getUserOrFail(userId);
         return user.isAdmin();
     }
 

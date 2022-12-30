@@ -14,19 +14,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 
-import com.foilen.login.spring.services.FoilenLoginService;
-
 @Configuration
 public class CrmTestConfig {
 
     @Bean
     public ConversionService conversionService() {
         return new DefaultConversionService();
-    }
-
-    @Bean
-    public FoilenLoginService foilenLoginServiceMock() {
-        return new FoilenLoginServiceMock();
     }
 
 }

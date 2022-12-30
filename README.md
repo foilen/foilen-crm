@@ -45,9 +45,10 @@ Here is an example of the content:
 	
 	"company" : "MyCompany",
 	
-	"loginConfigDetails" : {
-		"appId" : "AAAAA",
-		"baseUrl" : "https://sso.foilen.com"
+	"loginAzureConfig" : {
+		"clientId" : "XXXXX",
+		"clientSecret" : "XXXXX",
+		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
 	},
 	"loginCookieSignatureSalt" : "AAA",
 	
@@ -88,6 +89,8 @@ If you are adding or removing dependencies, you can then edit `CrmWebSpringConfi
 ## TEST in IntelliJ
 
 Run `./mariadb-start.sh`
+
+Create a config file with your Azure details by following the instructions in "Configuration file" above and save it as `test-config.json`.
 
 Then run "CrmApp" in IntelliJ.
 

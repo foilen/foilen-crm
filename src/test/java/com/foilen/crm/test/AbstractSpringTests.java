@@ -41,8 +41,6 @@ import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
-import com.foilen.login.spring.client.security.FoilenAuthentication;
-import com.foilen.login.spring.client.security.FoilenLoginUserDetails;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.SecureRandomTools;
 
@@ -75,7 +73,6 @@ public abstract class AbstractSpringTests {
         crmConfig.setMysqlDatabasePassword("_MYSQL_PASSWORD_");
         crmConfig.setMailFrom("crm@example.com");
         crmConfig.setCompany("MyCompany");
-        crmConfig.getLoginConfigDetails().setBaseUrl("http://login.example.com");
         crmConfig.setLoginCookieSignatureSalt(SecureRandomTools.randomBase64String(10));
         CrmApp.configToSystemProperties(crmConfig);
 
@@ -102,13 +99,6 @@ public abstract class AbstractSpringTests {
         } catch (ErrorMessageException e) {
             Assert.assertEquals("error.notAdmin", e.getMessage());
         }
-    }
-
-    protected void setFoilenAuth(String userId, String email) {
-        SecurityContext securityContext = new SecurityContextImpl();
-        UserDetails userDetails = new FoilenLoginUserDetails(userId, email);
-        securityContext.setAuthentication(new FoilenAuthentication(userDetails));
-        SecurityContextHolder.setContext(securityContext);
     }
 
     protected List<com.foilen.crm.web.model.Client> trimClient(List<Client> entities) {

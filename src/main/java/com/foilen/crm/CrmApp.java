@@ -9,7 +9,6 @@
  */
 package com.foilen.crm;
 
-import com.foilen.login.spring.client.security.FoilenLoginSecurityConfig;
 import com.foilen.smalltools.reflection.ReflectionTools;
 import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
@@ -113,10 +112,9 @@ public class CrmApp {
             }
 
             // Configure login service
-            File loginConfigFile = File.createTempFile("loginConfig", ".json");
-            JsonTools.writeToFile(loginConfigFile, config.getLoginConfigDetails());
-            System.setProperty("login.cookieSignatureSalt", config.getLoginCookieSignatureSalt());
-            System.setProperty("login.configFile", loginConfigFile.getAbsolutePath());
+            System.setProperty("spring.security.oauth2.client.registration.azure.client-id", config.getLoginAzureConfig().getClientId());
+            System.setProperty("spring.security.oauth2.client.registration.azure.client-secret", config.getLoginAzureConfig().getClientSecret());
+            System.setProperty("spring.security.oauth2.client.registration.azure.redirect-uri", config.getLoginAzureConfig().getRedirectUri());
 
             // Configure database
             System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
@@ -156,7 +154,7 @@ public class CrmApp {
             sources.add(CrmSpringConfig.class);
             sources.add(CrmDbLiveSpringConfig.class);
             sources.add(CrmWebSpringConfig.class);
-            sources.add(FoilenLoginSecurityConfig.class);
+            sources.add(CrmSecuritySpringConfig.class);
 
             // Start
             runApp(springBootArgs, sources, false);
