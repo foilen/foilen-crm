@@ -11,7 +11,6 @@ cd $RUN_PATH
 
 # Build
 echo '###[ Create build ]###'
-./step-update-copyrights.sh
 ./step-compile-no-tests.sh
 ./step-create-docker-image.sh
 
