@@ -1,90 +1,90 @@
 buildscript {
-  repositories {
-    mavenLocal()
-    jcenter()
-  }
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
 }
 plugins {
-  id "com.github.ben-manes.versions" version "$versionsVersion"
-  id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
-  id 'org.springframework.boot' version "$springBootVersion"
+    id "com.github.ben-manes.versions" version "$versionsVersion"
+    id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+    id 'org.springframework.boot' version "$springBootVersion"
 }
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
 
 group = 'com.foilen'
-version = System.getenv('VERSION')?:'master-SNAPSHOT'
+version = System.getenv('VERSION') ?: 'master-SNAPSHOT'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 sourceCompatibility = 11
 
 eclipse {
-  classpath {
-    downloadSources = true
-    downloadJavadoc = true
-  }
+    classpath {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
 
 dependencies {
 
-  // Databases
-  implementation "mysql:mysql-connector-java"
-  implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-  implementation "org.springframework.boot:spring-boot-starter-jdbc"
+    // Databases
+    implementation "mysql:mysql-connector-java"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-jdbc"
 
-  // Emails
-  implementation 'com.sun.mail:javax.mail:1.6.2'
-  implementation 'javax.activation:activation:1.1.1'
-  implementation 'org.freemarker:freemarker'
-  implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
+    // Emails
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'javax.activation:activation:1.1.1'
+    implementation 'org.freemarker:freemarker'
+    implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
 
-  // Web
-  implementation "org.springframework.boot:spring-boot-starter-freemarker"
-  implementation "org.springframework.boot:spring-boot-starter-web"
+    // Web
+    implementation "org.springframework.boot:spring-boot-starter-freemarker"
+    implementation "org.springframework.boot:spring-boot-starter-web"
 
-  // Spring
-  implementation "io.springfox:springfox-boot-starter:$springFoxSwaggerVersion"
-  implementation "org.springframework:spring-context"
-  implementation "org.springframework.retry:spring-retry"
-  implementation 'org.springframework.security:spring-security-web'
+    // Spring
+    implementation "io.springfox:springfox-boot-starter:$springFoxSwaggerVersion"
+    implementation "org.springframework:spring-context"
+    implementation "org.springframework.retry:spring-retry"
+    implementation 'org.springframework.security:spring-security-web'
 
-  // Login
-  implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory'
-  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // Login
+    implementation 'com.azure.spring:spring-cloud-azure-starter-active-directory'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-  // Misc
-  implementation "args4j:args4j:$argsVersion"
-  implementation "com.google.code.findbugs:jsr305:3.0.2"
-  implementation "com.foilen:jl-smalltools-hibernate52:$smalltoolsVersion"
-  implementation "com.foilen:jl-smalltools-spring:$smalltoolsVersion"
-  implementation "commons-validator:commons-validator:$commonsValidatorVersion"
-  implementation "org.apache.commons:commons-text:$commonsTextVersion"
-  implementation "javax.xml.bind:jaxb-api"
-  implementation 'org.quartz-scheduler:quartz'
+    // Misc
+    implementation "args4j:args4j:$argsVersion"
+    implementation "com.google.code.findbugs:jsr305:3.0.2"
+    implementation "com.foilen:jl-smalltools-hibernate52:$smalltoolsVersion"
+    implementation "com.foilen:jl-smalltools-spring:$smalltoolsVersion"
+    implementation "commons-validator:commons-validator:$commonsValidatorVersion"
+    implementation "org.apache.commons:commons-text:$commonsTextVersion"
+    implementation "javax.xml.bind:jaxb-api"
+    implementation 'org.quartz-scheduler:quartz'
 
-  // Test
-  testImplementation 'junit:junit'
-  testImplementation "org.springframework:spring-test"
-  testImplementation "org.springframework.boot:spring-boot-starter-test"
-  
+    // Test
+    testImplementation 'junit:junit'
+    testImplementation "org.springframework:spring-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
 }
 
 dependencyManagement {
-  imports {
-    mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
-  }
+    imports {
+        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+    }
 }
 
 apply plugin: 'application'
 mainClassName = 'com.foilen.crm.CrmApp'
 jar {
-  enabled = true
+    enabled = true
 }
 
 bootJar {
- classifier = 'boot'
+    archiveClassifier.set('boot')
 }
