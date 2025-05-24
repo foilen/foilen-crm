@@ -1,10 +1,4 @@
-FROM openjdk:21-jre-slim
-
-RUN export TERM=dumb ; \
-  apt-get update && apt-get install -y \
-    curl \
-    haproxy supervisor \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+FROM eclipse-temurin:21-alpine
 
 COPY app/ /app
 
