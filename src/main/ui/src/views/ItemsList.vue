@@ -3,21 +3,19 @@
     <div class="col-12">
       <h1>{{ $t('term.pending') }}</h1>
 
-      <button type="button" class="btn btn-success" data-toggle="modal" @click="showCreate()" data-target="#createModal">{{ $t('button.create') }}</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" @click="showCreate()" data-bs-target="#createModal">{{ $t('button.create') }}</button>
 
       <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="createModalLabel">{{ $t('button.create') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="clientShortName">{{ $t('term.clientShortName') }}</label>
                 <client-select id="clientShortName" v-model="createForm.clientShortName"></client-select>
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
@@ -25,28 +23,28 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="date">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date" v-model="createForm.date" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
                   <p v-for="errorCode in formResult.validationErrorsByField.date" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="description">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description" v-model="createForm.description" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
                   <p v-for="errorCode in formResult.validationErrorsByField.description" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="price">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price" v-model="createForm.price" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
                   <p v-for="errorCode in formResult.validationErrorsByField.price" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="category">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category" v-model="createForm.category" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
                   <p v-for="errorCode in formResult.validationErrorsByField.category" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -54,7 +52,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="create()">{{ $t('button.create') }}</button>
             </div>
           </div>
@@ -66,14 +64,12 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="editModalLabel">{{ $t('button.edit') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="clientShortName2">{{ $t('term.clientShortName') }}</label>
                 <client-select id="clientShortName2" v-model="editForm.clientShortName"></client-select>
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
@@ -81,28 +77,28 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="date2">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date2" v-model="editForm.date" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
                   <p v-for="errorCode in formResult.validationErrorsByField.date" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="description2">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description2" v-model="editForm.description" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
                   <p v-for="errorCode in formResult.validationErrorsByField.description" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="price2">{{ $t('term.price') }}</label> <input type="text" class="form-control" id="price2" v-model="editForm.price" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.price">
                   <p v-for="errorCode in formResult.validationErrorsByField.price" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="category2">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category2" v-model="editForm.category" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
                   <p v-for="errorCode in formResult.validationErrorsByField.category" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -110,28 +106,26 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="edit()">{{ $t('button.edit') }}</button>
             </div>
           </div>
         </div>
       </div>
 
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createWithTimeModal">{{ $t('button.createWithTime') }}</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createWithTimeModal">{{ $t('button.createWithTime') }}</button>
 
       <div class="modal fade" id="createWithTimeModal" tabindex="-1" role="dialog" aria-labelledby="createWithTimeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="createWithTimeModalLabel">{{ $t('button.createWithTime') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="clientShortName">{{ $t('term.clientShortName') }}</label>
                 <client-select id="clientShortName3" v-model="createForm.clientShortName"></client-select>
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName">
@@ -139,35 +133,35 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="date">{{ $t('term.date') }}</label> <input type="text" class="form-control" id="date3" v-model="createForm.date" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.date">
                   <p v-for="errorCode in formResult.validationErrorsByField.date" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="description">{{ $t('term.description') }}</label> <input type="text" class="form-control" id="description3" v-model="createForm.description" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.description">
                   <p v-for="errorCode in formResult.validationErrorsByField.description" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="hours">{{ $t('term.hours') }}</label> <input type="text" class="form-control" id="hours3" v-model="createForm.hours" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.hours">
                   <p v-for="errorCode in formResult.validationErrorsByField.hours" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="minutes">{{ $t('term.minutes') }}</label> <input type="text" class="form-control" id="minutes3" v-model="createForm.minutes" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.minutes">
                   <p v-for="errorCode in formResult.validationErrorsByField.minutes" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="category">{{ $t('term.category') }}</label> <input type="text" class="form-control" id="category3" v-model="createForm.category" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.category">
                   <p v-for="errorCode in formResult.validationErrorsByField.category" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -175,28 +169,26 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="createWithTime()">{{ $t('button.create') }}</button>
             </div>
           </div>
         </div>
       </div>
 
-      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#billPendingModal">{{ $t('button.billPending') }}</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#billPendingModal">{{ $t('button.billPending') }}</button>
 
       <div class="modal fade" id="billPendingModal" tabindex="-1" role="dialog" aria-labelledby="billPendingModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="cbillPendingModalLabel">{{ $t('button.billPending') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="invoicePrefix">{{ $t('term.invoicePrefix') }}</label> <input type="text" class="form-control" id="invoicePrefix" v-model="billForm.invoicePrefix" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.invoicePrefix">
                   <p v-for="errorCode in formResult.validationErrorsByField.invoicePrefix" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -204,7 +196,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="billPending()">{{ $t('button.billPending') }}</button>
             </div>
           </div>
@@ -216,14 +208,12 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="cbillSelectedModalLabel">{{ $t('button.billSelected') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="invoicePrefix">{{ $t('term.invoicePrefix') }}</label> <input type="text" class="form-control" id="invoicePrefix2" v-model="billForm.invoicePrefix" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.invoicePrefix">
                   <p v-for="errorCode in formResult.validationErrorsByField.invoicePrefix" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -233,14 +223,14 @@
               <p>{{(billForm.itemToBillIds && billForm.itemToBillIds.length) || 0}} {{$t('term.items')}}</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="billSelected()">{{ $t('button.billSelected') }}</button>
             </div>
           </div>
         </div>
       </div>
 
-      <pagination class="float-right" :pagination="pending.pagination" @changePage="refreshPending($event.pageId)"></pagination>
+      <pagination class="float-end" :pagination="pending.pagination" @changePage="refreshPending($event.pageId)"></pagination>
 
       <table class="table table-striped">
         <thead>
@@ -264,21 +254,21 @@
             <td>{{item.priceFormatted}}</td>
             <td>
               <div>
-                <button class="btn btn-sm btn-primary" data-toggle="modal" @click="showEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
-                <button class="btn btn-sm btn-danger" data-toggle="modal" @click="deleteOne(item)">{{ $t('button.delete') }}</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" @click="showEdit(item)" data-bs-target="#editModal">{{ $t('button.edit') }}</button>
+                <button class="btn btn-sm btn-danger" @click="deleteOne(item)">{{ $t('button.delete') }}</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <button type="button" class="float-right btn btn-success" @click="showBillSelected()">{{ $t('button.billSelected') }}</button>
+      <button type="button" class="float-end btn btn-success" @click="showBillSelected()">{{ $t('button.billSelected') }}</button>
 
       <hr />
 
       <h1>{{ $t('term.billed') }}</h1>
 
-      <pagination class="float-right" :pagination="billed.pagination" @changePage="refreshBilled($event.pageId)"></pagination>
+      <pagination class="float-end" :pagination="billed.pagination" @changePage="refreshBilled($event.pageId)"></pagination>
 
       <table class="table table-striped">
         <thead>

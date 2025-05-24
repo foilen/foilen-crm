@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="mb-3">
     <button class="btn btn-small btn-primary" :disabled="pagination.firstPage" @click="previous">&lt;</button>
     {{pagination.currentPageUi}} / {{pagination.totalPages}}
     <button class="btn btn-small btn-primary" :disabled="pagination.lastPage" @click="next">&gt;</button>

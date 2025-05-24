@@ -9,13 +9,13 @@
 
     <!-- Nav Bar -->
     <nav id="main-nav" class="navbar navbar-expand-sm navbar-light bg-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <span class="navbar-brand mb-0 h1">Foilen CRM</span>
 
       <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item"><router-link class="nav-link" to="/" :class="{active: $route.path == '/'}">{{ $t('menu.home') }}</router-link></li>
           <li class="nav-item"><router-link class="nav-link" to="/clients" :class="{active: $route.path == '/clients'}">{{ $t('menu.clients') }}</router-link></li>
           <li class="nav-item"><router-link class="nav-link" to="/technicalSupports" :class="{active: $route.path == '/technicalSupports'}">{{ $t('menu.technicalSupports') }}</router-link></li>

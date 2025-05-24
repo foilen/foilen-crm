@@ -1,28 +1,26 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn btn-success" data-toggle="modal" @click="showCreate()" data-target="#createModal">{{ $t('button.create') }}</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" @click="showCreate()" data-bs-target="#createModal">{{ $t('button.create') }}</button>
 
       <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="createModalLabel">{{ $t('button.create') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="sid">{{ $t('term.sid') }}</label> <input type="text" class="form-control" id="sid" v-model="createForm.sid" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.sid">
                   <p v-for="errorCode in formResult.validationErrorsByField.sid" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="pricePerHour">{{ $t('term.pricePerHour') }}</label> <input type="text" class="form-control" id="pricePerHour" v-model="createForm.pricePerHour" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour">
                   <p v-for="errorCode in formResult.validationErrorsByField.pricePerHour" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -30,7 +28,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="create()">{{ $t('button.create') }}</button>
             </div>
           </div>
@@ -41,21 +39,19 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="editModalLabel">{{ $t('button.edit') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <error-results :formResult="formResult"></error-results>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="sid2">{{ $t('term.sid') }}</label> <input type="text" class="form-control" id="sid2" v-model="editForm.sid" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.sid">
                   <p v-for="errorCode in formResult.validationErrorsByField.sid" :key="errorCode">{{ $t(errorCode) }}</p>
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="pricePerHour2">{{ $t('term.pricePerHour') }}</label> <input type="text" class="form-control" id="pricePerHour2" v-model="editForm.pricePerHour" autocomplete="off">
                 <div class="text-danger" v-if="formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour">
                   <p v-for="errorCode in formResult.validationErrorsByField.pricePerHour" :key="errorCode">{{ $t(errorCode) }}</p>
@@ -63,14 +59,14 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.close') }}</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('button.close') }}</button>
               <button type="button" class="btn btn-success" @click="edit()">{{ $t('button.edit') }}</button>
             </div>
           </div>
         </div>
       </div>
 
-      <pagination class="float-right" :pagination="pagination" @changePage="refresh($event.pageId)"></pagination>
+      <pagination class="float-end" :pagination="pagination" @changePage="refresh($event.pageId)"></pagination>
 
       <table class="table table-striped">
         <thead>
@@ -86,8 +82,8 @@
             <td>{{item.pricePerHourFormatted}}$</td>
             <td>
               <div>
-                <button class="btn btn-sm btn-primary" data-toggle="modal" @click="showEdit(item)" data-target="#editModal">{{ $t('button.edit') }}</button>
-                <button class="btn btn-sm btn-danger" data-toggle="modal" @click="deleteOne(item)">{{ $t('button.delete') }}</button>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" @click="showEdit(item)" data-bs-target="#editModal">{{ $t('button.edit') }}</button>
+                <button class="btn btn-sm btn-danger" @click="deleteOne(item)">{{ $t('button.delete') }}</button>
               </div>
             </td>
           </tr>
