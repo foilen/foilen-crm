@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:21-jre-slim
 
 RUN export TERM=dumb ; \
   apt-get update && apt-get install -y \

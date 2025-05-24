@@ -148,7 +148,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
 
-        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().get(0).getId();
+        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().getFirst().getId();
 
         FormResult result = itemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, itemId);
         AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testDelete_notPending_FAIL.json", getClass(), result);
@@ -198,7 +198,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialItems = trimItem(itemDao.findAll(Sort.by("invoiceId", "description")));
 
-        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().get(0).getId();
+        long itemId = itemDao.findAllByInvoiceIdNotNull(PageRequest.of(0, 1)).getContent().getFirst().getId();
 
         CreateOrUpdateItem form = new CreateOrUpdateItem();
         form.setClientShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);

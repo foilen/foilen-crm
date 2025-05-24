@@ -1,42 +1,29 @@
 package com.foilen.crm.test;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import com.foilen.crm.CrmApp;
 import com.foilen.crm.CrmConfig;
 import com.foilen.crm.CrmSpringConfig;
-import com.foilen.crm.db.dao.ClientDao;
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.RecurrentItemDao;
-import com.foilen.crm.db.dao.TechnicalSupportDao;
-import com.foilen.crm.db.dao.TransactionDao;
-import com.foilen.crm.db.dao.UserDao;
-import com.foilen.crm.db.entities.invoice.Client;
-import com.foilen.crm.db.entities.invoice.Item;
-import com.foilen.crm.db.entities.invoice.RecurrentItem;
-import com.foilen.crm.db.entities.invoice.TechnicalSupport;
-import com.foilen.crm.db.entities.invoice.Transaction;
+import com.foilen.crm.db.dao.*;
+import com.foilen.crm.db.entities.invoice.*;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.SecureRandomTools;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CrmTestConfig.class, CrmSpringConfig.class })
+@ContextConfiguration(classes = {CrmTestConfig.class, CrmSpringConfig.class})
 @ActiveProfiles("JUNIT")
 public abstract class AbstractSpringTests {
 
@@ -93,54 +80,54 @@ public abstract class AbstractSpringTests {
     }
 
     protected List<com.foilen.crm.web.model.Client> trimClient(List<Client> entities) {
-        return entities.stream() //
+        return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.Client c = JsonTools.clone(e, com.foilen.crm.web.model.Client.class);
                     return c;
-                }) //
+                })
                 .collect(Collectors.toList());
     }
 
     protected List<com.foilen.crm.web.model.Item> trimItem(List<Item> entities) {
-        return entities.stream() //
+        return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.Item t = JsonTools.clone(e, com.foilen.crm.web.model.Item.class);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     t.setId(null);
                     t.setDate(null);
                     return t;
-                }) //
+                })
                 .collect(Collectors.toList());
     }
 
     protected List<com.foilen.crm.web.model.RecurrentItem> trimRecurrentItem(List<RecurrentItem> entities) {
-        return entities.stream() //
+        return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.RecurrentItem t = JsonTools.clone(e, com.foilen.crm.web.model.RecurrentItem.class);
                     t.setId(null);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     return t;
-                }) //
+                })
                 .collect(Collectors.toList());
     }
 
     protected List<com.foilen.crm.web.model.TechnicalSupport> trimTechnicalSupport(List<TechnicalSupport> entities) {
-        return entities.stream() //
+        return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.TechnicalSupport c = JsonTools.clone(e, com.foilen.crm.web.model.TechnicalSupport.class);
                     return c;
-                }) //
+                })
                 .collect(Collectors.toList());
     }
 
     protected List<com.foilen.crm.web.model.Transaction> trimTransaction(List<Transaction> entities) {
-        return entities.stream() //
+        return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.Transaction t = JsonTools.clone(e, com.foilen.crm.web.model.Transaction.class);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     t.setDate(null);
                     return t;
-                }) //
+                })
                 .collect(Collectors.toList());
     }
 

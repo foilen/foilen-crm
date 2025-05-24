@@ -3,6 +3,7 @@ package com.foilen.crm;
 import com.foilen.smalltools.reflection.ReflectionTools;
 import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
+import jakarta.annotation.Nullable;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import org.springframework.retry.policy.AlwaysRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
-import javax.annotation.Nullable;
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.util.ArrayList;
@@ -176,6 +176,9 @@ public class CrmApp {
         SpringApplication springApplication = new SpringApplication();
         springApplication.addPrimarySources(sources);
         springApplication.setEnvironment(environment);
+
+        // Exclude some auto-configuration
+        System.setProperty("spring.autoconfigure.exclude", "com.azure.spring.cloud.autoconfigure.implementation.context.AzureTokenCredentialAutoConfiguration");
         ConfigurableApplicationContext appCtx = springApplication.run(springBootArgs.toArray(new String[0]));
         if (closeAtEnd) {
             appCtx.close();

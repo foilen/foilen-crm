@@ -1,6 +1,6 @@
 
     create table client (
-       id bigint not null auto_increment,
+        id bigint not null auto_increment,
         address varchar(255),
         contact_name varchar(255),
         email varchar(255),
@@ -15,9 +15,9 @@
     ) engine=InnoDB;
 
     create table item (
-       id bigint not null auto_increment,
+        id bigint not null auto_increment,
         category varchar(255),
-        date datetime,
+        date datetime(6),
         description varchar(2000),
         invoice_id varchar(255),
         price bigint not null,
@@ -27,12 +27,12 @@
     ) engine=InnoDB;
 
     create table recurrent_item (
-       id bigint not null auto_increment,
+        id bigint not null auto_increment,
         calendar_unit integer not null,
         category varchar(255),
         delta integer not null,
         description varchar(2000),
-        next_generation_date datetime,
+        next_generation_date datetime(6),
         price bigint not null,
         version bigint not null,
         client_id bigint,
@@ -40,7 +40,7 @@
     ) engine=InnoDB;
 
     create table technical_support (
-       id bigint not null auto_increment,
+        id bigint not null auto_increment,
         price_per_hour bigint not null,
         sid varchar(10) not null,
         version bigint not null,
@@ -48,8 +48,8 @@
     ) engine=InnoDB;
 
     create table transaction (
-       id bigint not null auto_increment,
-        date datetime,
+        id bigint not null auto_increment,
+        date datetime(6),
         description varchar(255),
         invoice_id varchar(255),
         price bigint not null,
@@ -59,7 +59,7 @@
     ) engine=InnoDB;
 
     create table user (
-       id bigint not null auto_increment,
+        id bigint not null auto_increment,
         is_admin bit not null,
         email varchar(255),
         user_id varchar(255) not null,
@@ -68,16 +68,16 @@
     ) engine=InnoDB;
 
     alter table client 
-       add constraint UK_epk5nw87ng8rnd46cs3eb2dm3 unique (short_name);
+       add constraint UKepk5nw87ng8rnd46cs3eb2dm3 unique (short_name);
 
     alter table technical_support 
-       add constraint UK_1xc923jrqhm36dayif6e9sjit unique (sid);
+       add constraint UK1xc923jrqhm36dayif6e9sjit unique (sid);
 
     alter table transaction 
-       add constraint UK_70ee1w3sw3hsac0yv8bidsyg0 unique (invoice_id);
+       add constraint UK70ee1w3sw3hsac0yv8bidsyg0 unique (invoice_id);
 
     alter table user 
-       add constraint UK_a3imlf41l37utmxiquukk8ajc unique (user_id);
+       add constraint UKa3imlf41l37utmxiquukk8ajc unique (user_id);
 
     alter table client 
        add constraint FK2mi1tp6expksgkk6bq3o79s43 

@@ -14,19 +14,24 @@ public class CrmSecuritySpringConfig {
 
     @Bean
     public CookieCsrfTokenRepository cookieCsrfTokenRepository() {
-        var csrfTokenRepository = new CookieCsrfTokenRepository();
-        csrfTokenRepository.setCookieHttpOnly(false);
-        return csrfTokenRepository;
+        return CookieCsrfTokenRepository.withHttpOnlyFalse();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().csrfTokenRepository(cookieCsrfTokenRepository());
+        http.csrf(csrf -> csrf
+                .csrfTokenRepository(cookieCsrfTokenRepository())
+                .csrfTokenRequestHandler((request, response, supplier) -> {
+                    String token = request.getHeader("X-XSRF-TOKEN");
+                    if (token != null) {
+                        request.setAttribute("_csrf", token);
+                    }
+                }));
 
-        http.authorizeRequests(requests -> requests.anyRequest().authenticated());
+        http.authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
         http.oauth2Login(Customizer.withDefaults());
-        http.oauth2Client();
+        http.oauth2Client(Customizer.withDefaults());
 
         return http.build();
     }

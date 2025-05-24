@@ -1,15 +1,10 @@
 package com.foilen.crm.db.entities.invoice;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foilen.smalltools.tools.AbstractBasics;
+import jakarta.persistence.*;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * Technical support contract.

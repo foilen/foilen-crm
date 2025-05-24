@@ -13,16 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.oas.annotations.EnableOpenApi;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.models.GroupedOpenApi;
 
 import java.util.List;
 
 @Configuration
-@EnableOpenApi
 @ComponentScan({"com.foilen.crm.web"})
 public class CrmWebSpringConfig implements WebMvcConfigurer {
 
@@ -33,12 +30,21 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2) //
-                .select() //
-                .apis(RequestHandlerSelectors.withClassAnnotation(SwaggerExpose.class)) //
-                .paths(PathSelectors.any()) //
+    public GroupedOpenApi api() {
+        return GroupedOpenApi.builder()
+                .group("api")
+                .packagesToScan("com.foilen.crm.web")
+                .addOpenApiMethodFilter(method -> 
+                    method.getDeclaringClass().isAnnotationPresent(SwaggerExpose.class))
                 .build();
+    }
+
+    @Bean
+    public OpenAPI openAPI() {
+        return new OpenAPI()
+                .info(new Info().title("Foilen CRM API")
+                        .description("Foilen CRM API Documentation")
+                        .version("1.0"));
     }
 
     @Override

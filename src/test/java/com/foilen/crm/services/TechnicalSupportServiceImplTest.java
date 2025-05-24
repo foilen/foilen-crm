@@ -1,17 +1,16 @@
 package com.foilen.crm.services;
 
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdateTechnicalSupportForm;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.test.asserts.AssertDiff;
 import com.foilen.smalltools.test.asserts.AssertTools;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
@@ -27,8 +26,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid("N1") //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid("N1")
                 .setPricePerHour(1099);
 
         expectNotAdmin(() -> {
@@ -44,8 +43,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid("N1") //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid("N1")
                 .setPricePerHour(1099);
 
         FormResult result = technicalSupportService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
@@ -61,8 +60,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid("S1") //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid("S1")
                 .setPricePerHour(1099);
 
         FormResult result = technicalSupportService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
@@ -115,8 +114,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid(FakeDataServiceImpl.SID_1) //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid(FakeDataServiceImpl.SID_1)
                 .setPricePerHour(1000);
 
         FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);
@@ -131,8 +130,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid(FakeDataServiceImpl.SID_1) //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid(FakeDataServiceImpl.SID_1)
                 .setPricePerHour(1234);
 
         expectNotAdmin(() -> {
@@ -148,8 +147,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid(FakeDataServiceImpl.SID_1) //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid(FakeDataServiceImpl.SID_1)
                 .setPricePerHour(1234);
 
         FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);
@@ -165,8 +164,8 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
 
         List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
 
-        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm() //
-                .setSid(FakeDataServiceImpl.SID_2) //
+        CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
+                .setSid(FakeDataServiceImpl.SID_2)
                 .setPricePerHour(1234);
 
         FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);

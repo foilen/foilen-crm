@@ -6,7 +6,6 @@ import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.localonly.LocalLaunchService;
 import com.foilen.smalltools.tools.AbstractBasics;
-import com.foilen.smalltools.tools.CharsetTools;
 import com.google.common.base.Strings;
 import freemarker.template.TemplateExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +18,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
-@ComponentScan({"com.foilen.crm.db.dao", //
-        "com.foilen.crm.services", //
-        "com.foilen.crm.tasks" //
+@ComponentScan({"com.foilen.crm.db.dao",
+        "com.foilen.crm.services",
+        "com.foilen.crm.tasks"
 })
 @EnableAutoConfiguration
 @EnableScheduling
@@ -85,7 +85,7 @@ public class CrmSpringConfig extends AbstractBasics {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:/com/foilen/crm/messages/messages");
-        messageSource.setDefaultEncoding(CharsetTools.UTF_8.name());
+        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }

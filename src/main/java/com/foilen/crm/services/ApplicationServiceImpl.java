@@ -1,29 +1,27 @@
 package com.foilen.crm.services;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.stereotype.Service;
-
 import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.web.model.ApplicationDetails;
 import com.foilen.crm.web.model.ApplicationDetailsResult;
 import com.foilen.smalltools.tools.AbstractBasics;
-import com.foilen.smalltools.tools.CharsetTools;
 import com.foilen.smalltools.tools.CloseableTools;
 import com.foilen.smalltools.tools.FileTools;
 import com.foilen.smalltools.tools.ResourceTools;
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 
 @Service
 @Transactional
@@ -47,7 +45,7 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
                 logger.error("Resource {} does not exist", filename);
                 return;
             }
-            properties.load(new InputStreamReader(inputStream, CharsetTools.UTF_8));
+            properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
             properties.forEach((key, value) -> lang.put((String) key, (String) value));
             CloseableTools.close(inputStream);
@@ -60,10 +58,10 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
     @Override
     public ApplicationDetailsResult getDetails(String userId) {
 
-        ApplicationDetails applicationDetails = new ApplicationDetails() //
-                .setVersion(version) //
-                .setUserId(userId) //
-                .setLang(LocaleContextHolder.getLocale().getLanguage()) //
+        ApplicationDetails applicationDetails = new ApplicationDetails()
+                .setVersion(version)
+                .setUserId(userId)
+                .setLang(LocaleContextHolder.getLocale().getLanguage())
                 .setTranslations(translations);
         ;
 

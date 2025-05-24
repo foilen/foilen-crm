@@ -1,16 +1,5 @@
 package com.foilen.crm.services;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.stereotype.Service;
-
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
@@ -20,6 +9,15 @@ import com.foilen.smalltools.reflection.BeanPropertiesCopierTools;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.DateTools;
 import com.foilen.smalltools.tools.JsonTools;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional

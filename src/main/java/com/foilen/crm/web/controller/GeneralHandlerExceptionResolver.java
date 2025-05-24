@@ -1,18 +1,16 @@
 package com.foilen.crm.web.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.foilen.crm.exception.ErrorMessageException;
+import com.foilen.smalltools.restapi.model.ApiError;
+import com.foilen.smalltools.tools.AbstractBasics;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import com.foilen.crm.exception.ErrorMessageException;
-import com.foilen.smalltools.restapi.model.ApiError;
-import com.foilen.smalltools.tools.AbstractBasics;
 
 public class GeneralHandlerExceptionResolver extends AbstractBasics implements HandlerExceptionResolver {
 
@@ -27,10 +25,9 @@ public class GeneralHandlerExceptionResolver extends AbstractBasics implements H
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setView(VIEW);
 
-        if (e instanceof ErrorMessageException) {
-            ErrorMessageException errorMessageException = (ErrorMessageException) e;
+        if (e instanceof ErrorMessageException errorMessageException) {
             String errorCode = errorMessageException.getMessage();
-            ApiError error = new ApiError(messageSource.getMessage(errorCode, new Object[] {}, LocaleContextHolder.getLocale()));
+            ApiError error = new ApiError(messageSource.getMessage(errorCode, new Object[]{}, LocaleContextHolder.getLocale()));
             modelAndView.addObject("error", error);
             logger.error("Error message exception with code {}. Error unique id: {}", errorCode, error.getUniqueId());
         } else {

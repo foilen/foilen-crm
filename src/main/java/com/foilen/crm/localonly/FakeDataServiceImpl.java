@@ -1,25 +1,15 @@
 package com.foilen.crm.localonly;
 
-import java.util.Calendar;
-
+import com.foilen.crm.db.dao.*;
+import com.foilen.crm.db.entities.invoice.*;
+import com.foilen.crm.db.entities.user.User;
+import com.foilen.smalltools.tools.AbstractBasics;
+import com.foilen.smalltools.tools.DateTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foilen.crm.db.dao.ClientDao;
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.RecurrentItemDao;
-import com.foilen.crm.db.dao.TechnicalSupportDao;
-import com.foilen.crm.db.dao.TransactionDao;
-import com.foilen.crm.db.dao.UserDao;
-import com.foilen.crm.db.entities.invoice.Client;
-import com.foilen.crm.db.entities.invoice.Item;
-import com.foilen.crm.db.entities.invoice.RecurrentItem;
-import com.foilen.crm.db.entities.invoice.TechnicalSupport;
-import com.foilen.crm.db.entities.invoice.Transaction;
-import com.foilen.crm.db.entities.user.User;
-import com.foilen.smalltools.tools.AbstractBasics;
-import com.foilen.smalltools.tools.DateTools;
+import java.util.Calendar;
 
 @Service
 @Transactional
@@ -91,29 +81,29 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         TechnicalSupport s1 = technicalSupportDao.findBySid(SID_1);
         TechnicalSupport s2 = technicalSupportDao.findBySid(SID_2);
 
-        clientDao.saveAndFlush(new Client() //
-                .setName("Bazar").setShortName(CLIENT_SHORTNAME_BAZAR) //
-                .setContactName("Benoit Bezos").setEmail("benoit@example.com") //
-                .setAddress("1010 Betancour").setTel("555-101-0101") //
-                .setMainSite("http://bazar.example.com") //
+        clientDao.saveAndFlush(new Client()
+                .setName("Bazar").setShortName(CLIENT_SHORTNAME_BAZAR)
+                .setContactName("Benoit Bezos").setEmail("benoit@example.com")
+                .setAddress("1010 Betancour").setTel("555-101-0101")
+                .setMainSite("http://bazar.example.com")
                 .setLang("FR").setTechnicalSupport(s1));
-        clientDao.saveAndFlush(new Client() //
-                .setName("Avez").setShortName("avez") //
-                .setContactName("Alex Aubut").setEmail("alex@example.com") //
-                .setAddress("2500 Alegria").setTel("555-202-0202") //
-                .setMainSite("http://avez.example.com") //
+        clientDao.saveAndFlush(new Client()
+                .setName("Avez").setShortName("avez")
+                .setContactName("Alex Aubut").setEmail("alex@example.com")
+                .setAddress("2500 Alegria").setTel("555-202-0202")
+                .setMainSite("http://avez.example.com")
                 .setLang("EN").setTechnicalSupport(s2));
-        clientDao.saveAndFlush(new Client() //
-                .setName("Zoo Alphonce").setShortName("zooa") //
-                .setContactName("Zoe Zephir").setEmail("zeo@example.com") //
-                .setAddress("300 Zenith").setTel("555-303-0303") //
-                .setMainSite("http://zoo.example.com") //
+        clientDao.saveAndFlush(new Client()
+                .setName("Zoo Alphonce").setShortName("zooa")
+                .setContactName("Zoe Zephir").setEmail("zeo@example.com")
+                .setAddress("300 Zenith").setTel("555-303-0303")
+                .setMainSite("http://zoo.example.com")
                 .setLang("FR").setTechnicalSupport(s2));
-        clientDao.saveAndFlush(new Client() //
-                .setName("Extra Vanilla").setShortName(CLIENT_SHORTNAME_EXTRA) //
-                .setContactName("Extra Vanilla").setEmail("extra@example.com") //
-                .setAddress("300 Zenith").setTel("555-303-4444") //
-                .setMainSite("http://extra.example.com") //
+        clientDao.saveAndFlush(new Client()
+                .setName("Extra Vanilla").setShortName(CLIENT_SHORTNAME_EXTRA)
+                .setContactName("Extra Vanilla").setEmail("extra@example.com")
+                .setAddress("300 Zenith").setTel("555-303-4444")
+                .setMainSite("http://extra.example.com")
                 .setLang("FR"));
 
     }

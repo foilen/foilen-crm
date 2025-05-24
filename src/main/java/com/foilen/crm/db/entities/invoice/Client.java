@@ -1,18 +1,11 @@
 package com.foilen.crm.db.entities.invoice;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 import java.util.Locale;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * A client.
@@ -107,10 +100,10 @@ public class Client {
         }
 
         switch (lang) {
-        case "EN":
-            return Locale.ENGLISH;
-        case "FR":
-            return Locale.FRENCH;
+            case "EN":
+                return Locale.ENGLISH;
+            case "FR":
+                return Locale.FRENCH;
         }
         return null;
     }

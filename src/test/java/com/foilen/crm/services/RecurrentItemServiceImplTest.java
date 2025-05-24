@@ -1,13 +1,5 @@
 package com.foilen.crm.services;
 
-import java.util.Calendar;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdateRecurrentItemForm;
@@ -16,6 +8,13 @@ import com.foilen.smalltools.test.asserts.AssertDiff;
 import com.foilen.smalltools.test.asserts.AssertTools;
 import com.foilen.smalltools.tools.DateTools;
 import com.foilen.smalltools.tools.JsonTools;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
@@ -31,12 +30,12 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm() //
-                .setCalendarUnit(Calendar.MONTH) //
-                .setDelta(1) //
-                .setNextGenerationDate("2021-01-01").setClientShortName("avez") //
-                .setDescription("Hosting L1") //
-                .setPrice(500) //
+        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm()
+                .setCalendarUnit(Calendar.MONTH)
+                .setDelta(1)
+                .setNextGenerationDate("2021-01-01").setClientShortName("avez")
+                .setDescription("Hosting L1")
+                .setPrice(500)
                 .setCategory("hosting");
 
         expectNotAdmin(() -> {
@@ -52,12 +51,12 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm() //
-                .setCalendarUnit(Calendar.MONTH) //
-                .setDelta(1) //
-                .setNextGenerationDate("2021-01-01").setClientShortName("avez") //
-                .setDescription("Hosting L1") //
-                .setPrice(500) //
+        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm()
+                .setCalendarUnit(Calendar.MONTH)
+                .setDelta(1)
+                .setNextGenerationDate("2021-01-01").setClientShortName("avez")
+                .setDescription("Hosting L1")
+                .setPrice(500)
                 .setCategory("hosting");
 
         FormResult result = recurrentItemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
@@ -73,7 +72,7 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").get(0).getId();
+        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").getFirst().getId();
 
         expectNotAdmin(() -> {
             recurrentItemService.delete(FakeDataServiceImpl.USER_ID_USER, recurrentItemId);
@@ -88,7 +87,7 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").get(0).getId();
+        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").getFirst().getId();
 
         FormResult result = recurrentItemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, recurrentItemId);
         AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
@@ -129,14 +128,14 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").get(0).getId();
+        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").getFirst().getId();
 
-        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm() //
-                .setCalendarUnit(Calendar.MONTH) //
-                .setDelta(1) //
-                .setNextGenerationDate("2021-01-01").setClientShortName("avez") //
-                .setDescription("Hosting L1") //
-                .setPrice(500) //
+        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm()
+                .setCalendarUnit(Calendar.MONTH)
+                .setDelta(1)
+                .setNextGenerationDate("2021-01-01").setClientShortName("avez")
+                .setDescription("Hosting L1")
+                .setPrice(500)
                 .setCategory("hosting");
 
         expectNotAdmin(() -> {
@@ -152,14 +151,14 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
         List<?> initialRecurrentItems = trimRecurrentItem(recurrentItemDao.findAll(Sort.by("id")));
 
-        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").get(0).getId();
+        long recurrentItemId = recurrentItemDao.findAllByClientShortName("avez").getFirst().getId();
 
-        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm() //
-                .setCalendarUnit(Calendar.MONTH) //
-                .setDelta(1) //
-                .setNextGenerationDate("2021-01-01").setClientShortName("avez") //
-                .setDescription("Hosting L1") //
-                .setPrice(500) //
+        CreateOrUpdateRecurrentItemForm form = new CreateOrUpdateRecurrentItemForm()
+                .setCalendarUnit(Calendar.MONTH)
+                .setDelta(1)
+                .setNextGenerationDate("2021-01-01").setClientShortName("avez")
+                .setDescription("Hosting L1")
+                .setPrice(500)
                 .setCategory("hosting");
 
         FormResult result = recurrentItemService.update(FakeDataServiceImpl.USER_ID_ADMIN, recurrentItemId, form);

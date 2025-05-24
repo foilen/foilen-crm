@@ -1,17 +1,16 @@
 package com.foilen.crm.services;
 
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdateClientForm;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.test.asserts.AssertDiff;
 import com.foilen.smalltools.test.asserts.AssertTools;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 public class ClientServiceImplTest extends AbstractSpringTests {
 
@@ -27,13 +26,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("ABC")//
-                .setShortName("abc") //
-                .setContactName("Abc Def").setEmail("abc@example.com") //
-                .setAddress("555 Betancour").setTel("555-202-0101") //
-                .setMainSite("http://abc.here.com") //
-                .setLang("EN") //
+                .setShortName("abc")
+                .setContactName("Abc Def").setEmail("abc@example.com")
+                .setAddress("555 Betancour").setTel("555-202-0101")
+                .setMainSite("http://abc.here.com")
+                .setLang("EN")
                 .setTechnicalSupportSid("S2");
 
         expectNotAdmin(() -> {
@@ -49,13 +48,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("ABC")//
-                .setShortName("abc") //
-                .setContactName("Abc Def").setEmail("abc@example.com") //
-                .setAddress("555 Betancour").setTel("555-202-0101") //
-                .setMainSite("http://abc.here.com") //
-                .setLang("EN") //
+                .setShortName("abc")
+                .setContactName("Abc Def").setEmail("abc@example.com")
+                .setAddress("555 Betancour").setTel("555-202-0101")
+                .setMainSite("http://abc.here.com")
+                .setLang("EN")
                 .setTechnicalSupportSid("S2");
 
         FormResult result = clientService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
@@ -70,13 +69,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("ABC")//
-                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_EXTRA) //
-                .setContactName("Abc Def").setEmail("abc@example.com") //
-                .setAddress("555 Betancour").setTel("555-202-0101") //
-                .setMainSite("http://abc.here.com") //
-                .setLang("EN") //
+                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_EXTRA)
+                .setContactName("Abc Def").setEmail("abc@example.com")
+                .setAddress("555 Betancour").setTel("555-202-0101")
+                .setMainSite("http://abc.here.com")
+                .setLang("EN")
                 .setTechnicalSupportSid("S2");
 
         FormResult result = clientService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form);
@@ -128,13 +127,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("Bazar")//
-                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR) //
-                .setContactName("Benoit Bezos").setEmail("benoit@example.com") //
-                .setAddress("1010 Betancour").setTel("555-101-0101") //
-                .setMainSite("http://bazar.example.com") //
-                .setLang("FR") //
+                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR)
+                .setContactName("Benoit Bezos").setEmail("benoit@example.com")
+                .setAddress("1010 Betancour").setTel("555-101-0101")
+                .setMainSite("http://bazar.example.com")
+                .setLang("FR")
                 .setTechnicalSupportSid("S1");
 
         FormResult result = clientService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form);
@@ -149,13 +148,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("Bazar Yay")//
-                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR) //
-                .setContactName("Benoit Banana").setEmail("benoit@example2.com") //
-                .setAddress("1020 Betancour").setTel("555-202-0101") //
-                .setMainSite("http://bazar.here.com") //
-                .setLang("EN") //
+                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR)
+                .setContactName("Benoit Banana").setEmail("benoit@example2.com")
+                .setAddress("1020 Betancour").setTel("555-202-0101")
+                .setMainSite("http://bazar.here.com")
+                .setLang("EN")
                 .setTechnicalSupportSid("S2");
 
         expectNotAdmin(() -> {
@@ -171,13 +170,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("Bazar Yay")//
-                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR) //
-                .setContactName("Benoit Banana").setEmail("benoit@example2.com") //
-                .setAddress("1020 Betancour").setTel("555-202-0101") //
-                .setMainSite("http://bazar.here.com") //
-                .setLang("EN") //
+                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR)
+                .setContactName("Benoit Banana").setEmail("benoit@example2.com")
+                .setAddress("1020 Betancour").setTel("555-202-0101")
+                .setMainSite("http://bazar.here.com")
+                .setLang("EN")
                 .setTechnicalSupportSid("S2");
 
         FormResult result = clientService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form);
@@ -192,13 +191,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("Bazar")//
-                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_EXTRA) //
-                .setContactName("Benoit Bezos").setEmail("benoit@example.com") //
-                .setAddress("1010 Betancour").setTel("555-101-0101") //
-                .setMainSite("http://bazar.example.com") //
-                .setLang("FR") //
+                .setShortName(FakeDataServiceImpl.CLIENT_SHORTNAME_EXTRA)
+                .setContactName("Benoit Bezos").setEmail("benoit@example.com")
+                .setAddress("1010 Betancour").setTel("555-101-0101")
+                .setMainSite("http://bazar.example.com")
+                .setLang("FR")
                 .setTechnicalSupportSid("S1");
 
         FormResult result = clientService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form);
@@ -213,13 +212,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
         List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
 
-        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm() //
+        CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                 .setName("Bazar")//
-                .setShortName("bbb") //
-                .setContactName("Benoit Bezos").setEmail("benoit@example.com") //
-                .setAddress("1010 Betancour").setTel("555-101-0101") //
-                .setMainSite("http://bazar.example.com") //
-                .setLang("FR") //
+                .setShortName("bbb")
+                .setContactName("Benoit Bezos").setEmail("benoit@example.com")
+                .setAddress("1010 Betancour").setTel("555-101-0101")
+                .setMainSite("http://bazar.example.com")
+                .setLang("FR")
                 .setTechnicalSupportSid("S1");
 
         FormResult result = clientService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form);

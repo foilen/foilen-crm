@@ -1,22 +1,14 @@
 package com.foilen.crm.db.entities.invoice;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.foilen.smalltools.tools.PriceFormatTools;
+import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.foilen.smalltools.tools.PriceFormatTools;
+import java.util.Date;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * Billed and not yet billed items.

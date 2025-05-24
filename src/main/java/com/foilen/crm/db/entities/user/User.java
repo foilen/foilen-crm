@@ -1,12 +1,8 @@
 package com.foilen.crm.db.entities.user;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import jakarta.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class User {

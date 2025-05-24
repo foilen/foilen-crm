@@ -4,13 +4,12 @@ import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.smalltools.tools.AbstractBasics;
+import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -134,8 +133,7 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
         var userId = authentication.getName();
         User user = userDao.findByUserId(userId);
         if (user == null) {
-            if (authentication instanceof OAuth2AuthenticationToken) {
-                var authenticationToken = (OAuth2AuthenticationToken) authentication;
+            if (authentication instanceof OAuth2AuthenticationToken authenticationToken) {
                 user = new User(userId, isFirstUser);
                 user.setEmail(authenticationToken.getPrincipal().getAttribute("email"));
                 isFirstUser = false;

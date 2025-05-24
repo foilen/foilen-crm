@@ -1,12 +1,5 @@
 package com.foilen.crm.services;
 
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
@@ -16,6 +9,12 @@ import com.foilen.crm.web.model.TransactionWithBalance;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.test.asserts.AssertTools;
 import com.foilen.smalltools.tools.DateTools;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 public class TransactionServiceImplTest extends AbstractSpringTests {
 
@@ -33,10 +32,10 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
         List<Transaction> initialItems = trimTransaction(transactionDao.findAll(Sort.by("invoiceId")));
 
         // Create
-        CreatePayment form = new CreatePayment() //
-                .setClientShortName("zooa") //
-                .setDate("2019-06-25") //
-                .setPaymentType("Paypal") //
+        CreatePayment form = new CreatePayment()
+                .setClientShortName("zooa")
+                .setDate("2019-06-25")
+                .setPaymentType("Paypal")
                 .setPrice(1000);
         FormResult formResult = transactionService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
         Assert.assertTrue(formResult.isSuccess());
