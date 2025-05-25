@@ -89,6 +89,7 @@ bootJar {
 if (!System.getenv().containsKey('SKIP_NODEJS')) {
     node {
         download = true
+        version = '22.16.0'
         nodeProjectDir = file("${project.projectDir}/src/main/ui")
     }
 

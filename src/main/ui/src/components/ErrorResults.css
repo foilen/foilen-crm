@@ -1,0 +1,20 @@
+.bg-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.bg-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.background-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}

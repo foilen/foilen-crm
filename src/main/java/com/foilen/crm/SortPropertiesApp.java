@@ -8,14 +8,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.Properties;
 
 public class SortPropertiesApp {
 
     public static void main(String[] args) throws Exception {
 
-        sort("src/main/resources/WEB-INF/crm/messages/messages_en.properties");
-        sort("src/main/resources/WEB-INF/crm/messages/messages_fr.properties");
+        sort("src/main/resources/com/foilen/crm/messages/messages_en.properties");
+        sort("src/main/resources/com/foilen/crm/messages/messages_fr.properties");
 
     }
 
@@ -31,7 +32,7 @@ public class SortPropertiesApp {
         PrintWriter printWriter = new PrintWriter(filename);
         properties.entrySet().stream()
                 .map(e -> new Tuple2<>((String) e.getKey(), (String) e.getValue()))
-                .sorted((a, b) -> a.getA().compareTo(b.getA()))
+                .sorted(Comparator.comparing(Tuple2::getA))
                 .forEach(e -> printWriter.println(e.getA() + "=" + e.getB()));
         CloseableTools.close(printWriter);
 

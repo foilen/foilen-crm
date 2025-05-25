@@ -7,8 +7,8 @@
  * @returns {string} The current date in the format YYYY-MM-DD
  */
 export function dateNowDayOnly() {
-  const d = new Date()
-  return d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
+    const d = new Date()
+    return d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
 }
 
 /**
@@ -16,7 +16,7 @@ export function dateNowDayOnly() {
  * @param {Object} object The object to modify
  */
 export function nullAllProperties(object) {
-  Object.keys(object).forEach(k => object[k] = null)
+    Object.keys(object).forEach(k => object[k] = null)
 }
 
 /**
@@ -25,20 +25,20 @@ export function nullAllProperties(object) {
  * @returns {number} The price in cents
  */
 export function priceToLong(price) {
-  return Math.round(parseFloat(price) * 100)
+    return Math.round(parseFloat(price) * 100)
 }
 
 /**
  * Initializes typeahead dropdowns
- * This is a no-op in the new project structure as we're using Vue's built-in functionality
+ * This is a no-op in the React project as we'll use React components for this functionality
  */
 export function refreshTypeahead() {
-  // No-op - Vue handles this functionality
+    // No-op - React components will handle this functionality
 }
 
 export default {
-  dateNowDayOnly,
-  nullAllProperties,
-  priceToLong,
-  refreshTypeahead
-}
+    dateNowDayOnly,
+    nullAllProperties,
+    priceToLong,
+    refreshTypeahead
+};

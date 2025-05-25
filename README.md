@@ -29,7 +29,7 @@ Here is an example of the content:
 ```json
 {
 	"baseUrl" : "http://127.0.0.1:8080",
-	
+
 	"mysqlHostName" : "127.0.0.1",
 	"mysqlPort" : 3306,
 	"mysqlDatabaseName" : "crm",
@@ -40,18 +40,18 @@ Here is an example of the content:
 	"mailPort" : 25,
 	"mailUsername" : "user",
 	"mailPassword" : "password",
-	
+
 	"mailFrom" : "crm@localhost",
-	
+
 	"company" : "MyCompany",
-	
+
 	"loginAzureConfig" : {
 		"clientId" : "XXXXX",
 		"clientSecret" : "XXXXX",
 		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
 	},
 	"loginCookieSignatureSalt" : "AAA",
-	
+
 	"emailTemplateDirectory" : "/data/emailTemplate"
 }
 ```
@@ -73,18 +73,30 @@ templates in it. You can then modify them and restart the application.
 ## Text messages
 
 The translations are in:
-- /src/main/resources/WEB-INF/crm/messages/messages_en.properties
-- /src/main/resources/WEB-INF/crm/messages/messages_en.properties
+- src/main/resources/com/foilen/crm/messages/messages_en.properties
+- src/main/resources/com/foilen/crm/messages/messages_en.properties
 
-And when you add more, you can easily sort them by running `SortMessagesApp.launch`.
+And when you add more, you can easily sort them by running `SortMessagesApp`.
 
-## To modify UI vendor libraries  
+## Frontend Development
 
-Edit `src/main/resources/WEB-INF/crm/web/js/vendor/package.json`.
+The frontend is built with:
+- React
+- Bootstrap 5.3.6
 
-Run `./update-ui-libraries.sh`.
+### Frontend Structure
 
-If you are adding or removing dependencies, you can then edit `CrmWebSpringConfig`.
+The frontend code is located in the `src/main/ui` directory with the following structure:
+
+- `src/main/ui/src/components`: Reusable React components
+- `src/main/ui/src/utils`: Utility functions
+- `src/main/ui/src/views`: Page components
+- `src/main/ui/src/App.js`: Main application component
+- `src/main/ui/src/index.js`: Application entry point
+
+### Running the Frontend in Development Mode
+
+To run the frontend in development mode, first start the `CrmApp` locally and then `./gradlew npmRunWatch`.
 
 ## TEST in IntelliJ
 
