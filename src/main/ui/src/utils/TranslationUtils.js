@@ -46,8 +46,11 @@ export const t = (key, options = {}) => {
                 translation = translation.replace(placeholder, marker)
             } else {
                 // For regular values, just replace the placeholder
-                const placeholder = `{{${optionKey}}}`
-                translation = translation.replace(placeholder, value)
+                // Support both {{key}} format and Java-style {key} format
+                const placeholder1 = `{{${optionKey}}}`
+                const placeholder2 = `{${optionKey}}`
+                translation = translation.replace(placeholder1, value)
+                translation = translation.replace(placeholder2, value)
             }
         })
 
