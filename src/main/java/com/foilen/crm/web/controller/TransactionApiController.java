@@ -1,7 +1,7 @@
 package com.foilen.crm.web.controller;
 
 import com.foilen.crm.services.TransactionService;
-import com.foilen.crm.web.model.CreatePayment;
+import com.foilen.crm.web.model.CreateOrUpdatePayment;
 import com.foilen.crm.web.model.TransactionList;
 import com.foilen.smalltools.restapi.model.FormResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class TransactionApiController {
 
     @PostMapping("payment")
     public FormResult createPayment(Authentication authentication,
-                                    @RequestBody CreatePayment form
+                                    @RequestBody CreateOrUpdatePayment form
     ) {
         return transactionService.create(authentication.getName(), form);
     }
@@ -29,6 +29,14 @@ public class TransactionApiController {
                                    @RequestParam(defaultValue = "1") int pageId
     ) {
         return transactionService.listAll(authentication.getName(), pageId);
+    }
+
+    @PutMapping("{id}")
+    public FormResult update(Authentication authentication,
+                             @PathVariable("id") long id,
+                             @RequestBody CreateOrUpdatePayment form
+    ) {
+        return transactionService.update(authentication.getName(), id, form);
     }
 
 }

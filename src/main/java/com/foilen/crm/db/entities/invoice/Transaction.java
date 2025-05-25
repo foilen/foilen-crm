@@ -48,20 +48,44 @@ public class Transaction {
         this.price = price;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Client getClient() {
         return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public Date getDate() {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public String getInvoiceId() {
-        return invoiceId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public long getPrice() {
@@ -72,28 +96,12 @@ public class Transaction {
         return PriceFormatTools.toDigit(price);
     }
 
-    public long getVersion() {
-        return version;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setInvoiceId(String invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
     public void setPrice(long price) {
         this.price = price;
+    }
+
+    public long getVersion() {
+        return version;
     }
 
     public void setVersion(long version) {

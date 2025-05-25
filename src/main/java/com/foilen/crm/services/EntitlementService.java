@@ -29,6 +29,8 @@ public interface EntitlementService {
 
     void canUpdateItemOrFail(String userId);
 
+    void canUpdatePaymentOrFail(String userId);
+
     void canUpdateRecurrentItemOrFail(String userId);
 
     void canUpdateTechnicalSupportOrFail(String userId);

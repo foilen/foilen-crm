@@ -3,7 +3,7 @@ package com.foilen.crm.services;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
-import com.foilen.crm.web.model.CreatePayment;
+import com.foilen.crm.web.model.CreateOrUpdatePayment;
 import com.foilen.crm.web.model.Transaction;
 import com.foilen.crm.web.model.TransactionWithBalance;
 import com.foilen.smalltools.restapi.model.FormResult;
@@ -32,7 +32,7 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
         List<Transaction> initialItems = trimTransaction(transactionDao.findAll(Sort.by("invoiceId")));
 
         // Create
-        CreatePayment form = new CreatePayment()
+        CreateOrUpdatePayment form = new CreateOrUpdatePayment()
                 .setClientShortName("zooa")
                 .setDate("2019-06-25")
                 .setPaymentType("Paypal")

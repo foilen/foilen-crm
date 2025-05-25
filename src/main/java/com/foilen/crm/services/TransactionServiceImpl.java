@@ -6,16 +6,13 @@ import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.exception.CrmException;
-import com.foilen.crm.web.model.CreatePayment;
+import com.foilen.crm.web.model.CreateOrUpdatePayment;
 import com.foilen.crm.web.model.TransactionList;
 import com.foilen.crm.web.model.TransactionWithBalance;
 import com.foilen.smalltools.email.EmailBuilder;
 import com.foilen.smalltools.email.EmailService;
 import com.foilen.smalltools.restapi.model.FormResult;
-import com.foilen.smalltools.tools.DirectoryTools;
-import com.foilen.smalltools.tools.JsonTools;
-import com.foilen.smalltools.tools.PriceFormatTools;
-import com.foilen.smalltools.tools.ResourceTools;
+import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -62,7 +59,7 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     private String mailFrom;
 
     @Override
-    public FormResult create(String userId, CreatePayment form) {
+    public FormResult create(String userId, CreateOrUpdatePayment form) {
 
         FormResult formResult = new FormResult();
 
@@ -234,6 +231,49 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         emailBuilder.setBodyTextFromString(messageSource.getMessage("email.body", new Object[]{}, transaction.getClient().getLangAsLocale()));
 
         emailService.sendEmail(emailBuilder);
+
+    }
+
+    @Override
+    public FormResult update(String userId, long id, CreateOrUpdatePayment form) {
+
+        FormResult formResult = new FormResult();
+
+        // Validation
+        entitlementService.canUpdatePaymentOrFail(userId);
+        validateMandatory(formResult, "clientShortName", form.getClientShortName());
+        validateDateOnly(formResult, "date", form.getDate());
+        validateMandatory(formResult, "date", form.getDate());
+        validateMandatory(formResult, "paymentType", form.getPaymentType());
+        Client client = validateClientByShortName(formResult, "clientShortName", form.getClientShortName());
+
+        if (!formResult.isSuccess()) {
+            return formResult;
+        }
+
+        // Find the transaction
+        Transaction entity = transactionDao.findById(id).orElse(null);
+        if (entity == null) {
+            formResult.getGlobalErrors().add("error.notFound");
+            return formResult;
+        }
+
+        // Validate that the transaction doesn't have an invoiceId
+        if (entity.getInvoiceId() != null) {
+            formResult.getGlobalErrors().add("error.cannotUpdateInvoicedTransaction");
+            return formResult;
+        }
+
+        // Update
+        String paymentMessage = messageSource.getMessage("transaction.create.paymentDescription", new Object[]{form.getPaymentType()}, client.getLangAsLocale());
+
+        entity.setClient(client);
+        entity.setDescription(paymentMessage);
+        entity.setDate(DateTools.parseDateOnly(form.getDate()));
+        entity.setPrice(form.getPrice() * -1);
+        transactionDao.save(entity);
+
+        return formResult;
 
     }
 

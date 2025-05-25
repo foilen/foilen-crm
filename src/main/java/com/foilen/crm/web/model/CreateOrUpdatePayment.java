@@ -2,7 +2,7 @@ package com.foilen.crm.web.model;
 
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
-public class CreatePayment extends AbstractApiBase {
+public class CreateOrUpdatePayment extends AbstractApiBase {
 
     private String clientShortName;
 
@@ -28,22 +28,22 @@ public class CreatePayment extends AbstractApiBase {
         return price;
     }
 
-    public CreatePayment setClientShortName(String clientShortName) {
+    public CreateOrUpdatePayment setClientShortName(String clientShortName) {
         this.clientShortName = clientShortName;
         return this;
     }
 
-    public CreatePayment setDate(String date) {
+    public CreateOrUpdatePayment setDate(String date) {
         this.date = date;
         return this;
     }
 
-    public CreatePayment setPaymentType(String paymentType) {
+    public CreateOrUpdatePayment setPaymentType(String paymentType) {
         this.paymentType = paymentType;
         return this;
     }
 
-    public CreatePayment setPrice(long price) {
+    public CreateOrUpdatePayment setPrice(long price) {
         this.price = price;
         return this;
     }

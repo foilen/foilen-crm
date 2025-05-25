@@ -1,12 +1,14 @@
 package com.foilen.crm.web.model;
 
-import java.util.Date;
-
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 import com.foilen.smalltools.tools.DateTools;
 import com.foilen.smalltools.tools.PriceFormatTools;
 
+import java.util.Date;
+
 public class Transaction extends AbstractApiBase {
+
+    private Long id;
 
     private ClientShort client;
 
@@ -17,6 +19,10 @@ public class Transaction extends AbstractApiBase {
 
     // 1099 for 10.99$
     private long price = 0;
+
+    public Long getId() {
+        return id;
+    }
 
     public ClientShort getClient() {
         return client;
@@ -44,6 +50,10 @@ public class Transaction extends AbstractApiBase {
 
     public String getPriceFormatted() {
         return PriceFormatTools.toDigit(price);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setClient(ClientShort client) {
