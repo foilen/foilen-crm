@@ -196,7 +196,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.calendarUnit && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.calendarUnit.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -215,7 +215,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.delta && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.delta.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -234,7 +234,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.nextGenerationDate && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.nextGenerationDate.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -250,7 +250,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -269,7 +269,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.description && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.description.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -288,7 +288,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -307,7 +307,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.category.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -350,7 +350,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.calendarUnit && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.calendarUnit.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -369,7 +369,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.delta && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.delta.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -388,7 +388,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.nextGenerationDate && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.nextGenerationDate.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -404,7 +404,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -423,7 +423,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.description && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.description.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -442,7 +442,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -461,7 +461,7 @@ function RecurrentItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.category.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}

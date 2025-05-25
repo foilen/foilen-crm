@@ -163,7 +163,7 @@ function TechnicalSupportsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.sid && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.sid.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -182,7 +182,7 @@ function TechnicalSupportsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.pricePerHour.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -223,7 +223,7 @@ function TechnicalSupportsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.sid && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.sid.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -242,7 +242,7 @@ function TechnicalSupportsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.pricePerHour.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}

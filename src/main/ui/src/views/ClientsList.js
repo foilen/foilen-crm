@@ -162,7 +162,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.name && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.name.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -181,7 +181,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.shortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.shortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -200,7 +200,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.contactName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.contactName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -219,7 +219,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.email && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.email.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -238,7 +238,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.address && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.address.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -257,7 +257,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.tel && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.tel.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -276,7 +276,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.mainSite && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.mainSite.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -298,7 +298,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.lang && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.lang.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -314,7 +314,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.technicalSupportSid && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.technicalSupportSid.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -355,7 +355,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.name && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.name.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -374,7 +374,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.shortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.shortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -393,7 +393,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.contactName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.contactName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -412,7 +412,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.email && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.email.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -431,7 +431,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.address && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.address.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -450,7 +450,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.tel && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.tel.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -469,7 +469,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.mainSite && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.mainSite.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -491,7 +491,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.lang && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.lang.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -507,7 +507,7 @@ function ClientsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.technicalSupportSid && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.technicalSupportSid.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}

@@ -337,7 +337,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -356,7 +356,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.date && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.date.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -375,7 +375,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.description && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.description.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -394,7 +394,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -413,7 +413,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.category.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -451,7 +451,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -470,7 +470,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.date && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.date.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -489,7 +489,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.description && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.description.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -508,7 +508,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -527,7 +527,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.category.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -569,7 +569,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -588,7 +588,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.date && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.date.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -607,7 +607,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.description && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.description.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -626,7 +626,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.hours && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.hours.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -645,7 +645,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.minutes && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.minutes.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -664,7 +664,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.category.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -708,7 +708,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.invoicePrefix && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.invoicePrefix.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -749,7 +749,7 @@ function ItemsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.invoicePrefix && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.invoicePrefix.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}

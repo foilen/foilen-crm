@@ -154,7 +154,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -173,7 +173,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.date && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.date.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -192,7 +192,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.paymentType && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.paymentType.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -211,7 +211,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -249,7 +249,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.clientShortName && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.clientShortName.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -268,7 +268,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.date && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.date.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -287,7 +287,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.paymentType && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.paymentType.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
@@ -306,7 +306,7 @@ function TransactionsList() {
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
                                         <div className="text-danger">
                                             {formResult.validationErrorsByField.price.map((errorCode, index) => (
-                                                <p key={index}>{errorCode}</p>
+                                                <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
                                     )}
