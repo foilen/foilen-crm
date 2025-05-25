@@ -118,4 +118,4 @@ When done, cleanup by stopping the DB: `docker stop crm_db crm_db_phpmyadmin` .
 
 ## Swagger
 
-You can see the API documentation here: http://localhost:8888/swagger-ui/index.html
+You can see the API documentation here: http://127.0.0.1:8080/swagger-ui/index.html
