@@ -124,6 +124,7 @@ public abstract class AbstractSpringTests {
         return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.Transaction t = JsonTools.clone(e, com.foilen.crm.web.model.Transaction.class);
+                    t.setId(null);
                     t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
                     t.setDate(null);
                     return t;

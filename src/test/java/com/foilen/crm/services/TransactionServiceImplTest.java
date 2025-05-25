@@ -65,6 +65,7 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
 
         // Test
         List<TransactionWithBalance> recents = transactionService.getRecentTransactions(clientAvez);
+        recents.forEach(it -> it.setId(null));
         recents.forEach(it -> it.getClient().setId(null));
         recents.forEach(it -> it.getClient().getTechnicalSupport().setId(null));
 
