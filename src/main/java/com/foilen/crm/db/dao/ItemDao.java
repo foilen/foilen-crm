@@ -27,6 +27,9 @@ public interface ItemDao extends JpaRepository<Item, Long> {
     @Query("SELECT DISTINCT i.client FROM Item i WHERE i.invoiceId IS NULL ORDER BY i.client.shortName")
     List<Client> findAllClientByInvoiceIdNull();
 
+    @Query("SELECT DISTINCT i.category FROM Item i ORDER BY i.category")
+    List<String> findAllDistinctCategories();
+
     @Query("SELECT new com.foilen.crm.web.model.ReportItemsByCategory( CONCAT(YEAR(date), CONCAT('-', MONTH(date))), "
             + "  category, "
             + "  sum(price)) "

@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping(value = "api/item", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
 @RestController
 @SwaggerExpose
@@ -57,6 +59,11 @@ public class ItemApiController {
                                @RequestParam(required = false) String search
     ) {
         return itemService.listBilled(authentication.getName(), pageId);
+    }
+
+    @GetMapping("listCategories")
+    public List<String> listCategories() {
+        return itemService.listDistinctCategories();
     }
 
     @GetMapping("listPending")

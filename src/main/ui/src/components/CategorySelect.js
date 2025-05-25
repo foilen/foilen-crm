@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {get} from '../utils/http'
-import './TechnicalSupportSelect.css'
+import './CategorySelect.css'
 
-function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onChange}) {
+function CategorySelect({id = 'categorySelect', value = '', onChange}) {
     const [items, setItems] = useState([])
     const [focused, setFocused] = useState(false)
     const [inputValue, setInputValue] = useState(value)
@@ -27,11 +27,19 @@ function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onCh
         }
 
         try {
-            const response = await get('/api/technicalSupport/listAll', {search: searchFor})
-            setItems(response.data.items || [])
-            console.log('Technical Supports - Loaded', response.data.items?.length, 'items for', searchFor)
+            const response = await get('/api/item/listCategories')
+            const categories = response.data || []
+            
+            // Filter categories based on search term if provided
+            const filteredCategories = searchFor 
+                ? categories.filter(category => 
+                    category.toLowerCase().includes(searchFor.toLowerCase()))
+                : categories
+                
+            setItems(filteredCategories)
+            console.log('Categories - Loaded', filteredCategories.length, 'items for', searchFor)
         } catch (error) {
-            console.error('Error loading technical supports', error)
+            console.error('Error loading categories', error)
             setItems([])
         }
     }
@@ -42,11 +50,11 @@ function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onCh
         search(newValue)
     }
 
-    const handleSelected = (sid) => {
-        console.log('Selected', sid)
-        setInputValue(sid)
+    const handleSelected = (category) => {
+        console.log('Selected', category)
+        setInputValue(category)
         if (onChange) {
-            onChange(sid)
+            onChange(category)
         }
         setFocused(false)
     }
@@ -85,9 +93,9 @@ function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onCh
             />
             {focused && (
                 <ul>
-                    {items.map(item => (
-                        <li key={item.sid} onClick={() => handleSelected(item.sid)}>
-                            {item.sid} ({item.pricePerHourFormatted}$)
+                    {items.map(category => (
+                        <li key={category} onClick={() => handleSelected(category)}>
+                            {category}
                         </li>
                     ))}
                 </ul>
@@ -96,4 +104,4 @@ function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onCh
     )
 }
 
-export default TechnicalSupportSelect
+export default CategorySelect

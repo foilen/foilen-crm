@@ -224,6 +224,11 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
     }
 
     @Override
+    public List<String> listDistinctCategories() { // TODO + Validation
+        return itemDao.findAllDistinctCategories();
+    }
+
+    @Override
     public ItemList listPending(String userId, int pageId) {
 
         // Validation

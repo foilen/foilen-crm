@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
 import Pagination from '../components/Pagination'
 import ClientSelect from '../components/ClientSelect'
+import CategorySelect from '../components/CategorySelect'
 import {delete as del, get, post, put, showSuccess} from '../utils/http'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
@@ -402,13 +403,10 @@ function ItemsList() {
 
                                 <div className="mb-3">
                                     <label htmlFor="category">{t('term.category')}</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
+                                    <CategorySelect
                                         id="category"
                                         value={createForm.category || ''}
-                                        onChange={(e) => handleCreateFormChange('category', e.target.value)}
-                                        autoComplete="off"
+                                        onChange={(value) => handleCreateFormChange('category', value)}
                                     />
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
@@ -515,14 +513,11 @@ function ItemsList() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="category2">Category</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
+                                    <label htmlFor="category2">{t('term.category')}</label>
+                                    <CategorySelect
                                         id="category2"
                                         value={editForm.category || ''}
-                                        onChange={(e) => handleEditFormChange('category', e.target.value)}
-                                        autoComplete="off"
+                                        onChange={(value) => handleEditFormChange('category', value)}
                                     />
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
@@ -653,13 +648,10 @@ function ItemsList() {
 
                                 <div className="mb-3">
                                     <label htmlFor="category3">{t('term.category')}</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
+                                    <CategorySelect
                                         id="category3"
                                         value={createForm.category || ''}
-                                        onChange={(e) => handleCreateFormChange('category', e.target.value)}
-                                        autoComplete="off"
+                                        onChange={(value) => handleCreateFormChange('category', value)}
                                     />
                                     {formResult.validationErrorsByField && formResult.validationErrorsByField.category && (
                                         <div className="text-danger">
