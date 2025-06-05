@@ -10,20 +10,18 @@ import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.SecureRandomTools;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {CrmTestConfig.class, CrmSpringConfig.class})
+@SpringJUnitConfig(classes = {CrmTestConfig.class, CrmSpringConfig.class})
 @ActiveProfiles("JUNIT")
 public abstract class AbstractSpringTests {
 
@@ -42,7 +40,7 @@ public abstract class AbstractSpringTests {
     @Autowired
     protected UserDao userDao;
 
-    private boolean createFakeData;
+    private final boolean createFakeData;
 
     public AbstractSpringTests(boolean createFakeData) {
         CrmConfig crmConfig = new CrmConfig();
@@ -58,7 +56,7 @@ public abstract class AbstractSpringTests {
         this.createFakeData = createFakeData;
     }
 
-    @Before
+    @BeforeEach
     public void createFakeData() {
 
         // Set no-one
@@ -70,13 +68,19 @@ public abstract class AbstractSpringTests {
         }
     }
 
-    protected void expectNotAdmin(Runnable runnable) {
-        try {
-            runnable.run();
-            Assert.fail("Expecting failure as not admin");
-        } catch (ErrorMessageException e) {
-            Assert.assertEquals("error.notAdmin", e.getMessage());
-        }
+    /**
+     * Asserts that the executable throws an ErrorMessageException with "error.notAdmin" message
+     * when executed by a non-admin user.
+     *
+     * @param executable the code to execute that must throw an exception
+     */
+    protected void expectNotAdmin(Executable executable) {
+        ErrorMessageException exception = Assertions.assertThrows(
+                ErrorMessageException.class,
+                executable,
+                "Must throw ErrorMessageException for non-admin users"
+        );
+        Assertions.assertEquals("error.notAdmin", exception.getMessage(), "Exception must have 'error.notAdmin' message");
     }
 
     protected List<com.foilen.crm.web.model.Client> trimClient(List<Client> entities) {

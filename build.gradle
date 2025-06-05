@@ -75,6 +75,10 @@ dependencyManagement {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 apply plugin: 'application'
 mainClassName = 'com.foilen.crm.CrmApp'
 jar {

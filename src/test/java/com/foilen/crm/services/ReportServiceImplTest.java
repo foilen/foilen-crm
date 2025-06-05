@@ -1,12 +1,13 @@
 package com.foilen.crm.services;
-
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.smalltools.test.asserts.AssertTools;
 
+@DisplayName("Report Service Implementation Tests")
 public class ReportServiceImplTest extends AbstractSpringTests {
 
     @Autowired
@@ -17,10 +18,10 @@ public class ReportServiceImplTest extends AbstractSpringTests {
     }
 
     @Test
-    public void testGetReports() {
-
-        AssertTools.assertJsonComparison("ReportServiceImplTest-testGetReports.json", getClass(), reportService.getReports(FakeDataServiceImpl.USER_ID_ADMIN));
-
+    @DisplayName("Admin users can get reports")
+    void getReportsSucceeds() {
+        AssertTools.assertJsonComparison("ReportServiceImplTest-testGetReports.json", getClass(), 
+                reportService.getReports(FakeDataServiceImpl.USER_ID_ADMIN));
     }
 
 }
