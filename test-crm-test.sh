@@ -53,7 +53,8 @@ cat > $FOLDER_DATA/config.json << _EOF
 
 	"mailHost" : "127.0.0.1",
 	"mailPort" : 25,
-	
+	"mailStartTlsEnable" : false,
+
 	"mailFrom" : "crm@localhost",
 	
 	"company" : "MyCompany",

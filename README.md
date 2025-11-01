@@ -38,6 +38,7 @@ Here is an example of the content:
 
 	"mailHost" : "127.0.0.1",
 	"mailPort" : 25,
+	"mailStartTlsEnable" : false,
 	"mailUsername" : "user",
 	"mailPassword" : "password",
 
@@ -58,6 +59,19 @@ Here is an example of the content:
 
 You can then specify the full path of that file as the *configFile* argument when launching the app or as the
 *CONFIG_FILE* environment variable.
+
+### Email Configuration
+
+The email configuration supports the following options:
+
+- `mailHost`: SMTP server hostname (default: "127.0.0.1")
+- `mailPort`: SMTP server port (default: 25, use 587 for STARTTLS or 465 for SSL/TLS)
+- `mailStartTlsEnable`: Enable STARTTLS encryption (default: false, set to true for Gmail, Office365, etc.)
+- `mailUsername`: SMTP authentication username (optional)
+- `mailPassword`: SMTP authentication password (optional)
+- `mailFrom`: The email address to use as the sender
+
+**Note**: When `mailStartTlsEnable` is set to `true`, STARTTLS becomes required for the connection. Most modern SMTP servers (Gmail, Office365, etc.) require this setting.
 
 ## Admin
 

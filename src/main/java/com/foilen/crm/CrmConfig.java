@@ -19,6 +19,7 @@ public class CrmConfig {
     // Email server
     private String mailHost = "127.0.0.1";
     private int mailPort = 25;
+    private boolean mailStartTlsEnable = false;
     @Nullable
     private String mailUsername;
     @Nullable
@@ -66,6 +67,10 @@ public class CrmConfig {
 
     public int getMailPort() {
         return mailPort;
+    }
+
+    public boolean isMailStartTlsEnable() {
+        return mailStartTlsEnable;
     }
 
     public String getMailUsername() {
@@ -122,6 +127,10 @@ public class CrmConfig {
 
     public void setMailPort(int mailPort) {
         this.mailPort = mailPort;
+    }
+
+    public void setMailStartTlsEnable(boolean mailStartTlsEnable) {
+        this.mailStartTlsEnable = mailStartTlsEnable;
     }
 
     public void setMailUsername(String mailUsername) {
