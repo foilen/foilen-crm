@@ -15,6 +15,7 @@ import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
+import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -175,7 +176,7 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
             // Render invoice
             ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
             File htmlFile = new File(tmpFolderAbs + "/index.html");
-            HtmlConverter.convertToPdf(new FileInputStream(htmlFile), pdfOutputStream);
+            HtmlConverter.convertToPdf(new FileInputStream(htmlFile), pdfOutputStream, new ConverterProperties().setBaseUri(tmpFolder.toURI().toString()));
             return new ByteArrayInputStream(pdfOutputStream.toByteArray());
         } catch (Exception e) {
             throw new CrmException("Problem generating the html invoice", e);
