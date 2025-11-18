@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
+        mavenCentral()
     }
 }
 plugins {
@@ -20,17 +20,20 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 21
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 dependencies {
 
     // Databases
-    implementation "com.mysql:mysql-connector-j:9.3.0"
+    implementation "com.mysql:mysql-connector-j:9.5.0"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     implementation "org.springframework.boot:spring-boot-starter-jdbc"
 
     // Emails
-    implementation 'com.itextpdf:html2pdf:6.2.0'
+    implementation 'com.itextpdf:html2pdf:6.3.0'
     implementation 'jakarta.mail:jakarta.mail-api:2.1.3'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.freemarker:freemarker'
@@ -57,8 +60,8 @@ dependencies {
     implementation "com.foilen:jl-smalltools-spring:$smalltoolsVersion"
     implementation "commons-validator:commons-validator:$commonsValidatorVersion"
     implementation "org.apache.commons:commons-text:$commonsTextVersion"
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
-    implementation 'org.quartz-scheduler:quartz'
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.4"
+    implementation 'org.quartz-scheduler:quartz:2.5.1'
 
     // Test
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
@@ -80,7 +83,9 @@ test {
 }
 
 apply plugin: 'application'
-mainClassName = 'com.foilen.crm.CrmApp'
+application {
+    mainClass = 'com.foilen.crm.CrmApp'
+}
 jar {
     enabled = true
 }
