@@ -49,14 +49,21 @@ cd src/main/ui && npm run test:ci
 ### Frontend Development
 
 ```bash
-# Start frontend in watch mode (requires backend running)
+# Start frontend dev server with HMR (hot module replacement)
+cd src/main/ui && npm start
+# Access at http://localhost:3000 (proxies API calls to backend at :8080)
+
+# Build frontend in watch mode (auto-rebuilds on changes)
 ./gradlew npmRunWatch
 
 # Build frontend only
 cd src/main/ui && npm run build
 
-# Run frontend tests
+# Run frontend tests with Vitest
 cd src/main/ui && npm test
+
+# Run frontend tests in CI mode
+cd src/main/ui && npm run test:ci
 ```
 
 ### Local Development
@@ -120,13 +127,17 @@ docker stop mariadb-crm mariadb-crm_phpmyadmin
 
 **Location**: `src/main/ui/`
 
-**Structure**:
-- `src/components/`: Reusable components (ClientSelect, Pagination, etc.)
-- `src/views/`: Page components (ClientsList, ItemsList, etc.)
-- `src/utils/`: Utilities (http, translations, features)
-- `src/App.js`: Main application with routing and navbar
+**Build Tool**: Uses **Vite** for fast builds and hot module replacement
 
-**Build Integration**: Gradle automatically runs `npm install` and `npm run build`, then copies the build output to `build/resources/main/static` for inclusion in the Spring Boot JAR.
+**Structure**:
+- `src/components/`: Reusable components (ClientSelect, Pagination, etc.) [.jsx files]
+- `src/views/`: Page components (ClientsList, ItemsList, etc.) [.jsx files]
+- `src/utils/`: Utilities (http, translations, features) [.js files]
+- `src/App.jsx`: Main application with routing and navbar
+- `vite.config.js`: Vite configuration with proxy settings for backend API
+- `vitest.config.js`: Testing configuration using Vitest
+
+**Build Integration**: Gradle automatically runs `npm install` and `npm run build` (Vite), which outputs directly to `build/resources/main/static` for inclusion in the Spring Boot JAR.
 
 **API Communication**: Uses axios with utilities in `src/main/ui/src/utils/http.js`. CSRF protection is handled automatically.
 
