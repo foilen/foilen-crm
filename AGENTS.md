@@ -4,7 +4,7 @@ This document provides essential information for AI coding agents working on the
 
 ## Project Overview
 
-**Stack**: Java 21 + Spring Boot 3.5.7 (Backend) + React 19 + Vite 7 (Frontend)  
+**Stack**: Java 25 + Spring Boot 4.0.2 (Backend) + React 19 + Vite 7 (Frontend)  
 **Database**: MySQL/MariaDB with Spring Data JPA  
 **Build Tools**: Gradle 7.x (Backend), Vite (Frontend)  
 **Testing**: JUnit 5 (Backend), Vitest (Frontend)  
