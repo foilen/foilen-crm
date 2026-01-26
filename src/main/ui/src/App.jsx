@@ -164,7 +164,7 @@ function App() {
             <hr/>
             <footer>
                 <p>
-                    &copy; <a href="https://foilen.com" target="_blank" rel="noopener noreferrer">Foilen</a> 2015-2025
+                    &copy; <a href="https://foilen.com" target="_blank" rel="noopener noreferrer">Foilen</a> 2015-2026
                 </p>
                 <p>Version: {appDetails.version}</p>
             </footer>
