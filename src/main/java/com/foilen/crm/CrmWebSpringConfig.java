@@ -3,6 +3,9 @@ package com.foilen.crm;
 import com.foilen.crm.web.controller.GeneralHandlerExceptionResolver;
 import com.foilen.crm.web.controller.SwaggerExpose;
 import com.foilen.crm.web.interceptor.ProcessUserInterceptor;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import org.springdoc.core.models.GroupedOpenApi;
 
+import java.time.Duration;
 import java.util.List;
 
 @Configuration
@@ -34,8 +35,8 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
         return GroupedOpenApi.builder()
                 .group("api")
                 .packagesToScan("com.foilen.crm.web")
-                .addOpenApiMethodFilter(method -> 
-                    method.getDeclaringClass().isAnnotationPresent(SwaggerExpose.class))
+                .addOpenApiMethodFilter(method ->
+                        method.getDeclaringClass().isAnnotationPresent(SwaggerExpose.class))
                 .build();
     }
 
@@ -54,8 +55,7 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
 
     @Bean
     public ForwardedHeaderFilter forwardedHeaderFilter() {
-        ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
-        return filter;
+        return new ForwardedHeaderFilter();
     }
 
     @Bean
@@ -72,9 +72,8 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
 
     @Bean
     public CookieLocaleResolver localeResolver() {
-        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setCookieMaxAge(2 * 7 * 24 * 60 * 60);// 2 weeks
-        cookieLocaleResolver.setCookieName("lang");
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver("lang");
+        cookieLocaleResolver.setCookieMaxAge(Duration.ofDays(14));// 2 weeks
         return cookieLocaleResolver;
     }
 
@@ -85,8 +84,7 @@ public class CrmWebSpringConfig implements WebMvcConfigurer {
 
     @Bean
     public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
-        ResourceUrlEncodingFilter resourceUrlEncodingFilter = new ResourceUrlEncodingFilter();
-        return resourceUrlEncodingFilter;
+        return new ResourceUrlEncodingFilter();
     }
 
 }
