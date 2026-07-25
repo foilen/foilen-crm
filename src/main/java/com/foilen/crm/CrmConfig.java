@@ -28,6 +28,10 @@ public class CrmConfig {
     // Email that sends
     private String mailFrom;
 
+    // When set, all outgoing emails are redirected to this address instead of their real recipient
+    @Nullable
+    private String mailForceEmailTo;
+
     private String company;
 
     private LoginAzureConfig loginAzureConfig = new LoginAzureConfig();
@@ -55,6 +59,10 @@ public class CrmConfig {
 
     public String getMailFrom() {
         return mailFrom;
+    }
+
+    public String getMailForceEmailTo() {
+        return mailForceEmailTo;
     }
 
     public String getMailHost() {
@@ -115,6 +123,10 @@ public class CrmConfig {
 
     public void setMailFrom(String mailFrom) {
         this.mailFrom = mailFrom;
+    }
+
+    public void setMailForceEmailTo(String mailForceEmailTo) {
+        this.mailForceEmailTo = mailForceEmailTo;
     }
 
     public void setMailHost(String mailHost) {

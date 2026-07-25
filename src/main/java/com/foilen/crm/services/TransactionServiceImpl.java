@@ -58,6 +58,8 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     private String emailTemplateDirectory;
     @Value("${crm.mailFrom}")
     private String mailFrom;
+    @Value("${crm.mailForceEmailTo:#{null}}")
+    private String mailForceEmailTo;
 
     @Override
     public FormResult create(String userId, CreateOrUpdatePayment form) {
@@ -222,13 +224,22 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     @Override
     public void sendInvoice(Transaction transaction) {
 
+        String to = transaction.getClient().getEmail();
+        String subject = messageSource.getMessage("email.subject", new Object[]{company, transaction.getInvoiceId()}, transaction.getClient().getLangAsLocale());
+
+        if (mailForceEmailTo != null) {
+            subject = "[FORCED] " + to + " | " + subject;
+            to = mailForceEmailTo;
+            logger.warn("Forcing email to {}", to);
+        }
+
         // Send email
         EmailBuilder emailBuilder = new EmailBuilder();
         emailBuilder.setFrom(mailFrom);
-        emailBuilder.addTo(transaction.getClient().getEmail());
+        emailBuilder.addTo(to);
         emailBuilder.addCc(mailFrom);
         emailBuilder.addAttachmentFromStream(transaction.getInvoiceId() + ".pdf", genPdf(transaction));
-        emailBuilder.setSubject(messageSource.getMessage("email.subject", new Object[]{company, transaction.getInvoiceId()}, transaction.getClient().getLangAsLocale()));
+        emailBuilder.setSubject(subject);
         emailBuilder.setBodyTextFromString(messageSource.getMessage("email.body", new Object[]{}, transaction.getClient().getLangAsLocale()));
 
         emailService.sendEmail(emailBuilder);
