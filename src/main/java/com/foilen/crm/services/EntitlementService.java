@@ -25,6 +25,10 @@ public interface EntitlementService {
 
     void canDeleteTechnicalSupportOrFail(String userId);
 
+    void canExportDataOrFail(String userId);
+
+    void canImportDataOrFail(String userId);
+
     void canUpdateClientOrFail(String userId);
 
     void canUpdateItemOrFail(String userId);

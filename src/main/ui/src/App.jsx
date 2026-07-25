@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 // Import components
 import Home from './views/Home'
+import Admin from './views/Admin'
 import ClientsList from './views/ClientsList'
 import ItemsList from './views/ItemsList'
 import RecurrentItemsList from './views/RecurrentItemsList'
@@ -128,6 +129,14 @@ function App() {
                                 {t('menu.reports')}
                             </NavLink>
                         </li>
+                        {appDetails.userAdmin && (
+                            <li className="nav-item">
+                                <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
+                                         to="/admin">
+                                    {t('menu.admin')}
+                                </NavLink>
+                            </li>
+                        )}
                     </ul>
                     <ul className="navbar-nav">
                         <li className="nav-item">
@@ -151,6 +160,7 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
+                    <Route path="/admin" element={<Admin/>}/>
                     <Route path="/clients" element={<ClientsList/>}/>
                     <Route path="/items" element={<ItemsList/>}/>
                     <Route path="/recurrentItems" element={<RecurrentItemsList/>}/>

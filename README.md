@@ -120,6 +120,8 @@ Create a config file with your Azure details by following the instructions in "C
 
 Then run "CrmApp" in IntelliJ.
 
+phpMyAdmin on http://127.0.0.1:12345/ with user "root" and password "ABC"
+
 ## TEST in Docker
 
 Simply execute `./test-crm-test.sh` .
