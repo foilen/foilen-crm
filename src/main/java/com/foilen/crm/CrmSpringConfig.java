@@ -5,6 +5,8 @@ import com.foilen.crm.localonly.EmailServiceMock;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.localonly.LocalLaunchService;
+import com.foilen.smalltools.restapi.services.PaginationService;
+import com.foilen.smalltools.restapi.services.PaginationServiceImpl;
 import com.foilen.smalltools.tools.AbstractBasics;
 import com.google.common.base.Strings;
 import freemarker.template.TemplateExceptionHandler;
@@ -29,27 +31,6 @@ import java.nio.charset.StandardCharsets;
 @EnableScheduling
 @PropertySource({"classpath:/com/foilen/crm/application-common.properties", "classpath:/com/foilen/crm/application-${MODE}.properties"})
 public class CrmSpringConfig extends AbstractBasics {
-
-    @Configuration
-    @Profile({"JUNIT", "LOCAL"})
-    public static class CrmConfigLocal {
-        @Primary
-        @Bean
-        public EmailServiceMock emailServiceMock() {
-            return new EmailServiceMock();
-        }
-
-        @Bean
-        public FakeDataService fakeDataService() {
-            return new FakeDataServiceImpl();
-        }
-
-        @Bean
-        public LocalLaunchService localLaunchService() {
-            return new LocalLaunchService(fakeDataService());
-        }
-
-    }
 
     @Value("${crm.emailTemplateDirectory:#{null}}")
     private String emailTemplateDirectory;
@@ -88,6 +69,32 @@ public class CrmSpringConfig extends AbstractBasics {
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
+    }
+
+    @Bean
+    public PaginationService paginationService() {
+        return new PaginationServiceImpl();
+    }
+
+    @Configuration
+    @Profile({"JUNIT", "LOCAL"})
+    public static class CrmConfigLocal {
+        @Primary
+        @Bean
+        public EmailServiceMock emailServiceMock() {
+            return new EmailServiceMock();
+        }
+
+        @Bean
+        public FakeDataService fakeDataService() {
+            return new FakeDataServiceImpl();
+        }
+
+        @Bean
+        public LocalLaunchService localLaunchService() {
+            return new LocalLaunchService(fakeDataService());
+        }
+
     }
 
 }

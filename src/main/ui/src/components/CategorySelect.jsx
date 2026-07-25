@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {get} from '../utils/http'
+import service from '../service'
 import './CategorySelect.css'
 
 function CategorySelect({id = 'categorySelect', value = '', onChange}) {
@@ -27,7 +27,7 @@ function CategorySelect({id = 'categorySelect', value = '', onChange}) {
         }
 
         try {
-            const response = await get('/api/item/listCategories')
+            const response = await service.itemListCategories()
             const categories = response.data || []
             
             // Filter categories based on search term if provided

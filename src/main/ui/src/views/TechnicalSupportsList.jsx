@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
-import Pagination from '../components/Pagination'
-import {delete as del, get, post, put, showSuccess} from '../utils/http'
+import PaginationControl from '../components/PaginationControl'
+import service, {showSuccess} from '../service'
 import {priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
@@ -32,7 +32,7 @@ function TechnicalSupportsList() {
         console.log('Technical Supports - Load', {pageId})
 
         try {
-            const response = await get('/api/technicalSupport/listAll', {pageId})
+            const response = await service.technicalSupportListAll(pageId)
             setPagination(response.data.pagination)
             setItems(response.data.items || [])
         } catch (error) {
@@ -54,7 +54,7 @@ function TechnicalSupportsList() {
         console.log('Technical Support - Create', clonedForm)
 
         try {
-            const response = await post('/api/technicalSupport', clonedForm)
+            const response = await service.technicalSupportCreate(clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#createModal .btn-secondary').click()
@@ -72,7 +72,7 @@ function TechnicalSupportsList() {
             console.log('Technical Support - Delete', item.sid)
 
             try {
-                await del('/api/technicalSupport/' + item.sid)
+                await service.technicalSupportDelete(item.sid)
                 showSuccess(`Successfully deleted ${item.sid}`)
                 refresh(queries.pageId)
             } catch (error) {
@@ -99,7 +99,7 @@ function TechnicalSupportsList() {
         console.log('Technical Support - Edit', clonedForm)
 
         try {
-            const response = await put('/api/technicalSupport/' + clonedForm.id, clonedForm)
+            const response = await service.technicalSupportUpdate(clonedForm.id, clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#editModal .btn-secondary').click()
@@ -258,8 +258,8 @@ function TechnicalSupportsList() {
                     </div>
                 </div>
 
-                <Pagination className="float-end" pagination={pagination}
-                            onChangePage={(event) => refresh(event.pageId)}/>
+                <PaginationControl className="float-end" state={pagination}
+                            onPageChange={(newPageId) => refresh(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>

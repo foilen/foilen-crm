@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
-import Pagination from '../components/Pagination'
+import PaginationControl from '../components/PaginationControl'
 import ClientSelect from '../components/ClientSelect'
 import CategorySelect from '../components/CategorySelect'
-import {delete as del, get, post, put, showSuccess} from '../utils/http'
+import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
@@ -71,7 +71,7 @@ function RecurrentItemsList() {
         console.log('Recurrent Items - Load', {pageId})
 
         try {
-            const response = await get('/api/recurrentItem/listAll', {pageId})
+            const response = await service.recurrentItemListAll(pageId)
             setPagination(response.data.pagination)
             setItems(response.data.items || [])
         } catch (error) {
@@ -93,7 +93,7 @@ function RecurrentItemsList() {
         console.log('Recurrent Item - Create', clonedForm)
 
         try {
-            const response = await post('/api/recurrentItem', clonedForm)
+            const response = await service.recurrentItemCreate(clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#createModal .btn-secondary').click()
@@ -111,7 +111,7 @@ function RecurrentItemsList() {
             console.log('Recurrent Item - Delete', item.id)
 
             try {
-                await del('/api/recurrentItem/' + item.id)
+                await service.recurrentItemDelete(item.id)
                 showSuccess(`Successfully deleted ${item.description}`)
                 refresh()
             } catch (error) {
@@ -143,7 +143,7 @@ function RecurrentItemsList() {
         console.log('Recurrent Item - Edit', clonedForm)
 
         try {
-            const response = await put('/api/recurrentItem/' + clonedForm.id, clonedForm)
+            const response = await service.recurrentItemUpdate(clonedForm.id, clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#editModal .btn-secondary').click()
@@ -168,8 +168,8 @@ function RecurrentItemsList() {
                     {t('button.create')}
                 </button>
 
-                <Pagination className="float-end" pagination={pagination}
-                            onChangePage={(event) => refresh(event.pageId)}/>
+                <PaginationControl className="float-end" state={pagination}
+                            onPageChange={(newPageId) => refresh(newPageId)}/>
 
                 <div className="modal fade" id="createModal" tabIndex="-1" role="dialog"
                      aria-labelledby="createModalLabel" aria-hidden="true">

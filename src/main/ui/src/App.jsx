@@ -13,6 +13,7 @@ import RecurrentItemsList from './views/RecurrentItemsList'
 import ReportsList from './views/ReportsList'
 import TechnicalSupportsList from './views/TechnicalSupportsList'
 import TransactionsList from './views/TransactionsList'
+import service from './service'
 import {t, updateAppDetails} from "./utils/TranslationUtils"
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
 
     // Function to refresh app details
     const refresh = () => {
-        axios.get('/api/app/details')
+        service.appDetails()
             .then(response => {
                 const details = response.data.item
                 setAppDetails(details)

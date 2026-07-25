@@ -6,14 +6,13 @@ import com.foilen.crm.web.model.AdminExportResult;
 import com.foilen.smalltools.restapi.model.FormResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(value = "api/admin", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+@RequestMapping("api/admin")
 @RestController
 @SwaggerExpose
 public class AdminApiController {

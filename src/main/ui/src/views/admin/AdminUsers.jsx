@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../../components/ErrorResults'
-import Pagination from '../../components/Pagination'
-import {get, put, showSuccess} from '../../utils/http'
+import PaginationControl from '../../components/PaginationControl'
+import service, {showSuccess} from '../../service'
 import {t} from '../../utils/TranslationUtils'
 
 function AdminUsers() {
@@ -30,7 +30,7 @@ function AdminUsers() {
         console.log('Admin Users - Load', {pageId, search})
 
         try {
-            const response = await get('/api/user/listAll', {pageId, search})
+            const response = await service.userListAll(pageId, search)
             setPagination(response.data.pagination)
             setItems(response.data.items || [])
         } catch (error) {
@@ -54,7 +54,7 @@ function AdminUsers() {
         console.log('Admin Users - Update Admin', item.id, nextAdmin)
 
         try {
-            const response = await put(`/api/user/${item.id}/admin`, {admin: nextAdmin})
+            const response = await service.userUpdateAdmin(item.id, {admin: nextAdmin})
             setFormResult(response.data)
             if (response.data.success) {
                 showSuccess(t('prompt.updateAdmin.success', {0: item.email || item.userId}))
@@ -91,8 +91,8 @@ function AdminUsers() {
                     />
                 </div>
 
-                <Pagination className="float-end" pagination={pagination}
-                            onChangePage={(event) => refresh(event.pageId)}/>
+                <PaginationControl className="float-end" state={pagination}
+                            onPageChange={(newPageId) => refresh(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>

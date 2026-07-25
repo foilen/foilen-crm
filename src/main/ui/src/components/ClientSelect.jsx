@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {get} from '../utils/http'
+import service from '../service'
 import './ClientSelect.css'
 
 function ClientSelect({id = 'clientSelect', value = '', onChange}) {
@@ -27,7 +27,7 @@ function ClientSelect({id = 'clientSelect', value = '', onChange}) {
         }
 
         try {
-            const response = await get('/api/client/listAll', {search: searchFor})
+            const response = await service.clientListAll(undefined, searchFor)
             setItems(response.data.items || [])
         } catch (error) {
             console.error('Error loading clients', error)

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
-import Pagination from '../components/Pagination'
+import PaginationControl from '../components/PaginationControl'
 import TechnicalSupportSelect from '../components/TechnicalSupportSelect'
-import {delete as del, get, post, put, showSuccess} from '../utils/http'
+import service, {showSuccess} from '../service'
 import {t} from '../utils/TranslationUtils'
 
 function ClientsList() {
@@ -35,7 +35,7 @@ function ClientsList() {
         console.log('Clients - Load', {pageId})
 
         try {
-            const response = await get('/api/client/listAll', {pageId})
+            const response = await service.clientListAll(pageId)
             setPagination(response.data.pagination)
             setItems(response.data.items || [])
         } catch (error) {
@@ -55,7 +55,7 @@ function ClientsList() {
         console.log('Clients - Create', createForm)
 
         try {
-            const response = await post('/api/client', createForm)
+            const response = await service.clientCreate(createForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#createModal .btn-secondary').click()
@@ -73,7 +73,7 @@ function ClientsList() {
             console.log('Client - Delete', item.name)
 
             try {
-                await del('/api/client/' + item.shortName)
+                await service.clientDelete(item.shortName)
                 showSuccess(t('prompt.delete.success', {0: item.shortName}))
                 refresh(queries.pageId)
             } catch (error) {
@@ -98,7 +98,7 @@ function ClientsList() {
         console.log('Clients - Edit', editForm)
 
         try {
-            const response = await put('/api/client/' + editForm.clientShortName, editForm)
+            const response = await service.clientUpdate(editForm.clientShortName, editForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#editModal .btn-secondary').click()
@@ -523,8 +523,8 @@ function ClientsList() {
                     </div>
                 </div>
 
-                <Pagination className="float-end" pagination={pagination}
-                            onChangePage={(event) => refresh(event.pageId)}/>
+                <PaginationControl className="float-end" state={pagination}
+                            onPageChange={(newPageId) => refresh(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>

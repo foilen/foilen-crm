@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {get} from '../utils/http'
+import service from '../service'
 import {t} from '../utils/TranslationUtils'
 
 function ReportsList() {
@@ -10,7 +10,7 @@ function ReportsList() {
         console.log('Reports - Load')
 
         try {
-            const response = await get('/api/report')
+            const response = await service.reportGet()
             setReports(response.data.item || {})
         } catch (error) {
             console.error('Error loading reports', error)

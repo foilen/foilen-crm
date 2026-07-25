@@ -6,10 +6,9 @@ import com.foilen.crm.web.model.UserList;
 import com.foilen.smalltools.restapi.model.FormResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "api/user", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+@RequestMapping("api/user")
 @RestController
 @SwaggerExpose
 public class UserApiController {

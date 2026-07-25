@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
-import Pagination from '../components/Pagination'
+import PaginationControl from '../components/PaginationControl'
 import ClientSelect from '../components/ClientSelect'
-import {get, post, put, showSuccess} from '../utils/http'
+import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
@@ -50,7 +50,7 @@ function TransactionsList() {
         console.log('Transaction Payment - Create', clonedForm)
 
         try {
-            const response = await post('/api/transaction/payment', clonedForm)
+            const response = await service.transactionCreatePayment(clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 // Close the modal
@@ -84,7 +84,7 @@ function TransactionsList() {
         console.log('Transaction - Edit', clonedForm)
 
         try {
-            const response = await put('/api/transaction/' + editForm.id, clonedForm)
+            const response = await service.transactionUpdate(editForm.id, clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#editModal .btn-secondary').click()
@@ -110,7 +110,7 @@ function TransactionsList() {
         console.log('Transactions - Load', {pageId})
 
         try {
-            const response = await get('/api/transaction/listAll', {pageId})
+            const response = await service.transactionListAll(pageId)
             setPagination(response.data.pagination)
             setItems(response.data.items || [])
         } catch (error) {
@@ -324,10 +324,10 @@ function TransactionsList() {
             </div>
 
             <div className="col-12">
-                <Pagination
+                <PaginationControl
                     className="float-end"
-                    pagination={pagination}
-                    onChangePage={(event) => refresh(event.pageId)}
+                    state={pagination}
+                    onPageChange={(newPageId) => refresh(newPageId)}
                 />
 
                 <table className="table table-striped">

@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react'
 import ErrorResults from '../../components/ErrorResults'
-import {get, post, showSuccess} from '../../utils/http'
+import service, {showSuccess} from '../../service'
 import {t} from '../../utils/TranslationUtils'
 
 function AdminExportImport() {
@@ -13,7 +13,7 @@ function AdminExportImport() {
         console.log('Admin - Export')
 
         try {
-            const response = await get('/api/admin/export')
+            const response = await service.adminExport()
             const dataStr = JSON.stringify(response.data.item, null, 2)
             const blob = new Blob([dataStr], {type: 'application/json'})
             const url = URL.createObjectURL(blob)
@@ -56,7 +56,7 @@ function AdminExportImport() {
         try {
             const text = await file.text()
             const adminExport = JSON.parse(text)
-            const response = await post('/api/admin/import', adminExport)
+            const response = await service.adminImport(adminExport)
             setFormResult(response.data)
             if (response.data.success) {
                 showSuccess(t('prompt.import.success'))

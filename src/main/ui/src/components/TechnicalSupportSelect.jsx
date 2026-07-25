@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {get} from '../utils/http'
+import service from '../service'
 import './TechnicalSupportSelect.css'
 
 function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onChange}) {
@@ -27,7 +27,7 @@ function TechnicalSupportSelect({id = 'technicalSupportSelect', value = '', onCh
         }
 
         try {
-            const response = await get('/api/technicalSupport/listAll', {search: searchFor})
+            const response = await service.technicalSupportListAll(undefined, searchFor)
             setItems(response.data.items || [])
             console.log('Technical Supports - Loaded', response.data.items?.length, 'items for', searchFor)
         } catch (error) {

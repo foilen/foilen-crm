@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import ErrorResults from '../components/ErrorResults'
-import Pagination from '../components/Pagination'
+import PaginationControl from '../components/PaginationControl'
 import ClientSelect from '../components/ClientSelect'
 import CategorySelect from '../components/CategorySelect'
-import {delete as del, get, post, put, showSuccess} from '../utils/http'
+import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
@@ -69,7 +69,7 @@ function ItemsList() {
         console.log('Items - Load Billed', {pageId})
 
         try {
-            const response = await get('/api/item/listBilled', {pageId})
+            const response = await service.itemListBilled(pageId)
             setBilled(prev => ({
                 ...prev,
                 pagination: response.data.pagination,
@@ -101,7 +101,7 @@ function ItemsList() {
         console.log('Items - Load Pending', {pageId})
 
         try {
-            const response = await get('/api/item/listPending', {pageId})
+            const response = await service.itemListPending(pageId)
             setPending(prev => ({
                 ...prev,
                 pagination: response.data.pagination,
@@ -129,7 +129,7 @@ function ItemsList() {
         console.log('Item - Create', clonedForm)
 
         try {
-            const response = await post('/api/item', clonedForm)
+            const response = await service.itemCreate(clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#createModal .btn-secondary').click()
@@ -148,7 +148,7 @@ function ItemsList() {
         console.log('Item - Create With Time', clonedForm)
 
         try {
-            const response = await post('/api/item/createWithTime', clonedForm)
+            const response = await service.itemCreateWithTime(clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#createWithTimeModal .btn-secondary').click()
@@ -165,7 +165,7 @@ function ItemsList() {
         console.log('Item - Bill Pending', billForm)
 
         try {
-            const response = await post('/api/item/billPending', billForm)
+            const response = await service.itemBillPending(billForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#billPendingModal .btn-secondary').click()
@@ -182,7 +182,7 @@ function ItemsList() {
         console.log('Item - Bill Selected', billForm)
 
         try {
-            const response = await post('/api/item/billSomePending', billForm)
+            const response = await service.itemBillSomePending(billForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#billSelectedModal .btn-secondary').click()
@@ -199,7 +199,7 @@ function ItemsList() {
             console.log('Item - Pending - Delete', item.id)
 
             try {
-                await del('/api/item/' + item.id)
+                await service.itemDelete(item.id)
                 showSuccess(t('prompt.delete.success', {0: item.id}))
                 refresh()
             } catch (error) {
@@ -252,7 +252,7 @@ function ItemsList() {
         console.log('Item - Pending - Edit', clonedForm)
 
         try {
-            const response = await put('/api/item/' + editForm.id, clonedForm)
+            const response = await service.itemUpdate(editForm.id, clonedForm)
             setFormResult(response.data)
             if (response.data.success) {
                 document.querySelector('#editModal .btn-secondary').click()
@@ -759,8 +759,8 @@ function ItemsList() {
                     </div>
                 </div>
 
-                <Pagination className="float-end" pagination={pending.pagination}
-                            onChangePage={(event) => refreshPending(event.pageId)}/>
+                <PaginationControl className="float-end" state={pending.pagination}
+                            onPageChange={(newPageId) => refreshPending(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>
@@ -810,8 +810,8 @@ function ItemsList() {
 
                 <h1>{t('term.billed')}</h1>
 
-                <Pagination className="float-end" pagination={billed.pagination}
-                            onChangePage={(event) => refreshBilled(event.pageId)}/>
+                <PaginationControl className="float-end" state={billed.pagination}
+                            onPageChange={(newPageId) => refreshBilled(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>
