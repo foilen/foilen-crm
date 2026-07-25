@@ -1,11 +1,11 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.UserDao;
+import com.foilen.crm.db.repository.UserRepository;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.smalltools.tools.AbstractBasics;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class EntitlementServiceImpl extends AbstractBasics implements EntitlementService {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     private boolean isFirstUser = false;
 
@@ -141,7 +141,7 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
     }
 
     private User getUserOrFail(String userId) {
-        User user = userDao.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new RuntimeException("User does not exist");
         }
@@ -151,13 +151,13 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
     @Override
     public User getUserOrFail(Authentication authentication) {
         var userId = authentication.getName();
-        User user = userDao.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
         if (user == null) {
             if (authentication instanceof OAuth2AuthenticationToken authenticationToken) {
                 user = new User(userId, isFirstUser);
                 user.setEmail(authenticationToken.getPrincipal().getAttribute("email"));
                 isFirstUser = false;
-                userDao.save(user);
+                userRepository.save(user);
             } else {
                 throw new RuntimeException("Not OAuth2");
             }
@@ -168,7 +168,7 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
 
     @PostConstruct
     public void init() {
-        isFirstUser = userDao.count() == 0;
+        isFirstUser = userRepository.count() == 0;
         logger.info("isFirstUser? {}", isFirstUser);
     }
 

@@ -9,12 +9,9 @@ public class CrmConfig {
     // UI
     private String baseUrl;
 
-    // MySql
-    private String mysqlHostName = "127.0.0.1";
-    private int mysqlPort = 3306;
-    private String mysqlDatabaseName = "foilen_crm";
-    private String mysqlDatabaseUserName;
-    private String mysqlDatabasePassword;
+    // MongoDB
+    private String mongoUri = "mongodb://127.0.0.1:27017";
+    private String mongoDatabase = "foilen_crm";
 
     // Email server
     private String mailHost = "127.0.0.1";
@@ -85,24 +82,12 @@ public class CrmConfig {
         return mailUsername;
     }
 
-    public String getMysqlDatabaseName() {
-        return mysqlDatabaseName;
+    public String getMongoDatabase() {
+        return mongoDatabase;
     }
 
-    public String getMysqlDatabasePassword() {
-        return mysqlDatabasePassword;
-    }
-
-    public String getMysqlDatabaseUserName() {
-        return mysqlDatabaseUserName;
-    }
-
-    public String getMysqlHostName() {
-        return mysqlHostName;
-    }
-
-    public int getMysqlPort() {
-        return mysqlPort;
+    public String getMongoUri() {
+        return mongoUri;
     }
 
     public void setBaseUrl(String baseUrl) {
@@ -149,24 +134,12 @@ public class CrmConfig {
         this.mailUsername = mailUsername;
     }
 
-    public void setMysqlDatabaseName(String mysqlDatabaseName) {
-        this.mysqlDatabaseName = mysqlDatabaseName;
+    public void setMongoDatabase(String mongoDatabase) {
+        this.mongoDatabase = mongoDatabase;
     }
 
-    public void setMysqlDatabasePassword(String mysqlDatabasePassword) {
-        this.mysqlDatabasePassword = mysqlDatabasePassword;
-    }
-
-    public void setMysqlDatabaseUserName(String mysqlDatabaseUserName) {
-        this.mysqlDatabaseUserName = mysqlDatabaseUserName;
-    }
-
-    public void setMysqlHostName(String mysqlHostName) {
-        this.mysqlHostName = mysqlHostName;
-    }
-
-    public void setMysqlPort(int mysqlPort) {
-        this.mysqlPort = mysqlPort;
+    public void setMongoUri(String mongoUri) {
+        this.mongoUri = mongoUri;
     }
 
     public LoginAzureConfig getLoginAzureConfig() {

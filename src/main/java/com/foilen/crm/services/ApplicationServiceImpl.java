@@ -1,6 +1,6 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.UserDao;
+import com.foilen.crm.db.repository.UserRepository;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.web.model.ApplicationDetails;
 import com.foilen.crm.web.model.ApplicationDetailsResult;
@@ -9,7 +9,7 @@ import com.foilen.smalltools.tools.CloseableTools;
 import com.foilen.smalltools.tools.FileTools;
 import com.foilen.smalltools.tools.ResourceTools;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -30,7 +30,7 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
     @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     private Map<String, Object> translations = new TreeMap<>();
 
@@ -66,7 +66,7 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
         ;
 
         // Logged in user
-        User user = userDao.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
         if (user != null) {
             applicationDetails.setUserEmail(user.getEmail());
             applicationDetails.setUserAdmin(user.isAdmin());

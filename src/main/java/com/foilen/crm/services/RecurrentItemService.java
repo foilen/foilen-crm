@@ -10,7 +10,7 @@ public interface RecurrentItemService {
 
     FormResult create(String userId, CreateOrUpdateRecurrentItemForm form);
 
-    FormResult delete(String userId, long id);
+    FormResult delete(String userId, String id);
 
     void generateReady(Date now);
 
@@ -25,5 +25,5 @@ public interface RecurrentItemService {
      */
     RecurrentItemList listAll(String userId, int pageId);
 
-    FormResult update(String userId, long id, CreateOrUpdateRecurrentItemForm form);
+    FormResult update(String userId, String id, CreateOrUpdateRecurrentItemForm form);
 }

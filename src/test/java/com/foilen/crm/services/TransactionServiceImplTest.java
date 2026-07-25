@@ -5,7 +5,7 @@ import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdatePayment;
 import com.foilen.crm.web.model.Transaction;
-import com.foilen.crm.web.model.TransactionWithBalance;
+import com.foilen.crm.web.model.TransactionExtended;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.test.asserts.AssertTools;
 import com.foilen.smalltools.tools.DateTools;
@@ -36,20 +36,20 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
         @DisplayName("Admin users can create transactions")
         void createTransactionSucceeds() {
             // Initial
-            List<Transaction> initialItems = trimTransaction(transactionDao.findAll(Sort.by("invoiceId")));
+            List<Transaction> initialItems = trimTransaction(transactionRepository.findAll(Sort.by("invoiceId")));
 
             // Create
             CreateOrUpdatePayment form = new CreateOrUpdatePayment()
                     .setClientShortName("zooa")
                     .setDate("2019-06-25")
                     .setPaymentType("Paypal")
-                    .setPrice(1000);
+                    .setPriceInCents(1000);
             FormResult formResult = transactionService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
             Assertions.assertTrue(formResult.isSuccess());
 
             // Final
-            List<Transaction> finalItems = trimTransaction(transactionDao.findAll(Sort.by("invoiceId")));
-            AssertTools.assertDiffJsonComparisonWithoutNulls("TransactionServiceImplTest-testCreate-transactions.json", getClass(), 
+            List<Transaction> finalItems = trimTransaction(transactionRepository.findAll(Sort.by("invoiceId")));
+            AssertTools.assertDiffJsonComparisonWithoutNulls("TransactionServiceImplTest-testCreate-transactions.json", getClass(),
                     initialItems, finalItems);
         }
 
@@ -57,24 +57,23 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
         @DisplayName("Can retrieve recent transactions for a client")
         void getRecentTransactionsSucceeds() {
             // Create transactions
-            transactionDao.deleteAll();
-            Client clientAvez = clientDao.findByShortName("avez");
+            transactionRepository.deleteAll();
+            Client clientAvez = clientRepository.findByShortName("avez");
 
             for (int i = 1; i <= 20; ++i) {
                 com.foilen.crm.db.entities.invoice.Transaction transaction = new com.foilen.crm.db.entities.invoice.Transaction();
-                transaction.setClient(clientAvez);
+                transaction.setClientId(clientAvez.getId());
                 transaction.setDate(DateTools.parseDateOnly("2019-01-" + i));
                 transaction.setDescription("TX " + i);
                 transaction.setInvoiceId("I" + i);
-                transaction.setPrice(i * 100);
-                transactionDao.save(transaction);
+                transaction.setPriceInCents(i * 100);
+                transactionRepository.save(transaction);
             }
 
             // Test
-            List<TransactionWithBalance> recents = transactionService.getRecentTransactions(clientAvez);
+            List<TransactionExtended> recents = transactionService.getRecentTransactions(clientAvez);
             recents.forEach(it -> it.setId(null));
-            recents.forEach(it -> it.getClient().setId(null));
-            recents.forEach(it -> it.getClient().getTechnicalSupport().setId(null));
+            recents.forEach(it -> it.setClientId(null));
 
             // Assert
             AssertTools.assertJsonComparisonWithoutNulls("TransactionServiceImplTest-testGetRecentTransactions.json", getClass(), recents);

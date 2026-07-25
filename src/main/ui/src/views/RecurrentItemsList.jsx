@@ -26,7 +26,7 @@ function RecurrentItemsList() {
         delta: '',
         clientShortName: '',
         description: '',
-        price: '',
+        priceInCents: '',
         category: ''
     })
     const [editForm, setEditForm] = useState({
@@ -36,7 +36,7 @@ function RecurrentItemsList() {
         nextGenerationDate: '',
         clientShortName: '',
         description: '',
-        price: '',
+        priceInCents: '',
         category: ''
     })
     const [formResult, setFormResult] = useState({})
@@ -89,7 +89,7 @@ function RecurrentItemsList() {
     const create = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(createForm))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Recurrent Item - Create', clonedForm)
 
         try {
@@ -130,7 +130,7 @@ function RecurrentItemsList() {
             nextGenerationDate: item.nextGenerationDateFormatted,
             clientShortName: item.client ? item.client.shortName : '',
             description: item.description,
-            price: item.priceFormatted,
+            priceInCents: item.priceFormatted,
             category: item.category
         })
     }
@@ -139,7 +139,7 @@ function RecurrentItemsList() {
     const edit = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(editForm))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Recurrent Item - Edit', clonedForm)
 
         try {
@@ -282,13 +282,13 @@ function RecurrentItemsList() {
                                         type="text"
                                         className="form-control"
                                         id="price"
-                                        value={createForm.price}
-                                        onChange={(e) => handleCreateFormChange('price', e.target.value)}
+                                        value={createForm.priceInCents}
+                                        onChange={(e) => handleCreateFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
@@ -433,13 +433,13 @@ function RecurrentItemsList() {
                                         type="text"
                                         className="form-control"
                                         id="price2"
-                                        value={editForm.price}
-                                        onChange={(e) => handleEditFormChange('price', e.target.value)}
+                                        value={editForm.priceInCents}
+                                        onChange={(e) => handleEditFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>

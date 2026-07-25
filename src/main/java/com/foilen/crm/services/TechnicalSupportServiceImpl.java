@@ -1,7 +1,7 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.ClientDao;
-import com.foilen.crm.db.dao.TechnicalSupportDao;
+import com.foilen.crm.db.repository.ClientRepository;
+import com.foilen.crm.db.repository.TechnicalSupportRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.web.model.CreateOrUpdateTechnicalSupportForm;
@@ -11,7 +11,7 @@ import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.StringTools;
 import com.google.common.base.Strings;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,10 +25,9 @@ import java.util.List;
 public class TechnicalSupportServiceImpl extends AbstractApiService implements TechnicalSupportService {
 
     @Autowired
-    private TechnicalSupportDao technicalSupportDao;
-
+    private ClientRepository clientRepository;
     @Autowired
-    private ClientDao clientDao;
+    private TechnicalSupportRepository technicalSupportRepository;
 
     @Override
     public FormResult create(String userId, CreateOrUpdateTechnicalSupportForm form) {
@@ -46,7 +45,7 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
 
         // Create
         TechnicalSupport entity = JsonTools.clone(form, TechnicalSupport.class);
-        technicalSupportDao.save(entity);
+        technicalSupportRepository.save(entity);
 
         return formResult;
     }
@@ -65,11 +64,12 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
         }
 
         // Detach from clients
-        List<Client> clients = clientDao.findByTechnicalSupport(technicalSupport);
-        clients.forEach(client -> client.setTechnicalSupport(null));
+        List<Client> clients = clientRepository.findByTechnicalSupportId(technicalSupport.getId());
+        clients.forEach(client -> client.setTechnicalSupportId(null));
+        clientRepository.saveAll(clients);
 
         // Delete
-        technicalSupportDao.delete(technicalSupport);
+        technicalSupportRepository.delete(technicalSupport);
 
         return formResult;
 
@@ -90,10 +90,9 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
         TechnicalSupportList result = new TechnicalSupportList();
         Page<TechnicalSupport> page;
         if (search == null) {
-            page = technicalSupportDao.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "sid"));
+            page = technicalSupportRepository.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "sid"));
         } else {
-            search = "%" + search + "%";
-            page = technicalSupportDao.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "sid"));
+            page = technicalSupportRepository.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "sid"));
         }
         paginationService.wrap(result, page, com.foilen.crm.web.model.TechnicalSupport.class);
         return result;
@@ -118,7 +117,7 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
         // Update
         new BeanPropertiesCopierTools(form, technicalSupport).copyAllSameProperties();
 
-        technicalSupportDao.save(technicalSupport);
+        technicalSupportRepository.save(technicalSupport);
 
         return formResult;
     }

@@ -7,8 +7,8 @@
       "shortName" : "zooa"
     },
     "description" : "Paiement (Paypal)",
-    "price" : -1000,
-    "priceFormatted" : "-10.00"
+    "priceFormatted" : "-10.00",
+    "priceInCents" : -1000
   } ],
   "removed" : [ ]
 }

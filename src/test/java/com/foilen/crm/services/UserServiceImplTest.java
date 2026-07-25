@@ -58,18 +58,18 @@ public class UserServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Non-admin users cannot update the admin status of a user")
         void testUpdateAdmin_notAdmin_FAIL() {
-            User targetUser = userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
+            User targetUser = userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
 
             expectNotAdmin(() -> userService.updateAdmin(FakeDataServiceImpl.USER_ID_USER, targetUser.getId(),
                     new UpdateUserAdminForm().setAdmin(true)));
 
-            assertFalse(userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
+            assertFalse(userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
         }
 
         @Test
         @DisplayName("Cannot update the admin status of a user that does not exist")
         void testUpdateAdmin_userNotExist_FAIL() {
-            FormResult result = userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, -1L,
+            FormResult result = userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, "does-not-exist",
                     new UpdateUserAdminForm().setAdmin(true));
 
             assertFalse(result.isSuccess());
@@ -79,39 +79,39 @@ public class UserServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Admin users can grant admin rights to another user")
         void testUpdateAdmin_grant_OK() {
-            User targetUser = userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
+            User targetUser = userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
 
             FormResult result = userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, targetUser.getId(),
                     new UpdateUserAdminForm().setAdmin(true));
 
             assertTrue(result.isSuccess());
-            assertTrue(userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
+            assertTrue(userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
         }
 
         @Test
         @DisplayName("Admin users can revoke admin rights from another user")
         void testUpdateAdmin_revoke_OK() {
-            User targetUser = userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
+            User targetUser = userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1);
             userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, targetUser.getId(), new UpdateUserAdminForm().setAdmin(true));
 
             FormResult result = userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, targetUser.getId(),
                     new UpdateUserAdminForm().setAdmin(false));
 
             assertTrue(result.isSuccess());
-            assertFalse(userDao.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
+            assertFalse(userRepository.findByUserId(FakeDataServiceImpl.USER_ID_TEST_1).isAdmin());
         }
 
         @Test
         @DisplayName("Admin users cannot remove their own admin rights")
         void testUpdateAdmin_cannotRemoveOwn_FAIL() {
-            User adminUser = userDao.findByUserId(FakeDataServiceImpl.USER_ID_ADMIN);
+            User adminUser = userRepository.findByUserId(FakeDataServiceImpl.USER_ID_ADMIN);
 
             FormResult result = userService.updateAdmin(FakeDataServiceImpl.USER_ID_ADMIN, adminUser.getId(),
                     new UpdateUserAdminForm().setAdmin(false));
 
             assertFalse(result.isSuccess());
             assertTrue(result.getGlobalErrors().contains("error.cannotRemoveOwnAdmin"));
-            assertTrue(userDao.findByUserId(FakeDataServiceImpl.USER_ID_ADMIN).isAdmin());
+            assertTrue(userRepository.findByUserId(FakeDataServiceImpl.USER_ID_ADMIN).isAdmin());
         }
     }
 

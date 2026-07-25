@@ -1,7 +1,7 @@
 {
   "added" : [ {
-    "pricePerHour" : 1099,
     "pricePerHourFormatted" : "10.99",
+    "pricePerHourInCents" : 1099,
     "sid" : "N1"
   } ],
   "removed" : [ ]

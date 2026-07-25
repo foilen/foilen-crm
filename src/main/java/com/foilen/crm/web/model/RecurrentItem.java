@@ -9,7 +9,7 @@ import com.foilen.smalltools.tools.PriceFormatTools;
 
 public class RecurrentItem extends AbstractApiBase {
 
-    private Long id;
+    private String id;
 
     // Recurrence details
     private int calendarUnit; // the unit of the delta that is a constant on {@link Calendar}
@@ -21,7 +21,7 @@ public class RecurrentItem extends AbstractApiBase {
     // Item details
     private ClientShort client;
     private String description;
-    private long price = 0; // 1099 for 10.99$
+    private long priceInCents = 0; // 1099 for 10.99$
     private String category;
 
     public int getCalendarUnit() {
@@ -55,7 +55,7 @@ public class RecurrentItem extends AbstractApiBase {
         return description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -67,12 +67,12 @@ public class RecurrentItem extends AbstractApiBase {
         return DateTools.formatDateOnly(nextGenerationDate);
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
     public void setCalendarUnit(int calendarUnit) {
@@ -95,7 +95,7 @@ public class RecurrentItem extends AbstractApiBase {
         this.description = description;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -103,8 +103,8 @@ public class RecurrentItem extends AbstractApiBase {
         this.nextGenerationDate = nextGenerationDate;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
 }

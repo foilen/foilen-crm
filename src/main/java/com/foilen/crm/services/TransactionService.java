@@ -36,6 +36,6 @@ public interface TransactionService {
 
     void sendInvoice(Transaction transaction);
 
-    FormResult update(String userId, long id, CreateOrUpdatePayment form);
+    FormResult update(String userId, String id, CreateOrUpdatePayment form);
 
 }

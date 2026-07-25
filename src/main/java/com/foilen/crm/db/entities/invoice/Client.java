@@ -1,53 +1,34 @@
 package com.foilen.crm.db.entities.invoice;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Locale;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * A client.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Document
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private String id;
 
-    @Version
-    private long version;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(unique = true, nullable = false)
     private String shortName;
 
-    @Column(nullable = true)
     private String contactName;
-
     private String email;
-
-    @Column(nullable = true)
     private String address;
-
-    @Column(nullable = true)
     private String tel;
-
-    @Column(nullable = true)
     private String mainSite;
 
     // FR or EN
-    @Column(nullable = true)
     private String lang;
 
-    @ManyToOne
-    @JoinColumn(name = "technical_support_id", nullable = true)
-    private TechnicalSupport technicalSupport;
+    private String technicalSupportId;
 
     public Client() {
     }
@@ -86,7 +67,7 @@ public class Client {
         return email;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -120,8 +101,8 @@ public class Client {
         return shortName;
     }
 
-    public TechnicalSupport getTechnicalSupport() {
-        return technicalSupport;
+    public String getTechnicalSupportId() {
+        return technicalSupportId;
     }
 
     public String getTel() {
@@ -151,7 +132,7 @@ public class Client {
         return this;
     }
 
-    public Client setId(Long id) {
+    public Client setId(String id) {
         this.id = id;
         return this;
     }
@@ -176,8 +157,8 @@ public class Client {
         return this;
     }
 
-    public Client setTechnicalSupport(TechnicalSupport technicalSupport) {
-        this.technicalSupport = technicalSupport;
+    public Client setTechnicalSupportId(String technicalSupportId) {
+        this.technicalSupportId = technicalSupportId;
         return this;
     }
 

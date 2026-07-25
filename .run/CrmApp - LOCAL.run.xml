@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CrmApp" type="Application" factoryName="Application">
+  <configuration default="false" name="CrmApp - LOCAL" type="Application" factoryName="Application">
+    <envs>
+      <env name="SPRING_PROFILES_ACTIVE" value="LOCAL" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="com.foilen.crm.CrmApp" />
     <module name="foilen-crm.main" />
     <option name="PROGRAM_PARAMETERS" value="--configFile test-config.json" />

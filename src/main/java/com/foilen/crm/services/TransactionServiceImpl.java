@@ -1,14 +1,15 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.TransactionDao;
+import com.foilen.crm.db.repository.ItemRepository;
+import com.foilen.crm.db.repository.TransactionRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.Transaction;
 import com.foilen.crm.exception.CrmException;
 import com.foilen.crm.web.model.CreateOrUpdatePayment;
 import com.foilen.crm.web.model.TransactionList;
-import com.foilen.crm.web.model.TransactionWithBalance;
+import com.foilen.crm.web.model.ClientShort;
+import com.foilen.crm.web.model.TransactionExtended;
 import com.foilen.smalltools.email.EmailBuilder;
 import com.foilen.smalltools.email.EmailService;
 import com.foilen.smalltools.restapi.model.FormResult;
@@ -19,21 +20,16 @@ import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -46,11 +42,11 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     @Autowired
     private EmailService emailService;
     @Autowired
-    private ItemDao itemDao;
+    private ItemRepository itemRepository;
     @Autowired
     private MessageSource messageSource;
     @Autowired
-    private TransactionDao transactionDao;
+    private TransactionRepository transactionRepository;
 
     @Value("${crm.company}")
     private String company;
@@ -82,10 +78,10 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         String paymentMessage = messageSource.getMessage("transaction.create.paymentDescription", new Object[]{form.getPaymentType()}, client.getLangAsLocale());
 
         Transaction entity = JsonTools.clone(form, Transaction.class);
-        entity.setClient(client);
+        entity.setClientId(client.getId());
         entity.setDescription(paymentMessage);
-        entity.setPrice(entity.getPrice() * -1);
-        transactionDao.save(entity);
+        entity.setPriceInCents(entity.getPriceInCents() * -1);
+        transactionRepository.save(entity);
 
         return formResult;
 
@@ -99,7 +95,7 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         while (invoiceId == null) {
             invoiceId = invoicePrefix + "-" + nextInvoiceSuffix.getAndIncrement();
             logger.info("Checking if invoice id {} is available", invoiceId);
-            if (transactionDao.findByInvoiceId(invoiceId) != null) {
+            if (transactionRepository.findByInvoiceId(invoiceId) != null) {
                 invoiceId = null;
             }
         }
@@ -108,15 +104,15 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
 
         // Create the transaction
         String description = messageSource.getMessage("transaction.create.description", new Object[]{invoiceId}, client.getLangAsLocale());
-        long price = items.stream().collect(Collectors.summingLong(Item::getPrice));
-        Transaction transaction = new Transaction(client, invoiceId, new Date(), description, price);
-        transactionDao.save(transaction);
+        long price = items.stream().collect(Collectors.summingLong(Item::getPriceInCents));
+        Transaction transaction = new Transaction(client.getId(), invoiceId, new Date(), description, price);
+        transactionRepository.save(transaction);
 
         // Update the items
         for (Item item : items) {
             item.setInvoiceId(invoiceId);
         }
-        itemDao.saveAll(items);
+        itemRepository.saveAll(items);
 
         return transaction;
     }
@@ -124,10 +120,10 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
     private InputStream genPdf(Transaction transaction) {
 
         // Get the extra details
-        Client client = transaction.getClient();
-        List<Item> items = itemDao.findAllByInvoiceId(transaction.getInvoiceId());
-        List<TransactionWithBalance> recentsTransactions = getRecentTransactions(client);
-        long accountBalance = transactionDao.findTotalByClient(client);
+        Client client = clientRepository.findById(transaction.getClientId()).orElse(null);
+        List<Item> items = itemRepository.findAllByInvoiceId(transaction.getInvoiceId());
+        List<TransactionExtended> recentsTransactions = getRecentTransactions(client);
+        long accountBalance = transactionRepository.findTotalByClientId(client.getId());
 
         // Create the HTML
         Map<String, Object> model = new HashMap<>();
@@ -190,18 +186,26 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
 
     }
 
-    protected List<TransactionWithBalance> getRecentTransactions(Client client) {
-        List<TransactionWithBalance> recentsTransactions = transactionDao.findFirst5ByClientOrderByDateDesc(client)
+    protected List<TransactionExtended> getRecentTransactions(Client client) {
+        List<TransactionExtended> recentsTransactions = transactionRepository.findFirst5ByClientIdOrderByDateDesc(client.getId())
                 .stream()
-                .map(it -> JsonTools.clone(it, TransactionWithBalance.class))
-                .sorted((a, b) -> a.getDate().compareTo(b.getDate()))
+                .map(it -> JsonTools.clone(it, TransactionExtended.class))
+                .sorted(Comparator.comparing(Transaction::getDate))
                 .collect(Collectors.toList());
-        long accountBalance = transactionDao.findTotalByClient(client);
+        long accountBalance = transactionRepository.findTotalByClientId(client.getId());
+
+        // Resolve the technicalSupportId reference once for the whole list
+        com.foilen.crm.web.model.ClientExtended clientExtended = JsonTools.clone(client, com.foilen.crm.web.model.ClientExtended.class);
+        if (client.getTechnicalSupportId() != null) {
+            clientExtended.setTechnicalSupport(technicalSupportsByIds(Set.of(client.getTechnicalSupportId())).get(client.getTechnicalSupportId()));
+        }
+
         long cumulativePrice = accountBalance;
         for (int i = recentsTransactions.size() - 1; i >= 0; --i) {
-            TransactionWithBalance transactionWithBalance = recentsTransactions.get(i);
-            transactionWithBalance.setBalanceFormatted(cumulativePrice);
-            cumulativePrice -= transactionWithBalance.getPrice();
+            TransactionExtended transactionExtended = recentsTransactions.get(i);
+            transactionExtended.setClient(clientExtended);
+            transactionExtended.setBalanceFormatted(cumulativePrice);
+            cumulativePrice -= transactionExtended.getPriceInCents();
         }
         return recentsTransactions;
     }
@@ -215,17 +219,28 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
 
         // Retrieve
         TransactionList result = new TransactionList();
-        Page<Transaction> page = transactionDao
-                .findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Sort.by(Order.desc("date"), Order.asc("client.name"), Order.desc("invoiceId"), Order.asc("id"))));
+        Page<Transaction> page = transactionRepository.findAllSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
         paginationService.wrap(result, page, com.foilen.crm.web.model.Transaction.class);
+
+        // Resolve the clientId reference on each item
+        Map<String, com.foilen.crm.web.model.ClientShort> clientShorts = clientShortsByIds(page.getContent().stream()
+                .map(Transaction::getClientId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+        List<com.foilen.crm.web.model.Transaction> items = result.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setClient(clientShorts.get(page.getContent().get(i).getClientId()));
+        }
+
         return result;
     }
 
     @Override
     public void sendInvoice(Transaction transaction) {
 
-        String to = transaction.getClient().getEmail();
-        String subject = messageSource.getMessage("email.subject", new Object[]{company, transaction.getInvoiceId()}, transaction.getClient().getLangAsLocale());
+        Client client = clientRepository.findById(transaction.getClientId()).orElse(null);
+        String to = client.getEmail();
+        String subject = messageSource.getMessage("email.subject", new Object[]{company, transaction.getInvoiceId()}, client.getLangAsLocale());
 
         if (mailForceEmailTo != null) {
             subject = "[FORCED] " + to + " | " + subject;
@@ -240,14 +255,14 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         emailBuilder.addCc(mailFrom);
         emailBuilder.addAttachmentFromStream(transaction.getInvoiceId() + ".pdf", genPdf(transaction));
         emailBuilder.setSubject(subject);
-        emailBuilder.setBodyTextFromString(messageSource.getMessage("email.body", new Object[]{}, transaction.getClient().getLangAsLocale()));
+        emailBuilder.setBodyTextFromString(messageSource.getMessage("email.body", new Object[]{}, client.getLangAsLocale()));
 
         emailService.sendEmail(emailBuilder);
 
     }
 
     @Override
-    public FormResult update(String userId, long id, CreateOrUpdatePayment form) {
+    public FormResult update(String userId, String id, CreateOrUpdatePayment form) {
 
         FormResult formResult = new FormResult();
 
@@ -264,7 +279,7 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         }
 
         // Find the transaction
-        Transaction entity = transactionDao.findById(id).orElse(null);
+        Transaction entity = transactionRepository.findById(id).orElse(null);
         if (entity == null) {
             formResult.getGlobalErrors().add("error.notFound");
             return formResult;
@@ -279,11 +294,11 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         // Update
         String paymentMessage = messageSource.getMessage("transaction.create.paymentDescription", new Object[]{form.getPaymentType()}, client.getLangAsLocale());
 
-        entity.setClient(client);
+        entity.setClientId(client.getId());
         entity.setDescription(paymentMessage);
         entity.setDate(DateTools.parseDateOnly(form.getDate()));
-        entity.setPrice(form.getPrice() * -1);
-        transactionDao.save(entity);
+        entity.setPriceInCents(form.getPriceInCents() * -1);
+        transactionRepository.save(entity);
 
         return formResult;
 

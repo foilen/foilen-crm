@@ -1,12 +1,12 @@
 {
   "added" : [ {
-    "pricePerHour" : 1234,
     "pricePerHourFormatted" : "12.34",
+    "pricePerHourInCents" : 1234,
     "sid" : "S1"
   } ],
   "removed" : [ {
-    "pricePerHour" : 1000,
     "pricePerHourFormatted" : "10.00",
+    "pricePerHourInCents" : 1000,
     "sid" : "S1"
   } ]
 }

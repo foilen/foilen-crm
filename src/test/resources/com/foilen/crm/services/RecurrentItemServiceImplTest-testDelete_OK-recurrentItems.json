@@ -12,9 +12,9 @@
     },
     "delta" : 1,
     "description" : "Shared hosting - L1",
-    "nextGenerationDate" : 1561953600000,
+    "nextGenerationDate" : "2019-07-01T04:00:00.000Z",
     "nextGenerationDateFormatted" : "2019-07-01",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   } ]
 }

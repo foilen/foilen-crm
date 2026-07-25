@@ -8,8 +8,8 @@
       "shortName" : "bazar"
     },
     "description" : "New description",
-    "price" : 1234,
-    "priceFormatted" : "12.34"
+    "priceFormatted" : "12.34",
+    "priceInCents" : 1234
   } ],
   "removed" : [ {
     "category" : "hosting",
@@ -20,7 +20,7 @@
       "shortName" : "avez"
     },
     "description" : "Shared hosting - L1",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   } ]
 }

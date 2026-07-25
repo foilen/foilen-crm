@@ -8,8 +8,8 @@
       "shortName" : "bazar"
     },
     "description" : "Fixing a code 18 (2h 10m)",
-    "price" : 2167,
-    "priceFormatted" : "21.67"
+    "priceFormatted" : "21.67",
+    "priceInCents" : 2167
   } ],
   "removed" : [ ]
 }

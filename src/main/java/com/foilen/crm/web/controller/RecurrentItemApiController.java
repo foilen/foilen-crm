@@ -27,7 +27,7 @@ public class RecurrentItemApiController {
     @DeleteMapping("{id}")
     public FormResult delete(
             Authentication authentication,
-            @PathVariable("id") long id
+            @PathVariable("id") String id
     ) {
         return recurrentItemService.delete(authentication.getName(), id);
     }
@@ -43,7 +43,7 @@ public class RecurrentItemApiController {
     @PutMapping("{id}")
     public FormResult update(
             Authentication authentication,
-            @PathVariable("id") long id,
+            @PathVariable("id") String id,
             @RequestBody CreateOrUpdateRecurrentItemForm form
     ) {
         return recurrentItemService.update(authentication.getName(), id, form);

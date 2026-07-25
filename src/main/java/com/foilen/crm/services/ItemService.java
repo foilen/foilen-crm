@@ -18,7 +18,7 @@ public interface ItemService {
 
     FormResult create(String userId, CreateOrUpdateItem form);
 
-    FormResult delete(String userId, long id);
+    FormResult delete(String userId, String id);
 
     /**
      * Get the list of items that were billed.
@@ -45,5 +45,5 @@ public interface ItemService {
      */
     ItemList listPending(String userId, int pageId);
 
-    FormResult update(String userId, long id, CreateOrUpdateItem form);
+    FormResult update(String userId, String id, CreateOrUpdateItem form);
 }

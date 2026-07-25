@@ -1,6 +1,6 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.TransactionDao;
+import com.foilen.crm.db.repository.TransactionRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
@@ -16,7 +16,7 @@ import com.foilen.crm.web.model.ExportTechnicalSupport;
 import com.foilen.crm.web.model.ExportTransaction;
 import com.foilen.crm.web.model.ExportUser;
 import com.foilen.smalltools.restapi.model.FormResult;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl extends AbstractApiService implements AdminService {
 
     @Autowired
-    private TransactionDao transactionDao;
+    private TransactionRepository transactionRepository;
 
     @Override
     public AdminExportResult exportAll(String userId) {
@@ -40,22 +40,22 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
         // Retrieve
         ExportModel exportModel = new ExportModel();
 
-        exportModel.setTechnicalSupports(technicalSupportDao.findAll().stream()
+        exportModel.setTechnicalSupports(technicalSupportRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
-        exportModel.setClients(clientDao.findAll().stream()
+        exportModel.setClients(clientRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
-        exportModel.setItems(itemDao.findAll().stream()
+        exportModel.setItems(itemRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
-        exportModel.setRecurrentItems(recurrentItemDao.findAll().stream()
+        exportModel.setRecurrentItems(recurrentItemRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
-        exportModel.setTransactions(transactionDao.findAll().stream()
+        exportModel.setTransactions(transactionRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
-        exportModel.setUsers(userDao.findAll().stream()
+        exportModel.setUsers(userRepository.findAll().stream()
                 .map(this::toExport)
                 .collect(Collectors.toList()));
 
@@ -77,25 +77,26 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
             return formResult;
         }
 
-        // Wipe all the data. Children first to respect the foreign keys
-        itemDao.deleteAllInBatch();
-        recurrentItemDao.deleteAllInBatch();
-        transactionDao.deleteAllInBatch();
-        clientDao.deleteAllInBatch();
-        technicalSupportDao.deleteAllInBatch();
-        userDao.deleteAllInBatch();
+        // Wipe all the data. Children first for consistency (no DB-level foreign keys with MongoDB)
+        itemRepository.deleteAll();
+        recurrentItemRepository.deleteAll();
+        transactionRepository.deleteAll();
+        clientRepository.deleteAll();
+        technicalSupportRepository.deleteAll();
+        userRepository.deleteAll();
 
         // Technical Supports
         Map<String, TechnicalSupport> technicalSupportBySid = new HashMap<>();
         for (ExportTechnicalSupport item : exportModel.getTechnicalSupports()) {
-            TechnicalSupport entity = new TechnicalSupport(item.getSid(), item.getPricePerHour());
-            technicalSupportDao.save(entity);
+            TechnicalSupport entity = new TechnicalSupport(item.getSid(), item.getPricePerHourInCents());
+            technicalSupportRepository.save(entity);
             technicalSupportBySid.put(entity.getSid(), entity);
         }
 
         // Clients
         Map<String, Client> clientByShortName = new HashMap<>();
         for (ExportClient item : exportModel.getClients()) {
+            TechnicalSupport technicalSupport = technicalSupportBySid.get(item.getTechnicalSupportSid());
             Client entity = new Client()
                     .setName(item.getName())
                     .setShortName(item.getShortName())
@@ -105,58 +106,62 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
                     .setTel(item.getTel())
                     .setMainSite(item.getMainSite())
                     .setLang(item.getLang())
-                    .setTechnicalSupport(technicalSupportBySid.get(item.getTechnicalSupportSid()));
-            clientDao.save(entity);
+                    .setTechnicalSupportId(technicalSupport == null ? null : technicalSupport.getId());
+            clientRepository.save(entity);
             clientByShortName.put(entity.getShortName(), entity);
         }
 
         // Items
         for (ExportItem item : exportModel.getItems()) {
+            Client client = clientByShortName.get(item.getClientShortName());
             Item entity = new Item(
-                    clientByShortName.get(item.getClientShortName()),
+                    client == null ? null : client.getId(),
                     item.getInvoiceId(),
                     item.getDate(),
                     item.getDescription(),
-                    item.getPrice(),
+                    item.getPriceInCents(),
                     item.getCategory());
-            itemDao.save(entity);
+            itemRepository.save(entity);
         }
 
         // Recurrent Items
         for (ExportRecurrentItem item : exportModel.getRecurrentItems()) {
+            Client client = clientByShortName.get(item.getClientShortName());
             RecurrentItem entity = new RecurrentItem(
-                    clientByShortName.get(item.getClientShortName()),
+                    client == null ? null : client.getId(),
                     item.getDescription(),
-                    item.getPrice(),
+                    item.getPriceInCents(),
                     item.getCategory(),
                     item.getCalendarUnit(),
                     item.getDelta(),
                     item.getNextGenerationDate());
-            recurrentItemDao.save(entity);
+            recurrentItemRepository.save(entity);
         }
 
         // Transactions
         for (ExportTransaction item : exportModel.getTransactions()) {
+            Client client = clientByShortName.get(item.getClientShortName());
             Transaction entity = new Transaction(
-                    clientByShortName.get(item.getClientShortName()),
+                    client == null ? null : client.getId(),
                     item.getInvoiceId(),
                     item.getDate(),
                     item.getDescription(),
-                    item.getPrice());
-            transactionDao.save(entity);
+                    item.getPriceInCents());
+            transactionRepository.save(entity);
         }
 
         // Users
         for (ExportUser item : exportModel.getUsers()) {
             User entity = new User(item.getUserId(), item.isAdmin());
             entity.setEmail(item.getEmail());
-            userDao.save(entity);
+            userRepository.save(entity);
         }
 
         return formResult;
     }
 
     private ExportClient toExport(Client entity) {
+        TechnicalSupport technicalSupport = entity.getTechnicalSupportId() == null ? null : technicalSupportRepository.findById(entity.getTechnicalSupportId()).orElse(null);
         ExportClient item = new ExportClient();
         item.setId(entity.getId());
         item.setName(entity.getName());
@@ -167,31 +172,33 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
         item.setTel(entity.getTel());
         item.setMainSite(entity.getMainSite());
         item.setLang(entity.getLang());
-        item.setTechnicalSupportSid(entity.getTechnicalSupport() == null ? null : entity.getTechnicalSupport().getSid());
+        item.setTechnicalSupportSid(technicalSupport == null ? null : technicalSupport.getSid());
         return item;
     }
 
     private ExportItem toExport(Item entity) {
+        Client client = entity.getClientId() == null ? null : clientRepository.findById(entity.getClientId()).orElse(null);
         ExportItem item = new ExportItem();
         item.setId(entity.getId());
-        item.setClientShortName(entity.getClient() == null ? null : entity.getClient().getShortName());
+        item.setClientShortName(client == null ? null : client.getShortName());
         item.setInvoiceId(entity.getInvoiceId());
         item.setDate(entity.getDate());
         item.setDescription(entity.getDescription());
-        item.setPrice(entity.getPrice());
+        item.setPriceInCents(entity.getPriceInCents());
         item.setCategory(entity.getCategory());
         return item;
     }
 
     private ExportRecurrentItem toExport(RecurrentItem entity) {
+        Client client = entity.getClientId() == null ? null : clientRepository.findById(entity.getClientId()).orElse(null);
         ExportRecurrentItem item = new ExportRecurrentItem();
         item.setId(entity.getId());
         item.setCalendarUnit(entity.getCalendarUnit());
         item.setDelta(entity.getDelta());
         item.setNextGenerationDate(entity.getNextGenerationDate());
-        item.setClientShortName(entity.getClient() == null ? null : entity.getClient().getShortName());
+        item.setClientShortName(client == null ? null : client.getShortName());
         item.setDescription(entity.getDescription());
-        item.setPrice(entity.getPrice());
+        item.setPriceInCents(entity.getPriceInCents());
         item.setCategory(entity.getCategory());
         return item;
     }
@@ -200,18 +207,19 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
         ExportTechnicalSupport item = new ExportTechnicalSupport();
         item.setId(entity.getId());
         item.setSid(entity.getSid());
-        item.setPricePerHour(entity.getPricePerHour());
+        item.setPricePerHourInCents(entity.getPricePerHourInCents());
         return item;
     }
 
     private ExportTransaction toExport(Transaction entity) {
+        Client client = entity.getClientId() == null ? null : clientRepository.findById(entity.getClientId()).orElse(null);
         ExportTransaction item = new ExportTransaction();
         item.setId(entity.getId());
-        item.setClientShortName(entity.getClient() == null ? null : entity.getClient().getShortName());
+        item.setClientShortName(client == null ? null : client.getShortName());
         item.setInvoiceId(entity.getInvoiceId());
         item.setDate(entity.getDate());
         item.setDescription(entity.getDescription());
-        item.setPrice(entity.getPrice());
+        item.setPriceInCents(entity.getPriceInCents());
         return item;
     }
 

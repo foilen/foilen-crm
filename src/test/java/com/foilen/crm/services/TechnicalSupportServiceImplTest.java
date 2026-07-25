@@ -31,49 +31,49 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Non-admin users cannot create technical support")
         void createNotAdminFails() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid("N1")
-                    .setPricePerHour(1099);
+                    .setPricePerHourInCents(1099);
 
             expectNotAdmin(() ->
                 technicalSupportService.create(FakeDataServiceImpl.USER_ID_USER, form));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Admin users can create technical support")
         void createSucceeds() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid("N1")
-                    .setPricePerHour(1099);
+                    .setPricePerHourInCents(1099);
 
             FormResult result = technicalSupportService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison("TechnicalSupportServiceImplTest-testCreate_OK-technicalSupports.json", getClass(), initialTechnicalSupports,
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Cannot create technical support with existing SID")
         void createWithExistingSidFails() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid("S1")
-                    .setPricePerHour(1099);
+                    .setPricePerHourInCents(1099);
 
             FormResult result = technicalSupportService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
             AssertTools.assertJsonComparisonWithoutNulls("TechnicalSupportServiceImplTest-sid_exists_FAIL-FormResult.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
     }
 
@@ -84,25 +84,25 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Non-admin users cannot delete technical support")
         void deleteNotAdminFails() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             expectNotAdmin(() ->
                 technicalSupportService.delete(FakeDataServiceImpl.USER_ID_USER, FakeDataServiceImpl.SID_1));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Admin users can delete technical support")
         void deleteSucceeds() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             FormResult result = technicalSupportService.delete(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison("TechnicalSupportServiceImplTest-testDelete_OK-technicalSupports.json", getClass(), initialTechnicalSupports,
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
     }
 
@@ -132,65 +132,65 @@ public class TechnicalSupportServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Update with no changes succeeds")
         void updateNoChangeSucceeds() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid(FakeDataServiceImpl.SID_1)
-                    .setPricePerHour(1000);
+                    .setPricePerHourInCents(1000);
 
             FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Non-admin users cannot update technical support")
         void updateNotAdminFails() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid(FakeDataServiceImpl.SID_1)
-                    .setPricePerHour(1234);
+                    .setPricePerHourInCents(1234);
 
             expectNotAdmin(() ->
                 technicalSupportService.update(FakeDataServiceImpl.USER_ID_USER, FakeDataServiceImpl.SID_1, form));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Admin users can update technical support")
         void updateSucceeds() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid(FakeDataServiceImpl.SID_1)
-                    .setPricePerHour(1234);
+                    .setPricePerHourInCents(1234);
 
             FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison("TechnicalSupportServiceImplTest-testUpdate_OK-technicalSupports.json", getClass(), initialTechnicalSupports,
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
 
         @Test
         @DisplayName("Cannot update to an existing SID")
         void updateWithExistingSidFails() {
-            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid")));
+            List<?> initialTechnicalSupports = trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid")));
 
             CreateOrUpdateTechnicalSupportForm form = new CreateOrUpdateTechnicalSupportForm()
                     .setSid(FakeDataServiceImpl.SID_2)
-                    .setPricePerHour(1234);
+                    .setPricePerHourInCents(1234);
 
             FormResult result = technicalSupportService.update(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.SID_1, form);
             AssertTools.assertJsonComparisonWithoutNulls("TechnicalSupportServiceImplTest-sid_exists_FAIL-FormResult.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialTechnicalSupports, 
-                    trimTechnicalSupport(technicalSupportDao.findAll(Sort.by("sid"))));
+                    trimTechnicalSupport(technicalSupportRepository.findAll(Sort.by("sid"))));
         }
     }
 

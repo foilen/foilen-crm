@@ -9,7 +9,7 @@
       "shortName" : "avez"
     },
     "description" : "Shared hosting - L1",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   } ]
 }

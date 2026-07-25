@@ -4,12 +4,13 @@ import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
 public class User extends AbstractApiBase {
 
-    private Long id;
+    private String id;
     private String userId;
+
     private boolean admin;
     private String email;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -25,7 +26,7 @@ public class User extends AbstractApiBase {
         return email;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

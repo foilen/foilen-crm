@@ -11,7 +11,7 @@ public class CreateOrUpdateItem extends AbstractApiBase {
     private String description;
 
     // 1099 for 10.99$
-    private long price = 0;
+    private long priceInCents = 0;
 
     private String category;
 
@@ -31,12 +31,12 @@ public class CreateOrUpdateItem extends AbstractApiBase {
         return description;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
     public void setCategory(String category) {
@@ -55,8 +55,8 @@ public class CreateOrUpdateItem extends AbstractApiBase {
         this.description = description;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
 }

@@ -8,7 +8,7 @@ import com.foilen.smalltools.tools.PriceFormatTools;
 
 public class Item extends AbstractApiBase {
 
-    private Long id;
+    private String id;
 
     private ClientShort client;
 
@@ -18,7 +18,7 @@ public class Item extends AbstractApiBase {
     private String description;
 
     // 1099 for 10.99$
-    private long price = 0;
+    private long priceInCents = 0;
 
     private String category;
 
@@ -42,7 +42,7 @@ public class Item extends AbstractApiBase {
         return description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -50,12 +50,12 @@ public class Item extends AbstractApiBase {
         return invoiceId;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
     public Item setCategory(String category) {
@@ -78,7 +78,7 @@ public class Item extends AbstractApiBase {
         return this;
     }
 
-    public Item setId(Long id) {
+    public Item setId(String id) {
         this.id = id;
         return this;
     }
@@ -88,8 +88,8 @@ public class Item extends AbstractApiBase {
         return this;
     }
 
-    public Item setPrice(long price) {
-        this.price = price;
+    public Item setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
         return this;
     }
 

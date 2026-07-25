@@ -10,7 +10,7 @@ public class CreateOrUpdatePayment extends AbstractApiBase {
     private String paymentType;
 
     // 1099 for 10.99$
-    private long price = 0;
+    private long priceInCents = 0;
 
     public String getClientShortName() {
         return clientShortName;
@@ -24,8 +24,8 @@ public class CreateOrUpdatePayment extends AbstractApiBase {
         return paymentType;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public CreateOrUpdatePayment setClientShortName(String clientShortName) {
@@ -43,8 +43,8 @@ public class CreateOrUpdatePayment extends AbstractApiBase {
         return this;
     }
 
-    public CreateOrUpdatePayment setPrice(long price) {
-        this.price = price;
+    public CreateOrUpdatePayment setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
         return this;
     }
 

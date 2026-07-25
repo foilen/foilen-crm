@@ -1,29 +1,34 @@
 package com.foilen.crm.services;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.foilen.crm.db.dao.ClientDao;
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.RecurrentItemDao;
-import com.foilen.crm.db.dao.TechnicalSupportDao;
-import com.foilen.crm.db.dao.UserDao;
+import com.foilen.crm.db.repository.ClientRepository;
+import com.foilen.crm.db.repository.ItemRepository;
+import com.foilen.crm.db.repository.RecurrentItemRepository;
+import com.foilen.crm.db.repository.TechnicalSupportRepository;
+import com.foilen.crm.db.repository.UserRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
+import com.foilen.crm.web.model.ClientShort;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.restapi.services.PaginationService;
 import com.foilen.smalltools.tools.AbstractBasics;
 import com.foilen.smalltools.tools.CollectionsTools;
 import com.foilen.smalltools.tools.DateTools;
+import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.StringTools;
 import com.google.common.base.Strings;
 
@@ -32,19 +37,37 @@ public abstract class AbstractApiService extends AbstractBasics {
     private static final Set<String> VALID_LANGS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("EN", "FR")));
 
     @Autowired
-    protected ClientDao clientDao;
+    protected ClientRepository clientRepository;
     @Autowired
     protected EntitlementService entitlementService;
     @Autowired
-    protected ItemDao itemDao;
+    protected ItemRepository itemRepository;
     @Autowired
     protected PaginationService paginationService;
     @Autowired
-    protected RecurrentItemDao recurrentItemDao;
+    protected RecurrentItemRepository recurrentItemRepository;
     @Autowired
-    protected TechnicalSupportDao technicalSupportDao;
+    protected TechnicalSupportRepository technicalSupportRepository;
     @Autowired
-    protected UserDao userDao;
+    protected UserRepository userRepository;
+
+    /**
+     * Batch-resolves clientIds into their {@link ClientShort} projection (name/shortName/email/lang),
+     * for enriching a page of API results whose entity only stores a clientId reference.
+     */
+    protected Map<String, ClientShort> clientShortsByIds(Collection<String> clientIds) {
+        return clientRepository.findAllById(clientIds).stream()
+                .collect(Collectors.toMap(Client::getId, c -> JsonTools.clone(c, ClientShort.class)));
+    }
+
+    /**
+     * Batch-resolves technicalSupportIds into their API model, for enriching a page of API results
+     * whose entity only stores a technicalSupportId reference.
+     */
+    protected Map<String, com.foilen.crm.web.model.TechnicalSupport> technicalSupportsByIds(Collection<String> technicalSupportIds) {
+        return technicalSupportRepository.findAllById(technicalSupportIds).stream()
+                .collect(Collectors.toMap(TechnicalSupport::getId, ts -> JsonTools.clone(ts, com.foilen.crm.web.model.TechnicalSupport.class)));
+    }
 
     protected Client validateClientByShortName(FormResult formResult, String fieldName, String clientShortName) {
 
@@ -52,7 +75,7 @@ public abstract class AbstractApiService extends AbstractBasics {
             return null;
         }
 
-        Client client = clientDao.findByShortName(clientShortName);
+        Client client = clientRepository.findByShortName(clientShortName);
         if (client == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.clientNotExist");
             return null;
@@ -67,7 +90,7 @@ public abstract class AbstractApiService extends AbstractBasics {
             return;
         }
 
-        Client client = clientDao.findByShortName(clientShortName);
+        Client client = clientRepository.findByShortName(clientShortName);
         if (client != null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.alreadyTaken");
         }
@@ -99,9 +122,9 @@ public abstract class AbstractApiService extends AbstractBasics {
         }
     }
 
-    protected Item validateItemById(FormResult formResult, String fieldName, long id) {
+    protected Item validateItemById(FormResult formResult, String fieldName, String id) {
 
-        Item item = itemDao.findById(id).orElse(null);
+        Item item = itemRepository.findById(id).orElse(null);
         if (item == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.itemNotExist");
             return null;
@@ -140,9 +163,9 @@ public abstract class AbstractApiService extends AbstractBasics {
         }
     }
 
-    protected RecurrentItem validateRecurrentItem(FormResult formResult, String fieldName, long id) {
+    protected RecurrentItem validateRecurrentItem(FormResult formResult, String fieldName, String id) {
 
-        RecurrentItem entity = recurrentItemDao.findById(id).orElse(null);
+        RecurrentItem entity = recurrentItemRepository.findById(id).orElse(null);
         if (entity == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.recurrentItemNotExist");
             return null;
@@ -158,7 +181,7 @@ public abstract class AbstractApiService extends AbstractBasics {
             return null;
         }
 
-        TechnicalSupport entity = technicalSupportDao.findBySid(sid);
+        TechnicalSupport entity = technicalSupportRepository.findBySid(sid);
         if (entity == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.technicalSupportNotExist");
             return null;
@@ -174,7 +197,7 @@ public abstract class AbstractApiService extends AbstractBasics {
             return null;
         }
 
-        TechnicalSupport technicalSupport = client.getTechnicalSupport();
+        TechnicalSupport technicalSupport = client.getTechnicalSupportId() == null ? null : technicalSupportRepository.findById(client.getTechnicalSupportId()).orElse(null);
         if (technicalSupport == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), clientFieldName, String.class).add("error.clientWithoutTechnicalSupport");
             return null;
@@ -189,15 +212,15 @@ public abstract class AbstractApiService extends AbstractBasics {
             return;
         }
 
-        TechnicalSupport technicalSupport = technicalSupportDao.findBySid(sid);
+        TechnicalSupport technicalSupport = technicalSupportRepository.findBySid(sid);
         if (technicalSupport != null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.alreadyTaken");
         }
     }
 
-    protected User validateUserById(FormResult formResult, String fieldName, Long id) {
+    protected User validateUserById(FormResult formResult, String fieldName, String id) {
 
-        User user = userDao.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.userNotExist");
             return null;

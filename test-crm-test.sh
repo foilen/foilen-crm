@@ -17,62 +17,52 @@ echo '###[ Create build ]###'
 FOLDER_DATA=$PWD/_data
 mkdir -p $FOLDER_DATA
 
-# Start mariadb
+# Start MongoDB (single-node replica set, needed for transactions)
 INSTANCE=crm_db
 DBNAME=crm
 
 if ! docker ps | grep $INSTANCE ; then
-	echo '###[ Start mariadb ]###'
+	echo '###[ Start MongoDB ]###'
 	docker run \
 	  --rm \
 	  --name $INSTANCE \
-	  --env MYSQL_ROOT_PASSWORD=ABC \
-	  --env DBNAME=$DBNAME \
-	  --volume $FOLDER_DATA:/data \
-	  -d mariadb:11.8.5
-  
-  echo '###[ Wait 20 seconds ]###'
-  sleep 20s
+	  --volume $FOLDER_DATA/mongo:/data/db \
+	  -p 27017:27017 \
+	  -d mongo:8.2 --replSet rs0 --bind_ip_all
+
+  echo '###[ Wait 10 seconds ]###'
+  sleep 10s
+
+  echo '###[ Initiate the replica set ]###'
+  docker exec -i $INSTANCE mongosh --eval "rs.initiate()"
 fi
-echo '###[ Create the MariaDB database ]###'
-until docker exec -i $INSTANCE mariadb -uroot -pABC << _EOF
-  CREATE DATABASE IF NOT EXISTS $DBNAME;
-_EOF
-do
-sleep 5
-done
 
 # Config file
 cat > $FOLDER_DATA/config.json << _EOF
 {
 	"baseUrl" : "http://127.0.0.1:8080",
-	
-	"mysqlDatabaseName" : "crm",
-	"mysqlDatabaseUserName" : "root",
-	"mysqlDatabasePassword" : "ABC",
+
+	"mongoUri" : "mongodb://host.docker.internal:27017/?replicaSet=rs0",
+	"mongoDatabase" : "$DBNAME",
 
 	"mailHost" : "127.0.0.1",
 	"mailPort" : 25,
 	"mailStartTlsEnable" : false,
 
 	"mailFrom" : "crm@localhost",
-	
+
 	"company" : "MyCompany",
-	
+
 	"loginAzureConfig" : {
 		"clientId" : "XXXXX",
 		"clientSecret" : "XXXXX",
 		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
 	},
 	"loginCookieSignatureSalt" : "AAA",
-	
+
 	"emailTemplateDirectory" : "/data/emailTemplate"
 }
 _EOF
-
-echo '###[ Start phpMyAdmin ]###'
-docker run --rm --name ${INSTANCE}_phpmyadmin -d --link ${INSTANCE}:db -p 12345:80 phpmyadmin/phpmyadmin
-echo 'phpMyAdmin on http://127.0.0.1:12345/ with user "root" and password "ABC"'
 
 # Start
 echo '###[ Start UI ]###'
@@ -83,5 +73,5 @@ docker run -ti \
   --user $USER_ID \
   --volume $FOLDER_DATA:/data \
   --publish 8080:8080 \
-  --link ${INSTANCE}:mysql \
+  --add-host host.docker.internal:host-gateway \
   foilen-crm:master-SNAPSHOT

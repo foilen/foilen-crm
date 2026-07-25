@@ -1,23 +1,16 @@
 package com.foilen.crm.db.entities.user;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-@Entity
+@Document
 public class User {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-    @Version
-    private long version;
+    private String id;
 
-    @Column(unique = true, nullable = false)
     private String userId;
-    @Column(name = "isAdmin", nullable = false)
     private boolean admin;
-    @Column(nullable = true)
     private String email;
 
     public User() {
@@ -32,7 +25,7 @@ public class User {
         return email;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -52,7 +45,7 @@ public class User {
         this.email = email;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

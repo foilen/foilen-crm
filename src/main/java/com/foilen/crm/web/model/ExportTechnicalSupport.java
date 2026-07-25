@@ -1,31 +1,37 @@
 package com.foilen.crm.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
+/**
+ * The "pricePerHour" JSON property name is pinned via {@link JsonProperty} so previously exported backup files
+ * (which use that name) keep loading, even though the Java-side name was updated to pricePerHourInCents.
+ */
 public class ExportTechnicalSupport extends AbstractApiBase {
 
-    private Long id;
+    private String id;
     private String sid;
-    private long pricePerHour;
+    @JsonProperty("pricePerHour")
+    private long pricePerHourInCents;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public long getPricePerHour() {
-        return pricePerHour;
+    public long getPricePerHourInCents() {
+        return pricePerHourInCents;
     }
 
     public String getSid() {
         return sid;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public void setPricePerHour(long pricePerHour) {
-        this.pricePerHour = pricePerHour;
+    public void setPricePerHourInCents(long pricePerHourInCents) {
+        this.pricePerHourInCents = pricePerHourInCents;
     }
 
     public void setSid(String sid) {

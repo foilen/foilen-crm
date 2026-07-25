@@ -1,6 +1,6 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.ItemDao;
+import com.foilen.crm.db.repository.ItemRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
@@ -15,17 +15,17 @@ import com.foilen.smalltools.tools.CollectionsTools;
 import com.foilen.smalltools.tools.DateTools;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.TimeConverterTools;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
     @Autowired
-    private ItemDao itemDao;
+    private ItemRepository itemRepository;
     @Autowired
     private TransactionService transactionService;
 
@@ -53,13 +53,16 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Per client
         AtomicLong invoiceSuffix = new AtomicLong(1);
-        List<Client> clients = itemDao.findAllClientByInvoiceIdNull();
+        List<String> clientIds = itemRepository.findAllDistinctClientIdByInvoiceIdNull();
+        List<Client> clients = clientRepository.findAllById(clientIds).stream()
+                .sorted(Comparator.comparing(Client::getShortName))
+                .collect(Collectors.toList());
         List<Transaction> newTransactions = new ArrayList<>();
         for (Client client : clients) {
             logger.info("Processing client {}", client);
 
             // Create a transaction
-            List<Item> items = itemDao.findAllByInvoiceIdIsNullAndClient(client);
+            List<Item> items = itemRepository.findAllByInvoiceIdIsNullAndClientIdOrderByDateAscDescriptionAsc(client.getId());
             logger.info("Client {} has {} pending items", client, items.size());
             if (items.isEmpty()) {
                 continue;
@@ -85,7 +88,7 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         validateMandatory(formResult, "invoicePrefix", form.getInvoicePrefix());
 
         // Get all items
-        List<Item> itemsToBill = itemDao.findAllById(form.getItemToBillIds());
+        List<Item> itemsToBill = itemRepository.findAllById(form.getItemToBillIds());
 
         // Ensure all found
         if (itemsToBill.size() != form.getItemToBillIds().size()) {
@@ -102,16 +105,19 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         }
 
         // Put per client
-        Map<Client, List<Item>> itemsPerClient = itemsToBill.stream().collect(Collectors.groupingBy(Item::getClient));
+        Map<String, List<Item>> itemsPerClientId = itemsToBill.stream().collect(Collectors.groupingBy(Item::getClientId));
+        List<Client> clients = clientRepository.findAllById(itemsPerClientId.keySet()).stream()
+                .sorted(Comparator.comparing(Client::getShortName))
+                .collect(Collectors.toList());
 
         // Per client
         AtomicLong invoiceSuffix = new AtomicLong(1);
         List<Transaction> newTransactions = new ArrayList<>();
-        for (Client client : itemsPerClient.keySet()) {
+        for (Client client : clients) {
             logger.info("Processing client {}", client);
 
             // Create a transaction
-            List<Item> items = itemsPerClient.get(client);
+            List<Item> items = itemsPerClientId.get(client.getId());
             logger.info("Client {} has {} pending items", client, items.size());
             if (items.isEmpty()) {
                 continue;
@@ -148,16 +154,16 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Create
         Item entity = JsonTools.clone(form, Item.class);
-        entity.setClient(client);
+        entity.setClientId(client.getId());
 
         // Calculate time and price
         long minutes = form.getHours() * 60 + form.getMinutes();
-        double price = minutes / 60d * technicalSupport.getPricePerHour();
-        entity.setPrice(Math.round(price));
+        double price = minutes / 60d * technicalSupport.getPricePerHourInCents();
+        entity.setPriceInCents(Math.round(price));
 
         entity.setDescription(entity.getDescription() + " (" + TimeConverterTools.convertToTextFromMin(minutes) + ")");
 
-        itemDao.save(entity);
+        itemRepository.save(entity);
 
         return formResult;
 
@@ -182,15 +188,15 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Create
         Item entity = JsonTools.clone(form, Item.class);
-        entity.setClient(client);
-        itemDao.save(entity);
+        entity.setClientId(client.getId());
+        itemRepository.save(entity);
 
         return formResult;
 
     }
 
     @Override
-    public FormResult delete(String userId, long id) {
+    public FormResult delete(String userId, String id) {
         FormResult formResult = new FormResult();
 
         // Validation
@@ -203,7 +209,7 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         }
 
         // Delete
-        itemDao.delete(item);
+        itemRepository.delete(item);
 
         return formResult;
     }
@@ -217,15 +223,15 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Retrieve
         ItemList result = new ItemList();
-        Page<Item> page = itemDao.findAllByInvoiceIdNotNull(
-                PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Sort.by(Order.desc("invoiceId"), Order.asc("client.name"), Order.desc("date"), Order.asc("id"))));
+        Page<Item> page = itemRepository.findAllBilledSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
         paginationService.wrap(result, page, com.foilen.crm.web.model.Item.class);
+        enrichClients(page, result.getItems());
         return result;
     }
 
     @Override
-    public List<String> listDistinctCategories() { // TODO + Validation
-        return itemDao.findAllDistinctCategories();
+    public List<String> listDistinctCategories() {
+        return itemRepository.findAllDistinctCategories();
     }
 
     @Override
@@ -237,13 +243,28 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Retrieve
         ItemList result = new ItemList();
-        Page<Item> page = itemDao.findAllByInvoiceIdNull(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Sort.by(Order.asc("client.name"), Order.desc("date"), Order.asc("id"))));
+        Page<Item> page = itemRepository.findAllPendingSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
         paginationService.wrap(result, page, com.foilen.crm.web.model.Item.class);
+        enrichClients(page, result.getItems());
         return result;
     }
 
+    /**
+     * Resolves each item's clientId into a {@link com.foilen.crm.web.model.ClientShort} on its API model,
+     * since the Item document only stores a clientId reference.
+     */
+    private void enrichClients(Page<Item> page, List<com.foilen.crm.web.model.Item> items) {
+        Map<String, com.foilen.crm.web.model.ClientShort> clientShorts = clientShortsByIds(page.getContent().stream()
+                .map(Item::getClientId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setClient(clientShorts.get(page.getContent().get(i).getClientId()));
+        }
+    }
+
     @Override
-    public FormResult update(String userId, long id, CreateOrUpdateItem form) {
+    public FormResult update(String userId, String id, CreateOrUpdateItem form) {
         FormResult formResult = new FormResult();
 
         // Validation
@@ -263,10 +284,10 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
 
         // Update
         new BeanPropertiesCopierTools(form, item).copyAllSameProperties();
-        item.setClient(client);
+        item.setClientId(client.getId());
         item.setDate(DateTools.parseDateOnly(form.getDate()));
 
-        itemDao.save(item);
+        itemRepository.save(item);
 
         return formResult;
     }

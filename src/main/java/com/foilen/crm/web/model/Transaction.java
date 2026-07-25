@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class Transaction extends AbstractApiBase {
 
-    private Long id;
+    private String id;
 
     private ClientShort client;
 
@@ -18,9 +18,9 @@ public class Transaction extends AbstractApiBase {
     private String description;
 
     // 1099 for 10.99$
-    private long price = 0;
+    private long priceInCents = 0;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -44,15 +44,15 @@ public class Transaction extends AbstractApiBase {
         return invoiceId;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -72,8 +72,8 @@ public class Transaction extends AbstractApiBase {
         this.invoiceId = invoiceId;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
 }

@@ -9,8 +9,8 @@
     },
     "description" : "Install Wordpress",
     "invoiceId" : "I190701-1",
-    "price" : 2000,
-    "priceFormatted" : "20.00"
+    "priceFormatted" : "20.00",
+    "priceInCents" : 2000
   }, {
     "category" : "hosting",
     "client" : {
@@ -21,8 +21,8 @@
     },
     "description" : "Shared hosting - L1",
     "invoiceId" : "I190701-1",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   }, {
     "category" : "hosting",
     "client" : {
@@ -33,8 +33,8 @@
     },
     "description" : "Shared hosting - L1",
     "invoiceId" : "I190701-2",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   }, {
     "category" : "hosting",
     "client" : {
@@ -45,8 +45,8 @@
     },
     "description" : "Shared hosting - L2",
     "invoiceId" : "I190701-3",
-    "price" : 1000,
-    "priceFormatted" : "10.00"
+    "priceFormatted" : "10.00",
+    "priceInCents" : 1000
   } ],
   "removed" : [ {
     "category" : "consulting",
@@ -57,19 +57,8 @@
       "shortName" : "avez"
     },
     "description" : "Install Wordpress",
-    "price" : 2000,
-    "priceFormatted" : "20.00"
-  }, {
-    "category" : "hosting",
-    "client" : {
-      "email" : "alex@example.com",
-      "lang" : "EN",
-      "name" : "Avez",
-      "shortName" : "avez"
-    },
-    "description" : "Shared hosting - L1",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "20.00",
+    "priceInCents" : 2000
   }, {
     "category" : "hosting",
     "client" : {
@@ -79,8 +68,19 @@
       "shortName" : "bazar"
     },
     "description" : "Shared hosting - L1",
-    "price" : 500,
-    "priceFormatted" : "5.00"
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
+  }, {
+    "category" : "hosting",
+    "client" : {
+      "email" : "alex@example.com",
+      "lang" : "EN",
+      "name" : "Avez",
+      "shortName" : "avez"
+    },
+    "description" : "Shared hosting - L1",
+    "priceFormatted" : "5.00",
+    "priceInCents" : 500
   }, {
     "category" : "hosting",
     "client" : {
@@ -90,7 +90,7 @@
       "shortName" : "zooa"
     },
     "description" : "Shared hosting - L2",
-    "price" : 1000,
-    "priceFormatted" : "10.00"
+    "priceFormatted" : "10.00",
+    "priceInCents" : 1000
   } ]
 }

@@ -6,7 +6,7 @@ import com.foilen.crm.web.model.UserList;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.StringTools;
 import com.google.common.base.Strings;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -31,17 +31,16 @@ public class UserServiceImpl extends AbstractApiService implements UserService {
         UserList result = new UserList();
         Page<User> page;
         if (search == null) {
-            page = userDao.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "email"));
+            page = userRepository.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "email"));
         } else {
-            search = "%" + search + "%";
-            page = userDao.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "email"));
+            page = userRepository.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "email"));
         }
         paginationService.wrap(result, page, com.foilen.crm.web.model.User.class);
         return result;
     }
 
     @Override
-    public FormResult updateAdmin(String userId, Long id, UpdateUserAdminForm form) {
+    public FormResult updateAdmin(String userId, String id, UpdateUserAdminForm form) {
 
         FormResult formResult = new FormResult();
 
@@ -60,7 +59,7 @@ public class UserServiceImpl extends AbstractApiService implements UserService {
 
         // Update
         user.setAdmin(form.isAdmin());
-        userDao.save(user);
+        userRepository.save(user);
 
         return formResult;
     }

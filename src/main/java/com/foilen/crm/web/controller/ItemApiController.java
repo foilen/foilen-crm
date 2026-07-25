@@ -52,7 +52,7 @@ public class ItemApiController {
     @DeleteMapping("{id}")
     public FormResult delete(
             Authentication authentication,
-            @PathVariable("id") long id
+            @PathVariable("id") String id
     ) {
         return itemService.delete(authentication.getName(), id);
     }
@@ -83,7 +83,7 @@ public class ItemApiController {
     @PutMapping("{id}")
     public FormResult update(
             Authentication authentication,
-            @PathVariable("id") long id,
+            @PathVariable("id") String id,
             @RequestBody CreateOrUpdateItem form
     ) {
         return itemService.update(authentication.getName(), id, form);

@@ -1,12 +1,17 @@
 package com.foilen.crm.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
 import java.util.Date;
 
+/**
+ * The "price" JSON property name is pinned via {@link JsonProperty} so previously exported backup files
+ * (which use that name) keep loading, even though the Java-side name was updated to priceInCents.
+ */
 public class ExportTransaction extends AbstractApiBase {
 
-    private Long id;
+    private String id;
 
     // Reference to the Client by its shortName
     private String clientShortName;
@@ -17,7 +22,8 @@ public class ExportTransaction extends AbstractApiBase {
     private String description;
 
     // 1099 for 10.99$
-    private long price;
+    @JsonProperty("price")
+    private long priceInCents;
 
     public String getClientShortName() {
         return clientShortName;
@@ -31,7 +37,7 @@ public class ExportTransaction extends AbstractApiBase {
         return description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -39,8 +45,8 @@ public class ExportTransaction extends AbstractApiBase {
         return invoiceId;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public void setClientShortName(String clientShortName) {
@@ -55,7 +61,7 @@ public class ExportTransaction extends AbstractApiBase {
         this.description = description;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -63,8 +69,8 @@ public class ExportTransaction extends AbstractApiBase {
         this.invoiceId = invoiceId;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
 }

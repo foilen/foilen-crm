@@ -8,8 +8,8 @@
     "name" : "Avez",
     "shortName" : "avez",
     "technicalSupport" : {
-      "pricePerHour" : 2000,
       "pricePerHourFormatted" : "20.00",
+      "pricePerHourInCents" : 2000,
       "sid" : "S2"
     },
     "tel" : "555-202-0202"
@@ -22,8 +22,8 @@
     "name" : "Bazar",
     "shortName" : "bazar",
     "technicalSupport" : {
-      "pricePerHour" : 1000,
       "pricePerHourFormatted" : "10.00",
+      "pricePerHourInCents" : 1000,
       "sid" : "S1"
     },
     "tel" : "555-101-0101"
@@ -45,8 +45,8 @@
     "name" : "Zoo Alphonce",
     "shortName" : "zooa",
     "technicalSupport" : {
-      "pricePerHour" : 2000,
       "pricePerHourFormatted" : "20.00",
+      "pricePerHourInCents" : 2000,
       "sid" : "S2"
     },
     "tel" : "555-303-0303"

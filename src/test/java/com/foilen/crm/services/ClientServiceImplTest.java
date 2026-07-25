@@ -31,7 +31,7 @@ public class ClientServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Non-admin users cannot create clients")
         void testCreate_notAdmin_FAIL() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("ABC")//
@@ -45,13 +45,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
             expectNotAdmin(() -> clientService.create(FakeDataServiceImpl.USER_ID_USER, form));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Admin users can create clients successfully")
         void testCreate_OK() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("ABC")//
@@ -67,13 +67,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
             AssertTools.assertDiffJsonComparison("ClientServiceImplTest-testCreate_OK-clients.json",
                     getClass(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Cannot create client with existing short name")
         void testCreate_shortName_exists_FAIL() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("ABC")
@@ -88,7 +88,7 @@ public class ClientServiceImplTest extends AbstractSpringTests {
             AssertTools.assertJsonComparisonWithoutNulls("ClientServiceImplTest-shortName_exists_FAIL-FormResult.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
     }
 
@@ -99,26 +99,26 @@ public class ClientServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Non-admin users cannot delete clients")
         void testDelete_notAdmin_FAIL() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             expectNotAdmin(() ->
                     clientService.delete(FakeDataServiceImpl.USER_ID_USER, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Admin users can delete clients successfully")
         void testDelete_OK() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             FormResult result = clientService.delete(FakeDataServiceImpl.USER_ID_ADMIN, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison("ClientServiceImplTest-testDelete_OK-clients.json",
                     getClass(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
     }
 
@@ -149,7 +149,7 @@ public class ClientServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Update with no changes succeeds")
         void testUpdate_noChange_OK() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("Bazar")//
@@ -164,13 +164,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Non-admin users cannot update clients")
         void testUpdate_notAdmin_FAIL() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("Bazar Yay")//
@@ -185,13 +185,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
                     clientService.update(FakeDataServiceImpl.USER_ID_USER, FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, form));
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Admin users can update clients successfully")
         void testUpdate_OK() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("Bazar Yay")//
@@ -207,13 +207,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
             AssertTools.assertDiffJsonComparison("ClientServiceImplTest-testUpdate_OK-clients.json",
                     getClass(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Cannot update client with existing short name")
         void testUpdate_shortName_exists_FAIL() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("Bazar")//
@@ -228,13 +228,13 @@ public class ClientServiceImplTest extends AbstractSpringTests {
             AssertTools.assertJsonComparisonWithoutNulls("ClientServiceImplTest-shortName_exists_FAIL-FormResult.json", getClass(), result);
 
             AssertTools.assertDiffJsonComparison(new AssertDiff(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
 
         @Test
         @DisplayName("Can update client short name to a new value")
         void testUpdate_shortName_OK() {
-            List<?> initialClients = trimClient(clientDao.findAll(Sort.by("shortName")));
+            List<?> initialClients = trimClient(clientRepository.findAll(Sort.by("shortName")));
 
             CreateOrUpdateClientForm form = new CreateOrUpdateClientForm()
                     .setName("Bazar")//
@@ -250,7 +250,7 @@ public class ClientServiceImplTest extends AbstractSpringTests {
 
             AssertTools.assertDiffJsonComparison("ClientServiceImplTest-testUpdate_shortName_OK-clients.json",
                     getClass(), initialClients,
-                    trimClient(clientDao.findAll(Sort.by("shortName"))));
+                    trimClient(clientRepository.findAll(Sort.by("shortName"))));
         }
     }
 

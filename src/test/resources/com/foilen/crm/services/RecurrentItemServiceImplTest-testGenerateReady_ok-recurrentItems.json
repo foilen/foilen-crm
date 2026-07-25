@@ -3,22 +3,6 @@
   "calendarUnitCode" : "recurrence.monthly",
   "category" : "hosting",
   "client" : {
-    "email" : "alex@example.com",
-    "lang" : "EN",
-    "name" : "Avez",
-    "shortName" : "avez"
-  },
-  "delta" : 1,
-  "description" : "Shared hosting - L1",
-  "nextGenerationDate" : 1564632000000,
-  "nextGenerationDateFormatted" : "2019-08-01",
-  "price" : 500,
-  "priceFormatted" : "5.00"
-}, {
-  "calendarUnit" : 2,
-  "calendarUnitCode" : "recurrence.monthly",
-  "category" : "hosting",
-  "client" : {
     "email" : "benoit@example.com",
     "lang" : "FR",
     "name" : "Bazar",
@@ -26,10 +10,26 @@
   },
   "delta" : 1,
   "description" : "Shared hosting - L1",
-  "nextGenerationDate" : 1564632000000,
+  "nextGenerationDate" : "2019-08-01T04:00:00.000Z",
   "nextGenerationDateFormatted" : "2019-08-01",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
+}, {
+  "calendarUnit" : 2,
+  "calendarUnitCode" : "recurrence.monthly",
+  "category" : "hosting",
+  "client" : {
+    "email" : "alex@example.com",
+    "lang" : "EN",
+    "name" : "Avez",
+    "shortName" : "avez"
+  },
+  "delta" : 1,
+  "description" : "Shared hosting - L1",
+  "nextGenerationDate" : "2019-08-01T04:00:00.000Z",
+  "nextGenerationDateFormatted" : "2019-08-01",
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "calendarUnit" : 2,
   "calendarUnitCode" : "recurrence.monthly",
@@ -42,8 +42,8 @@
   },
   "delta" : 1,
   "description" : "Shared hosting - L2",
-  "nextGenerationDate" : 1564632000000,
+  "nextGenerationDate" : "2019-08-01T04:00:00.000Z",
   "nextGenerationDateFormatted" : "2019-08-01",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 } ]

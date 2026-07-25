@@ -1,67 +1,59 @@
 package com.foilen.crm.db.entities.invoice;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foilen.smalltools.tools.PriceFormatTools;
-import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * Entries for sent invoices and for cash-in.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Document
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-    @Version
-    private long version;
+    private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Client client;
+    private String clientId;
 
-    @Column(unique = true, nullable = true)
     private String invoiceId;
 
     private Date date;
     private String description;
 
     // 1099 for 10.99$
-    private long price = 0;
+    private long priceInCents = 0;
 
     public Transaction() {
     }
 
-    public Transaction(Client client, String invoiceId, Date date, String description, long price) {
-        this.client = client;
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    public Transaction(String clientId, String invoiceId, Date date, String description, long priceInCents) {
+        this.clientId = clientId;
         this.invoiceId = invoiceId;
         this.date = date;
         this.description = description;
-        this.price = price;
+        this.priceInCents = priceInCents;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Client getClient() {
-        return client;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getInvoiceId() {
@@ -88,24 +80,16 @@ public class Transaction {
         this.description = description;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
 }

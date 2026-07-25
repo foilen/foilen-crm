@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-@ComponentScan({"com.foilen.crm.db.dao",
+@ComponentScan({"com.foilen.crm.db.repository",
         "com.foilen.crm.services",
         "com.foilen.crm.tasks"
 })
@@ -81,6 +81,7 @@ public class CrmSpringConfig extends AbstractBasics {
     public static class CrmConfigLocal {
         @Primary
         @Bean
+        @Profile("JUNIT")
         public EmailServiceMock emailServiceMock() {
             return new EmailServiceMock();
         }

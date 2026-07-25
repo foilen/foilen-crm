@@ -19,7 +19,7 @@ function TransactionsList() {
         date: dateNowDayOnly(),
         clientShortName: '',
         paymentType: '',
-        price: '',
+        priceInCents: '',
     })
     const [editForm, setEditForm] = useState({
         clientShortName: null,
@@ -46,7 +46,7 @@ function TransactionsList() {
     const create = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(form))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Transaction Payment - Create', clonedForm)
 
         try {
@@ -69,7 +69,7 @@ function TransactionsList() {
         setEditForm({
             ...item,
             id: item.id,
-            price: item.priceFormatted,
+            priceInCents: item.priceFormatted,
             date: item.dateFormatted,
             clientShortName: item.client ? item.client.shortName : null,
             paymentType: item.description
@@ -80,7 +80,7 @@ function TransactionsList() {
     const edit = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(editForm))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Transaction - Edit', clonedForm)
 
         try {
@@ -204,13 +204,13 @@ function TransactionsList() {
                                         type="text"
                                         className="form-control"
                                         id="price"
-                                        value={form.price}
-                                        onChange={(e) => handleFormChange('price', e.target.value)}
+                                        value={form.priceInCents}
+                                        onChange={(e) => handleFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
@@ -299,13 +299,13 @@ function TransactionsList() {
                                         type="text"
                                         className="form-control"
                                         id="price2"
-                                        value={editForm.price || ''}
-                                        onChange={(e) => handleEditFormChange('price', e.target.value)}
+                                        value={editForm.priceInCents || ''}
+                                        onChange={(e) => handleEditFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>

@@ -3,10 +3,12 @@ package com.foilen.crm.test;
 import com.foilen.crm.CrmApp;
 import com.foilen.crm.CrmConfig;
 import com.foilen.crm.CrmSpringConfig;
-import com.foilen.crm.db.dao.*;
+import com.foilen.crm.CrmUpgradesSpringConfig;
+import com.foilen.crm.db.repository.*;
 import com.foilen.crm.db.entities.invoice.*;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
+import com.foilen.crm.localonly.EmbeddedMongoDbSpringConfig;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
 import com.foilen.smalltools.tools.JsonTools;
@@ -22,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@SpringJUnitConfig(classes = {CrmTestConfig.class, CrmSpringConfig.class})
+@SpringJUnitConfig(classes = {CrmTestConfig.class, CrmSpringConfig.class, EmbeddedMongoDbSpringConfig.class, CrmUpgradesSpringConfig.class})
 @ActiveProfiles("JUNIT")
 public abstract class AbstractSpringTests {
 
@@ -30,23 +32,21 @@ public abstract class AbstractSpringTests {
     @Autowired
     protected FakeDataService fakeDataService;
     @Autowired
-    protected ClientDao clientDao;
+    protected ClientRepository clientRepository;
     @Autowired
-    protected ItemDao itemDao;
+    protected ItemRepository itemRepository;
     @Autowired
-    protected RecurrentItemDao recurrentItemDao;
+    protected RecurrentItemRepository recurrentItemRepository;
     @Autowired
-    protected TechnicalSupportDao technicalSupportDao;
+    protected TechnicalSupportRepository technicalSupportRepository;
     @Autowired
-    protected TransactionDao transactionDao;
+    protected TransactionRepository transactionRepository;
     @Autowired
-    protected UserDao userDao;
+    protected UserRepository userRepository;
 
     public AbstractSpringTests(boolean createFakeData) {
         CrmConfig crmConfig = new CrmConfig();
         crmConfig.setBaseUrl("https://crm.example.com");
-        crmConfig.setMysqlDatabaseUserName("_MYSQL_USER_NAME_");
-        crmConfig.setMysqlDatabasePassword("_MYSQL_PASSWORD_");
         crmConfig.setMailFrom("crm@example.com");
         crmConfig.setCompany("MyCompany");
         crmConfig.setLoginCookieSignatureSalt(SecureRandomTools.randomBase64String(10));
@@ -83,10 +83,24 @@ public abstract class AbstractSpringTests {
         Assertions.assertEquals("error.notAdmin", exception.getMessage(), "Exception must have 'error.notAdmin' message");
     }
 
-    protected List<com.foilen.crm.web.model.Client> trimClient(List<Client> entities) {
+    private ClientShort toClientShort(String clientId) {
+        if (clientId == null) {
+            return null;
+        }
+        Client client = clientRepository.findById(clientId).orElse(null);
+        return client == null ? null : JsonTools.clone(client, ClientShort.class);
+    }
+
+    protected List<com.foilen.crm.web.model.ClientExtended> trimClient(List<Client> entities) {
         return entities.stream()
                 .map(e -> {
-                    com.foilen.crm.web.model.Client c = JsonTools.clone(e, com.foilen.crm.web.model.Client.class);
+                    com.foilen.crm.web.model.ClientExtended c = JsonTools.clone(e, com.foilen.crm.web.model.ClientExtended.class);
+                    com.foilen.crm.web.model.TechnicalSupport technicalSupport = null;
+                    if (e.getTechnicalSupportId() != null) {
+                        TechnicalSupport entity = technicalSupportRepository.findById(e.getTechnicalSupportId()).orElse(null);
+                        technicalSupport = entity == null ? null : JsonTools.clone(entity, com.foilen.crm.web.model.TechnicalSupport.class);
+                    }
+                    c.setTechnicalSupport(technicalSupport);
                     return c;
                 })
                 .collect(Collectors.toList());
@@ -96,7 +110,7 @@ public abstract class AbstractSpringTests {
         return entities.stream()
                 .map(e -> {
                     com.foilen.crm.web.model.Item t = JsonTools.clone(e, com.foilen.crm.web.model.Item.class);
-                    t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
+                    t.setClient(toClientShort(e.getClientId()));
                     t.setId(null);
                     t.setDate(null);
                     return t;
@@ -109,7 +123,7 @@ public abstract class AbstractSpringTests {
                 .map(e -> {
                     com.foilen.crm.web.model.RecurrentItem t = JsonTools.clone(e, com.foilen.crm.web.model.RecurrentItem.class);
                     t.setId(null);
-                    t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
+                    t.setClient(toClientShort(e.getClientId()));
                     return t;
                 })
                 .collect(Collectors.toList());
@@ -129,7 +143,7 @@ public abstract class AbstractSpringTests {
                 .map(e -> {
                     com.foilen.crm.web.model.Transaction t = JsonTools.clone(e, com.foilen.crm.web.model.Transaction.class);
                     t.setId(null);
-                    t.setClient(JsonTools.clone(e.getClient(), ClientShort.class));
+                    t.setClient(toClientShort(e.getClientId()));
                     t.setDate(null);
                     return t;
                 })

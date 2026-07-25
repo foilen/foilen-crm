@@ -50,7 +50,7 @@ function TechnicalSupportsList() {
     const create = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(createForm))
-        clonedForm.pricePerHour = priceToLong(clonedForm.pricePerHour)
+        clonedForm.pricePerHourInCents = priceToLong(clonedForm.pricePerHourInCents)
         console.log('Technical Support - Create', clonedForm)
 
         try {
@@ -87,7 +87,7 @@ function TechnicalSupportsList() {
         setEditForm({
             ...item,
             id: item.sid,
-            pricePerHour: item.pricePerHourFormatted
+            pricePerHourInCents: item.pricePerHourFormatted
         })
     }
 
@@ -95,7 +95,7 @@ function TechnicalSupportsList() {
     const edit = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(editForm))
-        clonedForm.pricePerHour = priceToLong(clonedForm.pricePerHour)
+        clonedForm.pricePerHourInCents = priceToLong(clonedForm.pricePerHourInCents)
         console.log('Technical Support - Edit', clonedForm)
 
         try {
@@ -175,13 +175,13 @@ function TechnicalSupportsList() {
                                         type="text"
                                         className="form-control"
                                         id="pricePerHour"
-                                        value={createForm.pricePerHour || ''}
-                                        onChange={(e) => handleCreateFormChange('pricePerHour', e.target.value)}
+                                        value={createForm.pricePerHourInCents || ''}
+                                        onChange={(e) => handleCreateFormChange('pricePerHourInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHourInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.pricePerHour.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.pricePerHourInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
@@ -235,13 +235,13 @@ function TechnicalSupportsList() {
                                         type="text"
                                         className="form-control"
                                         id="pricePerHour2"
-                                        value={editForm.pricePerHour || ''}
-                                        onChange={(e) => handleEditFormChange('pricePerHour', e.target.value)}
+                                        value={editForm.pricePerHourInCents || ''}
+                                        onChange={(e) => handleEditFormChange('pricePerHourInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHour && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.pricePerHourInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.pricePerHour.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.pricePerHourInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>

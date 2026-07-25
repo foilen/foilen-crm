@@ -1,6 +1,7 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.ClientDao;
+import com.foilen.crm.db.repository.ClientRepository;
+import com.foilen.crm.db.repository.TransactionRepository;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.web.model.ClientList;
@@ -10,19 +11,26 @@ import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.JsonTools;
 import com.foilen.smalltools.tools.StringTools;
 import com.google.common.base.Strings;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class ClientServiceImpl extends AbstractApiService implements ClientService {
 
     @Autowired
-    private ClientDao clientDao;
+    private ClientRepository clientRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Override
     public FormResult create(String userId, CreateOrUpdateClientForm form) {
@@ -47,8 +55,8 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
 
         // Create
         Client entity = JsonTools.clone(form, Client.class);
-        entity.setTechnicalSupport(technicalSupport);
-        clientDao.save(entity);
+        entity.setTechnicalSupportId(technicalSupport == null ? null : technicalSupport.getId());
+        clientRepository.save(entity);
 
         return formResult;
     }
@@ -66,8 +74,11 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
             return formResult;
         }
 
-        // Delete
-        clientDao.delete(client);
+        // Delete the client and everything referencing it (no DB-level cascade with MongoDB)
+        itemRepository.deleteAllByClientId(client.getId());
+        recurrentItemRepository.deleteAllByClientId(client.getId());
+        transactionRepository.deleteAllByClientId(client.getId());
+        clientRepository.delete(client);
 
         return formResult;
     }
@@ -87,12 +98,22 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
         ClientList result = new ClientList();
         Page<Client> page;
         if (search == null) {
-            page = clientDao.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
+            page = clientRepository.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
         } else {
-            search = "%" + search + "%";
-            page = clientDao.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
+            page = clientRepository.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
         }
-        paginationService.wrap(result, page, com.foilen.crm.web.model.Client.class);
+        paginationService.wrap(result, page, com.foilen.crm.web.model.ClientExtended.class);
+
+        // Resolve the technicalSupportId reference on each item
+        Map<String, com.foilen.crm.web.model.TechnicalSupport> technicalSupports = technicalSupportsByIds(page.getContent().stream()
+                .map(Client::getTechnicalSupportId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+        var items = result.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            items.get(i).setTechnicalSupport(technicalSupports.get(page.getContent().get(i).getTechnicalSupportId()));
+        }
+
         return result;
     }
 
@@ -121,9 +142,9 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
 
         // Update
         new BeanPropertiesCopierTools(form, client).copyAllSameProperties();
-        client.setTechnicalSupport(technicalSupport);
+        client.setTechnicalSupportId(technicalSupport == null ? null : technicalSupport.getId());
 
-        clientDao.save(client);
+        clientRepository.save(client);
 
         return formResult;
     }

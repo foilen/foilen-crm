@@ -7,8 +7,8 @@
   },
   "description" : "Facture I190101-5",
   "invoiceId" : "I190101-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -18,8 +18,8 @@
   },
   "description" : "Facture I190201-5",
   "invoiceId" : "I190201-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -29,8 +29,8 @@
   },
   "description" : "Facture I190301-5",
   "invoiceId" : "I190301-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -40,8 +40,8 @@
   },
   "description" : "Facture I190401-5",
   "invoiceId" : "I190401-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -51,8 +51,8 @@
   },
   "description" : "Facture I190501-5",
   "invoiceId" : "I190501-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "alex@example.com",
@@ -62,8 +62,8 @@
   },
   "description" : "Invoice I190601-1",
   "invoiceId" : "I190601-1",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "client" : {
     "email" : "benoit@example.com",
@@ -73,8 +73,8 @@
   },
   "description" : "Facture I190601-2",
   "invoiceId" : "I190601-2",
-  "price" : 2500,
-  "priceFormatted" : "25.00"
+  "priceFormatted" : "25.00",
+  "priceInCents" : 2500
 }, {
   "client" : {
     "email" : "zeo@example.com",
@@ -84,8 +84,8 @@
   },
   "description" : "Facture I190601-3",
   "invoiceId" : "I190601-3",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "alex@example.com",
@@ -95,8 +95,8 @@
   },
   "description" : "Invoice I190601-4",
   "invoiceId" : "I190601-4",
-  "price" : 2500,
-  "priceFormatted" : "25.00"
+  "priceFormatted" : "25.00",
+  "priceInCents" : 2500
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -106,8 +106,8 @@
   },
   "description" : "Facture I190601-5",
   "invoiceId" : "I190601-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "benoit@example.com",
@@ -117,8 +117,8 @@
   },
   "description" : "Facture I190601-6",
   "invoiceId" : "I190601-6",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "client" : {
     "email" : "zeo@example.com",
@@ -128,8 +128,8 @@
   },
   "description" : "Facture I190601-7",
   "invoiceId" : "I190601-7",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -139,8 +139,8 @@
   },
   "description" : "Facture I190701-5",
   "invoiceId" : "I190701-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -150,8 +150,8 @@
   },
   "description" : "Facture I190801-5",
   "invoiceId" : "I190801-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -161,8 +161,8 @@
   },
   "description" : "Facture I190901-5",
   "invoiceId" : "I190901-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -172,8 +172,8 @@
   },
   "description" : "Facture I191001-5",
   "invoiceId" : "I191001-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -183,8 +183,8 @@
   },
   "description" : "Facture I191101-5",
   "invoiceId" : "I191101-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "client" : {
     "email" : "extra@example.com",
@@ -194,6 +194,6 @@
   },
   "description" : "Facture I191201-5",
   "invoiceId" : "I191201-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 } ]

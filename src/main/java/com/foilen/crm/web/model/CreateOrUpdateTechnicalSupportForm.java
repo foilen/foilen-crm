@@ -7,22 +7,22 @@ public class CreateOrUpdateTechnicalSupportForm extends AbstractApiBase {
 
     private String sid;
     // 1099 for 10.99$
-    private long pricePerHour;
+    private long pricePerHourInCents;
 
-    public long getPricePerHour() {
-        return pricePerHour;
+    public long getPricePerHourInCents() {
+        return pricePerHourInCents;
     }
 
     public String getPricePerHourFormatted() {
-        return PriceFormatTools.toDigit(pricePerHour);
+        return PriceFormatTools.toDigit(pricePerHourInCents);
     }
 
     public String getSid() {
         return sid;
     }
 
-    public CreateOrUpdateTechnicalSupportForm setPricePerHour(long pricePerHour) {
-        this.pricePerHour = pricePerHour;
+    public CreateOrUpdateTechnicalSupportForm setPricePerHourInCents(long pricePerHourInCents) {
+        this.pricePerHourInCents = pricePerHourInCents;
         return this;
     }
 

@@ -2,7 +2,7 @@ package com.foilen.crm.web.model;
 
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
-public class Client extends AbstractApiBase {
+public class ClientExtended extends AbstractApiBase {
 
     private String name;
     private String shortName;

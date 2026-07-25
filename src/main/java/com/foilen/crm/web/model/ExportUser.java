@@ -4,7 +4,7 @@ import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
 public class ExportUser extends AbstractApiBase {
 
-    private Long id;
+    private String id;
     private String userId;
     private boolean admin;
     private String email;
@@ -13,7 +13,7 @@ public class ExportUser extends AbstractApiBase {
         return email;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -33,7 +33,7 @@ public class ExportUser extends AbstractApiBase {
         this.email = email;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

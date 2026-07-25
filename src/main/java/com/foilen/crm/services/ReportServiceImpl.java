@@ -1,7 +1,7 @@
 package com.foilen.crm.services;
 
-import com.foilen.crm.db.dao.ItemDao;
-import com.foilen.crm.db.dao.TransactionDao;
+import com.foilen.crm.db.repository.ItemRepository;
+import com.foilen.crm.db.repository.TransactionRepository;
 import com.foilen.crm.web.model.ReportBalanceByClient;
 import com.foilen.crm.web.model.Reports;
 import com.foilen.crm.web.model.ReportsResponse;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl extends AbstractApiService implements ReportService {
 
     @Autowired
-    private ItemDao itemDao;
+    private ItemRepository itemRepository;
     @Autowired
-    private TransactionDao transactionDao;
+    private TransactionRepository transactionRepository;
 
     @Override
     public ReportsResponse getReports(String userId) {
@@ -29,11 +29,12 @@ public class ReportServiceImpl extends AbstractApiService implements ReportServi
         Reports reports = new Reports();
         result.setItem(reports);
 
-        reports.setItemsByCategory(itemDao.findAllItemsByCategory());
-        reports.setBalanceByClient(transactionDao.findAllClientBalance());
+        reports.setItemsByCategory(itemRepository.findAllItemsByCategory());
+        reports.setBalanceByClient(transactionRepository.findAllClientBalance());
 
         reports.setGlobalBalance(reports.getBalanceByClient().stream()
-                .collect(Collectors.summingLong(ReportBalanceByClient::getTotal))
+                .mapToLong(ReportBalanceByClient::getTotal)
+                .sum()
         );
 
         return result;

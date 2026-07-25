@@ -1,68 +1,53 @@
 package com.foilen.crm.db.entities.invoice;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.foilen.smalltools.tools.AbstractBasics;
-import jakarta.persistence.*;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Technical support contract.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-public class TechnicalSupport extends AbstractBasics {
+@Document
+public class TechnicalSupport {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private String id;
 
-    @Version
-    private long version;
-
-    @Column(unique = true, nullable = false, length = 10)
     private String sid;
     // 1099 for 10.99$
-    private long pricePerHour = 0;
+    private long pricePerHourInCents = 0;
 
     public TechnicalSupport() {
     }
 
-    public TechnicalSupport(String sid, long pricePerHour) {
+    public TechnicalSupport(String sid, long pricePerHourInCents) {
         this.sid = sid;
-        this.pricePerHour = pricePerHour;
+        this.pricePerHourInCents = pricePerHourInCents;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public long getPricePerHour() {
-        return pricePerHour;
+    public long getPricePerHourInCents() {
+        return pricePerHourInCents;
     }
 
     public String getSid() {
         return sid;
     }
 
-    public long getVersion() {
-        return version;
-    }
-
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public void setPricePerHour(long pricePerHour) {
-        this.pricePerHour = pricePerHour;
+    public void setPricePerHourInCents(long pricePerHourInCents) {
+        this.pricePerHourInCents = pricePerHourInCents;
     }
 
     public void setSid(String sid) {
         this.sid = sid;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
     }
 
 }

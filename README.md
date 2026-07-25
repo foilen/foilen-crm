@@ -17,8 +17,6 @@ Some configuration options can be overridden with the environment variables:
 
 * `HTTP_PORT` : The port to listen on (default 8080)
 * `CONFIG_FILE` : The path to the config file
-* `MYSQL_PORT_3306_TCP_ADDR` : To change `mysqlHostName` (used by Docker Links)
-* `MYSQL_PORT_3306_TCP_PORT` : To change `mysqlPort` (used by Docker Links)
 
 ## Configuration file
 
@@ -30,11 +28,8 @@ Here is an example of the content:
 {
 	"baseUrl" : "http://127.0.0.1:8080",
 
-	"mysqlHostName" : "127.0.0.1",
-	"mysqlPort" : 3306,
-	"mysqlDatabaseName" : "crm",
-	"mysqlDatabaseUserName" : "root",
-	"mysqlDatabasePassword" : "ABC",
+	"mongoUri" : "mongodb://127.0.0.1:27017",
+	"mongoDatabase" : "crm",
 
 	"mailHost" : "127.0.0.1",
 	"mailPort" : 25,
@@ -114,13 +109,11 @@ To run the frontend in development mode, first start the `CrmApp` locally and th
 
 ## TEST in IntelliJ
 
-Run `./mariadb-start.sh`
+No database setup needed: an embedded, ephemeral MongoDB starts in-process automatically.
 
 Create a config file with your Azure details by following the instructions in "Configuration file" above and save it as `test-config.json`.
 
 Then run "CrmApp" in IntelliJ.
-
-phpMyAdmin on http://127.0.0.1:12345/ with user "root" and password "ABC"
 
 ## TEST in Docker
 
@@ -128,7 +121,7 @@ Simply execute `./test-crm-test.sh` .
 
 Then go on http://127.0.0.1:8080/ .
 
-When done, cleanup by stopping the DB: `docker stop crm_db crm_db_phpmyadmin` .
+When done, cleanup by stopping the DB: `docker stop crm_db` .
 
 # More
 

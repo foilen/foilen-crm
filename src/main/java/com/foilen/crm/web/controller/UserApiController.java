@@ -28,7 +28,7 @@ public class UserApiController {
     @PutMapping("{id}/admin")
     public FormResult updateAdmin(
             Authentication authentication,
-            @PathVariable Long id,
+            @PathVariable String id,
             @RequestBody UpdateUserAdminForm form
     ) {
         return userService.updateAdmin(authentication.getName(), id, form);

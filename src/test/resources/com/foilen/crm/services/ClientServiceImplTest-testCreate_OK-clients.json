@@ -8,8 +8,8 @@
     "name" : "ABC",
     "shortName" : "abc",
     "technicalSupport" : {
-      "pricePerHour" : 2000,
       "pricePerHourFormatted" : "20.00",
+      "pricePerHourInCents" : 2000,
       "sid" : "S2"
     },
     "tel" : "555-202-0101"

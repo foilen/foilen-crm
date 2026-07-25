@@ -1,27 +1,21 @@
 package com.foilen.crm.db.entities.invoice;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 /**
  * An Item to bill recurrently.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
+@Document
 public class RecurrentItem {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-
-    @Version
-    private long version;
+    private String id;
 
     // Recurrence details
     private int calendarUnit; // the unit of the delta that is a constant on {@link Calendar}
@@ -31,26 +25,22 @@ public class RecurrentItem {
     private Date nextGenerationDate;
 
     // Item details
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Client client;
+    private String clientId;
 
-    @Column(length = 2000)
     private String description;
 
-    private long price = 0;// 1099 for 10.99$
+    private long priceInCents = 0;// 1099 for 10.99$
 
-    @Column(nullable = true)
     private String category;
 
     public RecurrentItem() {
     }
 
-    public RecurrentItem(Client client, String description, long price, String category, int calendarUnit, int delta, Date nextGenerationDate) {
-        this.client = client;
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    public RecurrentItem(String clientId, String description, long priceInCents, String category, int calendarUnit, int delta, Date nextGenerationDate) {
+        this.clientId = clientId;
         this.description = description;
-        this.price = price;
+        this.priceInCents = priceInCents;
         this.category = category;
         this.calendarUnit = calendarUnit;
         this.delta = delta;
@@ -65,8 +55,8 @@ public class RecurrentItem {
         return category;
     }
 
-    public Client getClient() {
-        return client;
+    public String getClientId() {
+        return clientId;
     }
 
     public int getDelta() {
@@ -77,7 +67,7 @@ public class RecurrentItem {
         return description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -85,8 +75,8 @@ public class RecurrentItem {
         return nextGenerationDate;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public void setCalendarUnit(int calendarUnit) {
@@ -97,8 +87,8 @@ public class RecurrentItem {
         this.category = category;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public void setDelta(int delta) {
@@ -109,7 +99,7 @@ public class RecurrentItem {
         this.description = description;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -117,19 +107,19 @@ public class RecurrentItem {
         this.nextGenerationDate = nextGenerationDate;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("RecurrentItem [client=");
-        builder.append(client);
+        builder.append("RecurrentItem [clientId=");
+        builder.append(clientId);
         builder.append(", description=");
         builder.append(description);
-        builder.append(", price=");
-        builder.append(price);
+        builder.append(", priceInCents=");
+        builder.append(priceInCents);
         builder.append(", category=");
         builder.append(category);
         builder.append("]");

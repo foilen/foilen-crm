@@ -8,13 +8,13 @@ import com.foilen.smalltools.restapi.model.AbstractApiBase;
 public class BillSomePendingItems extends AbstractApiBase {
 
     private String invoicePrefix;
-    private List<Long> itemToBillIds = new ArrayList<>();
+    private List<String> itemToBillIds = new ArrayList<>();
 
     public String getInvoicePrefix() {
         return invoicePrefix;
     }
 
-    public List<Long> getItemToBillIds() {
+    public List<String> getItemToBillIds() {
         return itemToBillIds;
     }
 
@@ -23,7 +23,7 @@ public class BillSomePendingItems extends AbstractApiBase {
         return this;
     }
 
-    public BillSomePendingItems setItemToBillIds(List<Long> itemToBillIds) {
+    public BillSomePendingItems setItemToBillIds(List<String> itemToBillIds) {
         this.itemToBillIds = itemToBillIds;
         return this;
     }

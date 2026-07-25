@@ -20,83 +20,83 @@
     "globalBalance" : 16000,
     "globalBalanceFormatted" : "160.00",
     "itemsByCategory" : [ {
-      "category" : "delivery",
       "monthDate" : "2019-12",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-11",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-10",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-9",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-8",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-7",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
+      "monthDate" : "2019-6",
       "category" : "consulting",
-      "monthDate" : "2019-6",
       "total" : 2000,
       "totalFormatted" : "20.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-6",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "hosting",
       "monthDate" : "2019-6",
+      "category" : "hosting",
       "total" : 2000,
       "totalFormatted" : "20.00"
     }, {
+      "monthDate" : "2019-5",
       "category" : "consulting",
-      "monthDate" : "2019-5",
       "total" : 2000,
       "totalFormatted" : "20.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-5",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "hosting",
       "monthDate" : "2019-5",
+      "category" : "hosting",
       "total" : 2000,
       "totalFormatted" : "20.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-4",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-3",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-2",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     }, {
-      "category" : "delivery",
       "monthDate" : "2019-1",
+      "category" : "delivery",
       "total" : 1000,
       "totalFormatted" : "10.00"
     } ]

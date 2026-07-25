@@ -15,7 +15,7 @@ public class CreateOrUpdateRecurrentItemForm extends AbstractApiBase {
     // Item details
     private String clientShortName;
     private String description;
-    private long price = 0; // 1099 for 10.99$
+    private long priceInCents = 0; // 1099 for 10.99$
     private String category;
 
     public int getCalendarUnit() {
@@ -42,12 +42,12 @@ public class CreateOrUpdateRecurrentItemForm extends AbstractApiBase {
         return nextGenerationDate;
     }
 
-    public long getPrice() {
-        return price;
+    public long getPriceInCents() {
+        return priceInCents;
     }
 
     public String getPriceFormatted() {
-        return PriceFormatTools.toDigit(price);
+        return PriceFormatTools.toDigit(priceInCents);
     }
 
     public CreateOrUpdateRecurrentItemForm setCalendarUnit(int calendarUnit) {
@@ -80,8 +80,8 @@ public class CreateOrUpdateRecurrentItemForm extends AbstractApiBase {
         return this;
     }
 
-    public CreateOrUpdateRecurrentItemForm setPrice(long price) {
-        this.price = price;
+    public CreateOrUpdateRecurrentItemForm setPriceInCents(long priceInCents) {
+        this.priceInCents = priceInCents;
         return this;
     }
 }

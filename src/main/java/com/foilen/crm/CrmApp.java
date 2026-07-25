@@ -1,5 +1,6 @@
 package com.foilen.crm;
 
+import com.foilen.crm.localonly.EmbeddedMongoDbSpringConfig;
 import com.foilen.smalltools.reflection.ReflectionTools;
 import com.foilen.smalltools.tools.*;
 import com.google.common.base.Strings;
@@ -79,16 +80,6 @@ public class CrmApp {
                 config = JsonTools.readFromFile(configFile, CrmConfig.class);
             }
 
-            // Override some database configuration if provided via environment
-            String overrideMysqlHostName = System.getenv("MYSQL_PORT_3306_TCP_ADDR");
-            if (!Strings.isNullOrEmpty(overrideMysqlHostName)) {
-                config.setMysqlHostName(overrideMysqlHostName);
-            }
-            String overrideMysqlPort = System.getenv("MYSQL_PORT_3306_TCP_PORT");
-            if (!Strings.isNullOrEmpty(overrideMysqlPort)) {
-                config.setMysqlPort(Integer.parseInt(overrideMysqlPort));
-            }
-
             // Check needed config and add it to the known properties
             configToSystemProperties(config);
 
@@ -108,15 +99,15 @@ public class CrmApp {
             System.setProperty("spring.security.oauth2.client.registration.azure.redirect-uri", config.getLoginAzureConfig().getRedirectUri());
 
             // Configure database
-            System.setProperty("spring.datasource.url", "jdbc:mysql://" + config.getMysqlHostName() + ":" + config.getMysqlPort() + "/" + config.getMysqlDatabaseName());
-            System.setProperty("spring.datasource.username", config.getMysqlDatabaseUserName());
-            System.setProperty("spring.datasource.password", config.getMysqlDatabasePassword());
+            System.setProperty("spring.mongodb.uri", config.getMongoUri());
+            System.setProperty("spring.mongodb.database", config.getMongoDatabase());
 
             List<Class<?>> sources = new ArrayList<>();
 
             // Run the upgrader
             logger.info("Begin UPGRADE MODE");
             sources.add(CrmUpgradesSpringConfig.class);
+            sources.add(EmbeddedMongoDbSpringConfig.class);
 
             RetryTemplate infiniteRetryTemplate = new RetryTemplate();
 
@@ -143,7 +134,7 @@ public class CrmApp {
             sources.add(SpringTools.class);
 
             sources.add(CrmSpringConfig.class);
-            sources.add(CrmDbLiveSpringConfig.class);
+            sources.add(EmbeddedMongoDbSpringConfig.class);
             sources.add(CrmWebSpringConfig.class);
             sources.add(CrmSecuritySpringConfig.class);
 

@@ -19,6 +19,6 @@ public interface UserService {
      */
     UserList listAll(String userId, int pageId, String search);
 
-    FormResult updateAdmin(String userId, Long id, UpdateUserAdminForm form);
+    FormResult updateAdmin(String userId, String id, UpdateUserAdminForm form);
 
 }

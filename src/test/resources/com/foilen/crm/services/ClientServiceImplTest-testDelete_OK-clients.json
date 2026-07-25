@@ -9,8 +9,8 @@
     "name" : "Bazar",
     "shortName" : "bazar",
     "technicalSupport" : {
-      "pricePerHour" : 1000,
       "pricePerHourFormatted" : "10.00",
+      "pricePerHourInCents" : 1000,
       "sid" : "S1"
     },
     "tel" : "555-101-0101"

@@ -35,7 +35,7 @@ public class TransactionApiController {
     @PutMapping("{id}")
     public FormResult update(
             Authentication authentication,
-            @PathVariable("id") long id,
+            @PathVariable("id") String id,
             @RequestBody CreateOrUpdatePayment form
     ) {
         return transactionService.update(authentication.getName(), id, form);

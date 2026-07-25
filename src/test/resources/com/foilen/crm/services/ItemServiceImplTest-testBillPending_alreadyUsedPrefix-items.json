@@ -8,8 +8,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190101-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -20,8 +20,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190201-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -32,8 +32,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190301-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -44,8 +44,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190401-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -56,8 +56,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190501-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "hosting",
   "client" : {
@@ -68,8 +68,8 @@
   },
   "description" : "Shared hosting - L1",
   "invoiceId" : "I190601-1",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "category" : "consulting",
   "client" : {
@@ -80,8 +80,8 @@
   },
   "description" : "Install Wordpress",
   "invoiceId" : "I190601-2",
-  "price" : 2000,
-  "priceFormatted" : "20.00"
+  "priceFormatted" : "20.00",
+  "priceInCents" : 2000
 }, {
   "category" : "hosting",
   "client" : {
@@ -92,8 +92,8 @@
   },
   "description" : "Shared hosting - L1",
   "invoiceId" : "I190601-2",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "category" : "hosting",
   "client" : {
@@ -104,8 +104,8 @@
   },
   "description" : "Shared hosting - L2",
   "invoiceId" : "I190601-3",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "consulting",
   "client" : {
@@ -116,8 +116,8 @@
   },
   "description" : "Install Wordpress",
   "invoiceId" : "I190601-4",
-  "price" : 2000,
-  "priceFormatted" : "20.00"
+  "priceFormatted" : "20.00",
+  "priceInCents" : 2000
 }, {
   "category" : "hosting",
   "client" : {
@@ -128,8 +128,8 @@
   },
   "description" : "Shared hosting - L1",
   "invoiceId" : "I190601-4",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "category" : "delivery",
   "client" : {
@@ -140,8 +140,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190601-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "hosting",
   "client" : {
@@ -152,8 +152,8 @@
   },
   "description" : "Shared hosting - L1",
   "invoiceId" : "I190601-6",
-  "price" : 500,
-  "priceFormatted" : "5.00"
+  "priceFormatted" : "5.00",
+  "priceInCents" : 500
 }, {
   "category" : "hosting",
   "client" : {
@@ -164,8 +164,8 @@
   },
   "description" : "Shared hosting - L2",
   "invoiceId" : "I190601-7",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -176,8 +176,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190701-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -188,8 +188,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190801-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -200,8 +200,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I190901-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -212,8 +212,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I191001-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -224,8 +224,8 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I191101-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 }, {
   "category" : "delivery",
   "client" : {
@@ -236,6 +236,6 @@
   },
   "description" : "Delivery",
   "invoiceId" : "I191201-5",
-  "price" : 1000,
-  "priceFormatted" : "10.00"
+  "priceFormatted" : "10.00",
+  "priceInCents" : 1000
 } ]

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {Modal} from 'bootstrap'
 import ErrorResults from '../components/ErrorResults'
 import PaginationControl from '../components/PaginationControl'
 import ClientSelect from '../components/ClientSelect'
@@ -125,7 +126,7 @@ function ItemsList() {
     const create = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(createForm))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Item - Create', clonedForm)
 
         try {
@@ -227,7 +228,7 @@ function ItemsList() {
         // Use Bootstrap's modal API to show the modal
         const modal = document.querySelector('#billSelectedModal')
         if (modal) {
-            const bsModal = new window.bootstrap.Modal(modal)
+            const bsModal = new Modal(modal)
             bsModal.show()
         }
     }
@@ -238,7 +239,7 @@ function ItemsList() {
         setEditForm({
             ...item,
             id: item.id,
-            price: item.priceFormatted,
+            priceInCents: item.priceFormatted,
             date: item.dateFormatted,
             clientShortName: item.client ? item.client.shortName : null
         })
@@ -248,7 +249,7 @@ function ItemsList() {
     const edit = async () => {
         setFormResult({})
         const clonedForm = JSON.parse(JSON.stringify(editForm))
-        clonedForm.price = priceToLong(clonedForm.price)
+        clonedForm.priceInCents = priceToLong(clonedForm.priceInCents)
         console.log('Item - Pending - Edit', clonedForm)
 
         try {
@@ -388,13 +389,13 @@ function ItemsList() {
                                         type="text"
                                         className="form-control"
                                         id="price"
-                                        value={createForm.price || ''}
-                                        onChange={(e) => handleCreateFormChange('price', e.target.value)}
+                                        value={createForm.priceInCents || ''}
+                                        onChange={(e) => handleCreateFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
@@ -499,13 +500,13 @@ function ItemsList() {
                                         type="text"
                                         className="form-control"
                                         id="price2"
-                                        value={editForm.price || ''}
-                                        onChange={(e) => handleEditFormChange('price', e.target.value)}
+                                        value={editForm.priceInCents || ''}
+                                        onChange={(e) => handleEditFormChange('priceInCents', e.target.value)}
                                         autoComplete="off"
                                     />
-                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.price && (
+                                    {formResult.validationErrorsByField && formResult.validationErrorsByField.priceInCents && (
                                         <div className="text-danger">
-                                            {formResult.validationErrorsByField.price.map((errorCode, index) => (
+                                            {formResult.validationErrorsByField.priceInCents.map((errorCode, index) => (
                                                 <p key={index}>{t(errorCode)}</p>
                                             ))}
                                         </div>
