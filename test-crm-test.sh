@@ -29,13 +29,13 @@ if ! docker ps | grep $INSTANCE ; then
 	  --env MYSQL_ROOT_PASSWORD=ABC \
 	  --env DBNAME=$DBNAME \
 	  --volume $FOLDER_DATA:/data \
-	  -d mariadb:10.5.8
+	  -d mariadb:11.8.5
   
   echo '###[ Wait 20 seconds ]###'
   sleep 20s
 fi
 echo '###[ Create the MariaDB database ]###'
-until docker exec -i $INSTANCE mysql -uroot -pABC << _EOF
+until docker exec -i $INSTANCE mariadb -uroot -pABC << _EOF
   CREATE DATABASE IF NOT EXISTS $DBNAME;
 _EOF
 do

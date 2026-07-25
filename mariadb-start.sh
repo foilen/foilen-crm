@@ -12,10 +12,10 @@ docker run \
   -e MYSQL_ROOT_PASSWORD=ABC \
   -e DBNAME=$DBNAME \
   -p 3306:3306 \
-  -d mariadb:10.5.8
+  -d mariadb:11.8.5
 
 echo "Create database (might fail a couple times)"
-until docker exec -i $INSTANCE mysql -uroot -pABC << _EOF
+until docker exec -i $INSTANCE mariadb -uroot -pABC << _EOF
   CREATE DATABASE foilen_crm;
   CREATE DATABASE foilen_crm_junits;
 _EOF
