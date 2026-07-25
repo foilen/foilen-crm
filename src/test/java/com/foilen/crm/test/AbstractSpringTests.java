@@ -5,6 +5,7 @@ import com.foilen.crm.CrmConfig;
 import com.foilen.crm.CrmSpringConfig;
 import com.foilen.crm.db.dao.*;
 import com.foilen.crm.db.entities.invoice.*;
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.crm.localonly.FakeDataService;
 import com.foilen.crm.web.model.ClientShort;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @ActiveProfiles("JUNIT")
 public abstract class AbstractSpringTests {
 
+    private final boolean createFakeData;
     @Autowired
     protected FakeDataService fakeDataService;
     @Autowired
@@ -39,8 +41,6 @@ public abstract class AbstractSpringTests {
     protected TransactionDao transactionDao;
     @Autowired
     protected UserDao userDao;
-
-    private final boolean createFakeData;
 
     public AbstractSpringTests(boolean createFakeData) {
         CrmConfig crmConfig = new CrmConfig();
@@ -133,6 +133,12 @@ public abstract class AbstractSpringTests {
                     t.setDate(null);
                     return t;
                 })
+                .collect(Collectors.toList());
+    }
+
+    protected List<com.foilen.crm.web.model.User> trimUser(List<User> entities) {
+        return entities.stream()
+                .map(e -> JsonTools.clone(e, com.foilen.crm.web.model.User.class))
                 .collect(Collectors.toList());
     }
 

@@ -81,6 +81,11 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
     }
 
     @Override
+    public void canManageUsersOrFail(String userId) {
+        isAdminOrFail(userId);
+    }
+
+    @Override
     public void canUpdateClientOrFail(String userId) {
         isAdminOrFail(userId);
     }

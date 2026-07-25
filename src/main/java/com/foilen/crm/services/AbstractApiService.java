@@ -12,10 +12,12 @@ import com.foilen.crm.db.dao.ClientDao;
 import com.foilen.crm.db.dao.ItemDao;
 import com.foilen.crm.db.dao.RecurrentItemDao;
 import com.foilen.crm.db.dao.TechnicalSupportDao;
+import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
 import com.foilen.crm.db.entities.invoice.TechnicalSupport;
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.tools.AbstractBasics;
@@ -40,6 +42,8 @@ public abstract class AbstractApiService extends AbstractBasics {
     protected RecurrentItemDao recurrentItemDao;
     @Autowired
     protected TechnicalSupportDao technicalSupportDao;
+    @Autowired
+    protected UserDao userDao;
 
     protected Client validateClientByShortName(FormResult formResult, String fieldName, String clientShortName) {
 
@@ -189,4 +193,16 @@ public abstract class AbstractApiService extends AbstractBasics {
             CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.alreadyTaken");
         }
     }
+
+    protected User validateUserById(FormResult formResult, String fieldName, Long id) {
+
+        User user = userDao.findById(id).orElse(null);
+        if (user == null) {
+            CollectionsTools.getOrCreateEmptyArrayList(formResult.getValidationErrorsByField(), fieldName, String.class).add("error.userNotExist");
+            return null;
+        }
+
+        return user;
+    }
+
 }

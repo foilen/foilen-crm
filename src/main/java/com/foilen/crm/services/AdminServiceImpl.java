@@ -1,7 +1,6 @@
 package com.foilen.crm.services;
 
 import com.foilen.crm.db.dao.TransactionDao;
-import com.foilen.crm.db.dao.UserDao;
 import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.invoice.Item;
 import com.foilen.crm.db.entities.invoice.RecurrentItem;
@@ -31,8 +30,6 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
 
     @Autowired
     private TransactionDao transactionDao;
-    @Autowired
-    private UserDao userDao;
 
     @Override
     public AdminExportResult exportAll(String userId) {

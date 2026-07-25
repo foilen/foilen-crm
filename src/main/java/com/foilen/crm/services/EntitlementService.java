@@ -29,6 +29,8 @@ public interface EntitlementService {
 
     void canImportDataOrFail(String userId);
 
+    void canManageUsersOrFail(String userId);
+
     void canUpdateClientOrFail(String userId);
 
     void canUpdateItemOrFail(String userId);
