@@ -33,6 +33,7 @@ function ReportsList() {
                     <tr>
                         <th scope="col">{t('term.client')}</th>
                         <th scope="col">{t('term.total')}</th>
+                        <th scope="col">{t('term.currentBalance')}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,7 @@ function ReportsList() {
                         <tr key={item.clientName}>
                             <td>{item.clientName}</td>
                             <td>{item.totalFormatted}$</td>
+                            <td>{item.currentBalanceFormatted}$</td>
                         </tr>
                     ))}
                     </tbody>

@@ -1,6 +1,7 @@
 package com.foilen.crm.services;
 
 import com.foilen.crm.db.entities.invoice.Client;
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdatePayment;
@@ -77,6 +78,22 @@ public class TransactionServiceImplTest extends AbstractSpringTests {
 
             // Assert
             AssertTools.assertJsonComparisonWithoutNulls("TransactionServiceImplTest-testGetRecentTransactions.json", getClass(), recents);
+        }
+    }
+
+    @Nested
+    @DisplayName("List Transaction Tests")
+    class ListTransactionTests {
+
+        @Test
+        @DisplayName("Non-admin users only see transactions for their own client")
+        void testListAll_notAdmin_ownClientOnly_OK() {
+            userRepository.save(new User("alex@example.com", false));
+
+            var result = transactionService.listAll("alex@example.com", 1);
+
+            Assertions.assertFalse(result.getItems().isEmpty());
+            result.getItems().forEach(item -> Assertions.assertEquals("avez", item.getClient().getShortName()));
         }
     }
 

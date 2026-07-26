@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.foilen.crm.db.entities.invoice.Item;
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.BillSomePendingItems;
@@ -42,7 +43,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
 
             AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testBillPending_alreadyUsedPrefix-transactions.json", getClass(),
                     trimTransaction(transactionRepository.findAll(Sort.by("invoiceId"))));
-            AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testBillPending_alreadyUsedPrefix-items.json", getClass(), 
+            AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testBillPending_alreadyUsedPrefix-items.json", getClass(),
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -101,7 +102,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems, 
+            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -135,7 +136,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.create(FakeDataServiceImpl.USER_ID_ADMIN, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems, 
+            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testCreateWithTime-items.json", getClass(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
     }
@@ -152,9 +153,9 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             String itemId = itemRepository.findByClientIdAndInvoiceIdNullAndDescription(clientRepository.findByShortName("avez").getId(), "Shared hosting - L1").getId();
 
             expectNotAdmin(() ->
-                itemService.delete(FakeDataServiceImpl.USER_ID_USER, itemId));
+                    itemService.delete(FakeDataServiceImpl.USER_ID_USER, itemId));
 
-            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, 
+            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -168,7 +169,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, itemId);
             AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testDelete_notPending_FAIL.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, 
+            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -182,7 +183,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.delete(FakeDataServiceImpl.USER_ID_ADMIN, itemId);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testDelete_OK-items.json", getClass(), initialItems, 
+            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testDelete_OK-items.json", getClass(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
     }
@@ -206,9 +207,9 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             form.setCategory("new category");
 
             expectNotAdmin(() ->
-                itemService.update(FakeDataServiceImpl.USER_ID_USER, itemId, form));
+                    itemService.update(FakeDataServiceImpl.USER_ID_USER, itemId, form));
 
-            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, 
+            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -229,7 +230,7 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.update(FakeDataServiceImpl.USER_ID_ADMIN, itemId, form);
             AssertTools.assertJsonComparisonWithoutNulls("ItemServiceImplTest-testUpdate_notPending_FAIL.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems, 
+            AssertTools.assertDiffJsonComparison(new AssertDiff(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
         }
 
@@ -250,11 +251,38 @@ public class ItemServiceImplTest extends AbstractSpringTests {
             FormResult result = itemService.update(FakeDataServiceImpl.USER_ID_ADMIN, itemId, form);
             AssertTools.assertJsonComparisonWithoutNulls("FormResult-success.json", getClass(), result);
 
-            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testUpdate_OK-items.json", getClass(), initialItems, 
+            AssertTools.assertDiffJsonComparison("ItemServiceImplTest-testUpdate_OK-items.json", getClass(), initialItems,
                     trimItem(itemRepository.findAll(Sort.by("invoiceId", "description"))));
 
             Item item = itemRepository.findById(itemId).get();
             Assertions.assertEquals("2020-01-01", DateTools.formatDateOnly(item.getDate()));
+        }
+    }
+
+    @Nested
+    @DisplayName("List Item Tests")
+    class ListItemTests {
+
+        @Test
+        @DisplayName("Non-admin users only see billed items for their own client")
+        void testListBilled_notAdmin_ownClientOnly_OK() {
+            userRepository.save(new User("alex@example.com", false));
+
+            var result = itemService.listBilled("alex@example.com", 1);
+
+            Assertions.assertFalse(result.getItems().isEmpty());
+            result.getItems().forEach(item -> Assertions.assertEquals("avez", item.getClient().getShortName()));
+        }
+
+        @Test
+        @DisplayName("Non-admin users only see pending items for their own client")
+        void testListPending_notAdmin_ownClientOnly_OK() {
+            userRepository.save(new User("alex@example.com", false));
+
+            var result = itemService.listPending("alex@example.com", 1);
+
+            Assertions.assertFalse(result.getItems().isEmpty());
+            result.getItems().forEach(item -> Assertions.assertEquals("avez", item.getClient().getShortName()));
         }
     }
 

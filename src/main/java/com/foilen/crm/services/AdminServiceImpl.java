@@ -152,8 +152,8 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
 
         // Users
         for (ExportUser item : exportModel.getUsers()) {
-            User entity = new User(item.getUserId(), item.isAdmin());
-            entity.setEmail(item.getEmail());
+            User entity = new User(item.getEmail(), item.isAdmin());
+            entity.setDisabled(item.isDisabled());
             userRepository.save(entity);
         }
 
@@ -225,10 +225,9 @@ public class AdminServiceImpl extends AbstractApiService implements AdminService
 
     private ExportUser toExport(User entity) {
         ExportUser item = new ExportUser();
-        item.setId(entity.getId());
-        item.setUserId(entity.getUserId());
-        item.setAdmin(entity.isAdmin());
         item.setEmail(entity.getEmail());
+        item.setAdmin(entity.isAdmin());
+        item.setDisabled(entity.isDisabled());
         return item;
     }
 

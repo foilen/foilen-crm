@@ -1,5 +1,6 @@
 package com.foilen.crm.services;
 
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdateRecurrentItemForm;
@@ -182,6 +183,22 @@ public class RecurrentItemServiceImplTest extends AbstractSpringTests {
 
             AssertTools.assertDiffJsonComparison("RecurrentItemServiceImplTest-testUpdate_OK-recurrentItems.json", getClass(), initialRecurrentItems,
                     trimRecurrentItem(recurrentItemRepository.findAll(Sort.by("id"))));
+        }
+    }
+
+    @Nested
+    @DisplayName("List Recurrent Item Tests")
+    class ListRecurrentItemTests {
+
+        @Test
+        @DisplayName("Non-admin users only see recurrent items for their own client")
+        void testListAll_notAdmin_ownClientOnly_OK() {
+            userRepository.save(new User("alex@example.com", false));
+
+            var result = recurrentItemService.listAll("alex@example.com", 1);
+
+            Assertions.assertFalse(result.getItems().isEmpty());
+            result.getItems().forEach(item -> Assertions.assertEquals("avez", item.getClient().getShortName()));
         }
     }
 

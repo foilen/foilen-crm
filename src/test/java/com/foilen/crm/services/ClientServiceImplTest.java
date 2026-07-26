@@ -1,5 +1,6 @@
 package com.foilen.crm.services;
 
+import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.localonly.FakeDataServiceImpl;
 import com.foilen.crm.test.AbstractSpringTests;
 import com.foilen.crm.web.model.CreateOrUpdateClientForm;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Client Service Implementation Tests")
 public class ClientServiceImplTest extends AbstractSpringTests {
@@ -127,10 +130,21 @@ public class ClientServiceImplTest extends AbstractSpringTests {
     class ListClientTests {
 
         @Test
-        @DisplayName("Non-admin users cannot list all clients")
-        void testListAll_notAdmin_FAIL() {
-            expectNotAdmin(() ->
-                    clientService.listAll(FakeDataServiceImpl.USER_ID_USER, 1, null));
+        @DisplayName("Non-admin users only see clients sharing their own email")
+        void testListAll_notAdmin_seesNothing_OK() {
+            // USER_ID_USER's email does not match any client's email
+            var result = clientService.listAll(FakeDataServiceImpl.USER_ID_USER, 1, null);
+            assertEquals(0, result.getItems().size());
+        }
+
+        @Test
+        @DisplayName("Non-admin users see the client sharing their own email")
+        void testListAll_notAdmin_ownClient_OK() {
+            userRepository.save(new User("benoit@example.com", false));
+
+            var result = clientService.listAll("benoit@example.com", 1, null);
+            assertEquals(1, result.getItems().size());
+            assertEquals(FakeDataServiceImpl.CLIENT_SHORTNAME_BAZAR, result.getItems().get(0).getShortName());
         }
 
         @Test

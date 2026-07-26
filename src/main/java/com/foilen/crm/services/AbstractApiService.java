@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import com.foilen.crm.db.repository.ClientRepository;
 import com.foilen.crm.db.repository.ItemRepository;
@@ -23,6 +24,8 @@ import com.foilen.crm.db.entities.invoice.TechnicalSupport;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.crm.web.model.ClientShort;
+import com.foilen.smalltools.restapi.model.AbstractListResultWithPagination;
+import com.foilen.smalltools.restapi.model.ApiPagination;
 import com.foilen.smalltools.restapi.model.FormResult;
 import com.foilen.smalltools.restapi.services.PaginationService;
 import com.foilen.smalltools.tools.AbstractBasics;
@@ -58,6 +61,20 @@ public abstract class AbstractApiService extends AbstractBasics {
     protected Map<String, ClientShort> clientShortsByIds(Collection<String> clientIds) {
         return clientRepository.findAllById(clientIds).stream()
                 .collect(Collectors.toMap(Client::getId, c -> JsonTools.clone(c, ClientShort.class)));
+    }
+
+    /**
+     * Restricts listings to a non-admin's own data: returns null for an admin (no restriction), or the ids of
+     * the clients whose email matches the user's email otherwise (possibly empty, meaning "see nothing").
+     */
+    protected Set<String> ownedClientIdsOrNullIfAdmin(String userId) {
+        User user = entitlementService.getUserOrFail(userId);
+        if (user.isAdmin()) {
+            return null;
+        }
+        return clientRepository.findAllByEmailIgnoreCase(user.getEmail()).stream()
+                .map(Client::getId)
+                .collect(Collectors.toSet());
     }
 
     /**

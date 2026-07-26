@@ -31,7 +31,6 @@ public class CrmConfig {
 
     private String company;
 
-    private LoginAzureConfig loginAzureConfig = new LoginAzureConfig();
     private String loginCookieSignatureSalt;
 
     // Template
@@ -142,11 +141,4 @@ public class CrmConfig {
         this.mongoUri = mongoUri;
     }
 
-    public LoginAzureConfig getLoginAzureConfig() {
-        return loginAzureConfig;
-    }
-
-    public void setLoginAzureConfig(LoginAzureConfig loginAzureConfig) {
-        this.loginAzureConfig = loginAzureConfig;
-    }
 }

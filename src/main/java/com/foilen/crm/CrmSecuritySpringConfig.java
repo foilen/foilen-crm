@@ -1,9 +1,8 @@
 package com.foilen.crm;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.Customizer;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -29,9 +28,17 @@ public class CrmSecuritySpringConfig {
                     }
                 }));
 
-        http.authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
-        http.oauth2Login(Customizer.withDefaults());
-        http.oauth2Client(Customizer.withDefaults());
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/index.html").permitAll()
+                .requestMatchers("/assets/**").permitAll()
+                .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/api/csrf").permitAll()
+                .requestMatchers("/api/app/details").permitAll()
+                .requestMatchers("/api/user/login").permitAll()
+                .requestMatchers("/api/user/loginWithCodeRequest").permitAll()
+                .requestMatchers("/api/user/loginWithCode").permitAll()
+                .anyRequest().authenticated());
 
         return http.build();
     }

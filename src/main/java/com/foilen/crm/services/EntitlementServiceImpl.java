@@ -4,11 +4,9 @@ import com.foilen.crm.db.repository.UserRepository;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.exception.ErrorMessageException;
 import com.foilen.smalltools.tools.AbstractBasics;
-import jakarta.annotation.PostConstruct;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +15,6 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
 
     @Autowired
     private UserRepository userRepository;
-
-    private boolean isFirstUser = false;
 
     @Override
     public void canBillItemOrFail(String userId) {
@@ -110,19 +106,21 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
         isAdminOrFail(userId);
     }
 
+    // Viewing a Client / Item / RecurrentItem / Transaction listing is open to any active user;
+    // the service layer restricts non-admins to their own client's data.
     @Override
     public void canViewClientOrFail(String userId) {
-        isAdminOrFail(userId);
+        getUserOrFail(userId);
     }
 
     @Override
     public void canViewItemAllOrFail(String userId) {
-        isAdminOrFail(userId);
+        getUserOrFail(userId);
     }
 
     @Override
     public void canViewRecurrentItemOrFail(String userId) {
-        isAdminOrFail(userId);
+        getUserOrFail(userId);
     }
 
     @Override
@@ -137,44 +135,29 @@ public class EntitlementServiceImpl extends AbstractBasics implements Entitlemen
 
     @Override
     public void canViewTransactionOrFail(String userId) {
-        isAdminOrFail(userId);
+        getUserOrFail(userId);
     }
 
-    private User getUserOrFail(String userId) {
-        User user = userRepository.findByUserId(userId);
+    @Override
+    public User getUserOrFail(Authentication authentication) {
+        return getUserOrFail(authentication.getName());
+    }
+
+    @Override
+    public User getUserOrFail(String userId) {
+        User user = userRepository.findByEmail(userId);
         if (user == null) {
             throw new RuntimeException("User does not exist");
+        }
+        if (user.isDisabled()) {
+            throw new ErrorMessageException("error.userDisabled");
         }
         return user;
     }
 
     @Override
-    public User getUserOrFail(Authentication authentication) {
-        var userId = authentication.getName();
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            if (authentication instanceof OAuth2AuthenticationToken authenticationToken) {
-                user = new User(userId, isFirstUser);
-                user.setEmail(authenticationToken.getPrincipal().getAttribute("email"));
-                isFirstUser = false;
-                userRepository.save(user);
-            } else {
-                throw new RuntimeException("Not OAuth2");
-            }
-        }
-
-        return user;
-    }
-
-    @PostConstruct
-    public void init() {
-        isFirstUser = userRepository.count() == 0;
-        logger.info("isFirstUser? {}", isFirstUser);
-    }
-
-    protected boolean isAdmin(String userId) {
-        User user = getUserOrFail(userId);
-        return user.isAdmin();
+    public boolean isAdmin(String userId) {
+        return getUserOrFail(userId).isAdmin();
     }
 
     private void isAdminOrFail(String userId) {

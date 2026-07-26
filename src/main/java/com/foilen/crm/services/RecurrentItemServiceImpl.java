@@ -93,10 +93,11 @@ public class RecurrentItemServiceImpl extends AbstractApiService implements Recu
         // Validation
         validatePageId(pageId);
         entitlementService.canViewRecurrentItemOrFail(userId);
+        var clientIdFilter = ownedClientIdsOrNullIfAdmin(userId);
 
         // Retrieve
         RecurrentItemList result = new RecurrentItemList();
-        Page<RecurrentItem> page = recurrentItemRepository.findAllSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
+        Page<RecurrentItem> page = recurrentItemRepository.findAllSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()), clientIdFilter);
         paginationService.wrap(result, page, com.foilen.crm.web.model.RecurrentItem.class);
 
         // Resolve the clientId reference on each item

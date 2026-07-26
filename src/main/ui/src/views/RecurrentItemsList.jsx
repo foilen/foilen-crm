@@ -7,7 +7,9 @@ import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
-function RecurrentItemsList() {
+function RecurrentItemsList({appDetails = {}}) {
+    const isAdmin = !!appDetails.userAdmin
+
     const [queries, setQueries] = useState({})
     const [items, setItems] = useState([])
     const [frequencies] = useState([
@@ -163,13 +165,15 @@ function RecurrentItemsList() {
     return (
         <div className="row">
             <div className="col-12">
-                <button type="button" className="btn btn-success" data-bs-toggle="modal" onClick={showCreate}
-                        data-bs-target="#createModal">
-                    {t('button.create')}
-                </button>
+                {isAdmin && (
+                    <button type="button" className="btn btn-success" data-bs-toggle="modal" onClick={showCreate}
+                            data-bs-target="#createModal">
+                        {t('button.create')}
+                    </button>
+                )}
 
                 <PaginationControl className="float-end" state={pagination}
-                            onPageChange={(newPageId) => refresh(newPageId)}/>
+                                   onPageChange={(newPageId) => refresh(newPageId)}/>
 
                 <div className="modal fade" id="createModal" tabIndex="-1" role="dialog"
                      aria-labelledby="createModalLabel" aria-hidden="true">
@@ -483,7 +487,7 @@ function RecurrentItemsList() {
                         <th scope="col">{t('term.frequency')}</th>
                         <th scope="col">{t('term.delta')}</th>
                         <th scope="col">{t('term.nextGenerationDate')}</th>
-                        <th scope="col">{t('term.actions')}</th>
+                        {isAdmin && <th scope="col">{t('term.actions')}</th>}
                     </tr>
                     </thead>
                     <tbody>
@@ -496,17 +500,19 @@ function RecurrentItemsList() {
                             <td>{item.calendarUnitCode === 'recurrence.monthly' ? 'Monthly' : 'Yearly'}</td>
                             <td>{item.delta}</td>
                             <td>{item.nextGenerationDateFormatted}</td>
-                            <td>
-                                <div>
-                                    <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                            onClick={() => showEdit(item)}
-                                            data-bs-target="#editModal">{t('button.edit')}
-                                    </button>
-                                    <button className="btn btn-sm btn-danger"
-                                            onClick={() => deleteOne(item)}>{t('button.delete')}
-                                    </button>
-                                </div>
-                            </td>
+                            {isAdmin && (
+                                <td>
+                                    <div>
+                                        <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                onClick={() => showEdit(item)}
+                                                data-bs-target="#editModal">{t('button.edit')}
+                                        </button>
+                                        <button className="btn btn-sm btn-danger"
+                                                onClick={() => deleteOne(item)}>{t('button.delete')}
+                                        </button>
+                                    </div>
+                                </td>
+                            )}
                         </tr>
                     ))}
                     </tbody>

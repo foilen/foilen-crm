@@ -19,7 +19,7 @@ public class AppApiController {
 
     @GetMapping("details")
     public ApplicationDetailsResult details(Authentication authentication) {
-        return applicationService.getDetails(authentication.getName());
+        return applicationService.getDetails(authentication == null ? null : authentication.getName());
     }
 
 }

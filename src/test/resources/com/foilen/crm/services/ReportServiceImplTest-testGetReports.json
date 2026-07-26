@@ -3,18 +3,30 @@
     "balanceByClient" : [ {
       "clientName" : "Extra Vanilla",
       "total" : 12000,
+      "currentBalance" : 12000,
+      "currentBalanceFormatted" : "120.00",
+      "pendingTotal" : 0,
       "totalFormatted" : "120.00"
     }, {
       "clientName" : "Bazar",
       "total" : 2500,
+      "currentBalance" : 3000,
+      "currentBalanceFormatted" : "30.00",
+      "pendingTotal" : 500,
       "totalFormatted" : "25.00"
     }, {
       "clientName" : "Zoo Alphonce",
       "total" : 1000,
+      "currentBalance" : 2000,
+      "currentBalanceFormatted" : "20.00",
+      "pendingTotal" : 1000,
       "totalFormatted" : "10.00"
     }, {
       "clientName" : "Avez",
       "total" : 500,
+      "currentBalance" : 3000,
+      "currentBalanceFormatted" : "30.00",
+      "pendingTotal" : 2500,
       "totalFormatted" : "5.00"
     } ],
     "globalBalance" : 16000,

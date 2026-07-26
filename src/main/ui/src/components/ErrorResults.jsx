@@ -1,4 +1,5 @@
 import React from 'react'
+import {t} from '../utils/TranslationUtils'
 import './ErrorResults.css'
 
 function ErrorResults({formResult = {}}) {
@@ -14,7 +15,7 @@ function ErrorResults({formResult = {}}) {
                 {formResult.globalErrors && formResult.globalErrors.length > 0 && (
                     <ul>
                         {formResult.globalErrors.map((item, index) => (
-                            <li className="bg-danger" key={index}>{item}</li>
+                            <li className="bg-danger" key={index}>{t(item)}</li>
                         ))}
                     </ul>
                 )}
@@ -22,7 +23,7 @@ function ErrorResults({formResult = {}}) {
                 {formResult.globalWarnings && formResult.globalWarnings.length > 0 && (
                     <ul>
                         {formResult.globalWarnings.map((item, index) => (
-                            <li className="bg-warning" key={index}>{item}</li>
+                            <li className="bg-warning" key={index}>{t(item)}</li>
                         ))}
                     </ul>
                 )}

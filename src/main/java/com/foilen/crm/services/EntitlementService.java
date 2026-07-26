@@ -54,4 +54,9 @@ public interface EntitlementService {
     void canViewTransactionOrFail(String userId);
 
     User getUserOrFail(Authentication authentication);
+
+    User getUserOrFail(String userId);
+
+    boolean isAdmin(String userId);
+
 }

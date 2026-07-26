@@ -216,10 +216,11 @@ public class TransactionServiceImpl extends AbstractApiService implements Transa
         // Validation
         validatePageId(pageId);
         entitlementService.canViewTransactionOrFail(userId);
+        var clientIdFilter = ownedClientIdsOrNullIfAdmin(userId);
 
         // Retrieve
         TransactionList result = new TransactionList();
-        Page<Transaction> page = transactionRepository.findAllSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
+        Page<Transaction> page = transactionRepository.findAllSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()), clientIdFilter);
         paginationService.wrap(result, page, com.foilen.crm.web.model.Transaction.class);
 
         // Resolve the clientId reference on each item

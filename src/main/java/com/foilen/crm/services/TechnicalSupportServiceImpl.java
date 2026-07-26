@@ -64,7 +64,7 @@ public class TechnicalSupportServiceImpl extends AbstractApiService implements T
         }
 
         // Detach from clients
-        List<Client> clients = clientRepository.findByTechnicalSupportId(technicalSupport.getId());
+        List<Client> clients = clientRepository.findAllByTechnicalSupportId(technicalSupport.getId());
         clients.forEach(client -> client.setTechnicalSupportId(null));
         clientRepository.saveAll(clients);
 

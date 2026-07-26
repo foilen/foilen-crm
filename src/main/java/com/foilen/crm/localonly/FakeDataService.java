@@ -6,4 +6,6 @@ public interface FakeDataService {
 
     void createAll();
 
+    void createAllExceptUsers();
+
 }

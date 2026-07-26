@@ -5,14 +5,18 @@ import com.foilen.crm.web.model.ReportItemsByCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface ItemRepositoryCustom {
 
     /**
      * Billed items (invoiceId not null), sorted by invoiceId desc, client's name asc, date desc, id asc.
+     *
+     * @param clientIdFilter when not null, restricts the results to these clientIds
      */
-    Page<Item> findAllBilledSortedByClientName(Pageable pageable);
+    Page<Item> findAllBilledSortedByClientName(Pageable pageable, Collection<String> clientIdFilter);
 
     List<String> findAllDistinctCategories();
 
@@ -25,7 +29,19 @@ public interface ItemRepositoryCustom {
 
     /**
      * Pending items (invoiceId null), sorted by client's name asc, date desc, id asc.
+     *
+     * @param clientIdFilter when not null, restricts the results to these clientIds
      */
-    Page<Item> findAllPendingSortedByClientName(Pageable pageable);
+    Page<Item> findAllPendingSortedByClientName(Pageable pageable, Collection<String> clientIdFilter);
+
+    /**
+     * Sum of priceInCents of the pending (not yet invoiced) items, grouped by clientId.
+     */
+    Map<String, Long> findAllPendingTotalsByClientId();
+
+    /**
+     * Sum of priceInCents of the pending (not yet invoiced) items, grouped by clientId, restricted to the given clients.
+     */
+    Map<String, Long> findPendingTotalsByClientIds(Collection<String> clientIds);
 
 }

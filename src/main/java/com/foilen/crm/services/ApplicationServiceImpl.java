@@ -1,9 +1,14 @@
 package com.foilen.crm.services;
 
+import com.foilen.crm.db.repository.ClientRepository;
+import com.foilen.crm.db.repository.ItemRepository;
+import com.foilen.crm.db.repository.TransactionRepository;
 import com.foilen.crm.db.repository.UserRepository;
+import com.foilen.crm.db.entities.invoice.Client;
 import com.foilen.crm.db.entities.user.User;
 import com.foilen.crm.web.model.ApplicationDetails;
 import com.foilen.crm.web.model.ApplicationDetailsResult;
+import com.foilen.crm.web.model.ReportBalanceByClient;
 import com.foilen.smalltools.tools.AbstractBasics;
 import com.foilen.smalltools.tools.CloseableTools;
 import com.foilen.smalltools.tools.FileTools;
@@ -19,16 +24,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ApplicationServiceImpl extends AbstractBasics implements ApplicationService {
 
     @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
+    @Autowired
+    private TransactionRepository transactionRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -60,16 +74,38 @@ public class ApplicationServiceImpl extends AbstractBasics implements Applicatio
 
         ApplicationDetails applicationDetails = new ApplicationDetails()
                 .setVersion(version)
-                .setUserId(userId)
                 .setLang(LocaleContextHolder.getLocale().getLanguage())
                 .setTranslations(translations);
-        ;
 
         // Logged in user
-        User user = userRepository.findByUserId(userId);
-        if (user != null) {
-            applicationDetails.setUserEmail(user.getEmail());
-            applicationDetails.setUserAdmin(user.isAdmin());
+        if (userId != null) {
+            User user = userRepository.findByEmail(userId);
+            if (user != null && !user.isDisabled()) {
+                applicationDetails.setUserId(userId);
+                applicationDetails.setUserEmail(user.getEmail());
+                applicationDetails.setUserAdmin(user.isAdmin());
+                applicationDetails.setUserHasPassword(user.getPasswordHash() != null);
+
+                if (!user.isAdmin()) {
+                    List<Client> clients = clientRepository.findAllByEmailIgnoreCase(user.getEmail());
+                    Set<String> clientIds = clients.stream()
+                            .map(Client::getId)
+                            .collect(Collectors.toSet());
+
+                    Map<String, Long> pendingTotalsByClientId = itemRepository.findPendingTotalsByClientIds(clientIds);
+
+                    List<ReportBalanceByClient> clientBalances = clients.stream()
+                            .map(client -> {
+                                ReportBalanceByClient clientBalance = new ReportBalanceByClient(client.getName(),
+                                        transactionRepository.findTotalByClientId(client.getId()));
+                                clientBalance.setPendingTotal(pendingTotalsByClientId.getOrDefault(client.getId(), 0L));
+                                return clientBalance;
+                            })
+                            .collect(Collectors.toList());
+
+                    applicationDetails.setClientBalances(clientBalances);
+                }
+            }
         }
 
         return new ApplicationDetailsResult(applicationDetails);

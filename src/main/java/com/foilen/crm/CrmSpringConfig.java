@@ -16,7 +16,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,15 +81,19 @@ public class CrmSpringConfig extends AbstractBasics {
         return new PaginationServiceImpl();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
     @Configuration
     @Profile({"JUNIT", "LOCAL"})
     public static class CrmConfigLocal {
-        @Primary
-        @Bean
-        @Profile("JUNIT")
-        public EmailServiceMock emailServiceMock() {
-            return new EmailServiceMock();
-        }
 
         @Bean
         public FakeDataService fakeDataService() {
@@ -92,8 +101,10 @@ public class CrmSpringConfig extends AbstractBasics {
         }
 
         @Bean
-        public LocalLaunchService localLaunchService() {
-            return new LocalLaunchService(fakeDataService());
+        public LocalLaunchService localLaunchService(Environment environment) {
+            // The LOCAL profile keeps the users list empty so that the first person to log in becomes admin
+            boolean includeUsers = environment.matchesProfiles("JUNIT");
+            return new LocalLaunchService(fakeDataService(), includeUsers);
         }
 
     }

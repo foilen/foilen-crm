@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
@@ -96,11 +97,17 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
 
         // Retrieve
         ClientList result = new ClientList();
+        Pageable pageable = PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name");
         Page<Client> page;
-        if (search == null) {
-            page = clientRepository.findAll(PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
+        if (entitlementService.isAdmin(userId)) {
+            if (search == null) {
+                page = clientRepository.findAll(pageable);
+            } else {
+                page = clientRepository.findAllSearch(search, pageable);
+            }
         } else {
-            page = clientRepository.findAllSearch(search, PageRequest.of(pageId - 1, paginationService.getItemsPerPage(), Direction.ASC, "name"));
+            // Non-admins only see the client(s) sharing their own email
+            page = clientRepository.findAllByEmailIgnoreCase(userId, pageable);
         }
         paginationService.wrap(result, page, com.foilen.crm.web.model.ClientExtended.class);
 

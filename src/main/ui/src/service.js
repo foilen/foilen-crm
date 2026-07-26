@@ -256,12 +256,36 @@ class Service {
 
     // User
 
+    userChangePassword(form) {
+        return this.post('/api/user/changePassword', form)
+    }
+
     userListAll(pageId, search) {
         return this.get('/api/user/listAll', {pageId, search})
     }
 
+    userLogin(form) {
+        return this.post('/api/user/login', form)
+    }
+
+    userLoginWithCode(form) {
+        return this.post('/api/user/loginWithCode', form)
+    }
+
+    userLoginWithCodeRequest(form) {
+        return this.post('/api/user/loginWithCodeRequest', form)
+    }
+
+    userLogout() {
+        return this.post('/api/user/logout', {})
+    }
+
     userUpdateAdmin(id, form) {
         return this.put(`/api/user/${id}/admin`, form)
+    }
+
+    userUpdateDisabled(id, form) {
+        return this.put(`/api/user/${id}/disabled`, form)
     }
 }
 

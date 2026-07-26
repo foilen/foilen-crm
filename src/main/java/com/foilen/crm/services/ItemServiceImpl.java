@@ -220,10 +220,11 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         // Validation
         validatePageId(pageId);
         entitlementService.canViewItemAllOrFail(userId);
+        var clientIdFilter = ownedClientIdsOrNullIfAdmin(userId);
 
         // Retrieve
         ItemList result = new ItemList();
-        Page<Item> page = itemRepository.findAllBilledSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
+        Page<Item> page = itemRepository.findAllBilledSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()), clientIdFilter);
         paginationService.wrap(result, page, com.foilen.crm.web.model.Item.class);
         enrichClients(page, result.getItems());
         return result;
@@ -240,10 +241,11 @@ public class ItemServiceImpl extends AbstractApiService implements ItemService {
         // Validation
         validatePageId(pageId);
         entitlementService.canViewItemAllOrFail(userId);
+        var clientIdFilter = ownedClientIdsOrNullIfAdmin(userId);
 
         // Retrieve
         ItemList result = new ItemList();
-        Page<Item> page = itemRepository.findAllPendingSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()));
+        Page<Item> page = itemRepository.findAllPendingSortedByClientName(PageRequest.of(pageId - 1, paginationService.getItemsPerPage()), clientIdFilter);
         paginationService.wrap(result, page, com.foilen.crm.web.model.Item.class);
         enrichClients(page, result.getItems());
         return result;

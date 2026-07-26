@@ -12,20 +12,46 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ItemRepositoryImpl extends AbstractRepositoryCustom implements ItemRepositoryCustom {
 
+    private List<AggregationOperation> billedOrPendingPipeline(boolean billed, Collection<String> clientIdFilter) {
+
+        AggregationOperation matchStage = billed
+                ? Aggregation.match(Criteria.where("invoiceId").ne(null))
+                : Aggregation.match(Criteria.where("invoiceId").is(null));
+
+        AggregationOperation lookupStage = lookupByStringId("client", "clientId", "clientLookup");
+
+        AggregationOperation unwindStage = context -> new Document("$unwind", new Document("path", "$clientLookup").append("preserveNullAndEmptyArrays", true));
+
+        AggregationOperation addFieldsStage = context -> new Document("$addFields", new Document("clientName", "$clientLookup.name"));
+
+        AggregationOperation sortStage = billed
+                ? (context -> new Document("$sort", new Document("invoiceId", -1).append("clientName", 1).append("date", -1).append("_id", 1)))
+                : (context -> new Document("$sort", new Document("clientName", 1).append("date", -1).append("_id", 1)));
+
+        List<AggregationOperation> pipeline = new ArrayList<>();
+        pipeline.add(matchStage);
+        if (clientIdFilter != null) {
+            pipeline.add(Aggregation.match(Criteria.where("clientId").in(clientIdFilter)));
+        }
+        pipeline.add(lookupStage);
+        pipeline.add(unwindStage);
+        pipeline.add(addFieldsStage);
+        pipeline.add(sortStage);
+        return pipeline;
+    }
+
     @Override
-    public List<String> findAllDistinctClientIdByInvoiceIdNull() {
-        Query query = new Query(Criteria.where("invoiceId").is(null));
-        return mongoOperations.query(Item.class)
-                .distinct("clientId")
-                .matching(query)
-                .as(String.class)
-                .all();
+    public Page<Item> findAllBilledSortedByClientName(Pageable pageable, Collection<String> clientIdFilter) {
+        return aggregation(Item.class, Item.class, pageable, billedOrPendingPipeline(true, clientIdFilter));
     }
 
     @Override
@@ -36,6 +62,16 @@ public class ItemRepositoryImpl extends AbstractRepositoryCustom implements Item
                 .all());
         categories.sort(Comparator.nullsFirst(Comparator.naturalOrder()));
         return categories;
+    }
+
+    @Override
+    public List<String> findAllDistinctClientIdByInvoiceIdNull() {
+        Query query = new Query(Criteria.where("invoiceId").is(null));
+        return mongoOperations.query(Item.class)
+                .distinct("clientId")
+                .matching(query)
+                .as(String.class)
+                .all();
     }
 
     @Override
@@ -64,32 +100,44 @@ public class ItemRepositoryImpl extends AbstractRepositoryCustom implements Item
     }
 
     @Override
-    public Page<Item> findAllBilledSortedByClientName(Pageable pageable) {
-        return aggregation(Item.class, Item.class, pageable, billedOrPendingPipeline(true));
+    public Page<Item> findAllPendingSortedByClientName(Pageable pageable, Collection<String> clientIdFilter) {
+        return aggregation(Item.class, Item.class, pageable, billedOrPendingPipeline(false, clientIdFilter));
     }
 
     @Override
-    public Page<Item> findAllPendingSortedByClientName(Pageable pageable) {
-        return aggregation(Item.class, Item.class, pageable, billedOrPendingPipeline(false));
+    public Map<String, Long> findAllPendingTotalsByClientId() {
+
+        AggregationOperation matchStage = Aggregation.match(Criteria.where("invoiceId").is(null));
+        AggregationOperation groupStage = context -> new Document("$group", new Document("_id", "$clientId")
+                .append("total", new Document("$sum", "$priceInCents")));
+
+        List<Document> results = aggregation(Item.class, Document.class, List.of(matchStage, groupStage));
+
+        Map<String, Long> totalsByClientId = new HashMap<>();
+        for (Document result : results) {
+            totalsByClientId.put(result.getString("_id"), ((Number) result.get("total")).longValue());
+        }
+        return totalsByClientId;
     }
 
-    private List<AggregationOperation> billedOrPendingPipeline(boolean billed) {
+    @Override
+    public Map<String, Long> findPendingTotalsByClientIds(Collection<String> clientIds) {
 
-        AggregationOperation matchStage = billed
-                ? Aggregation.match(Criteria.where("invoiceId").ne(null))
-                : Aggregation.match(Criteria.where("invoiceId").is(null));
+        if (clientIds.isEmpty()) {
+            return Map.of();
+        }
 
-        AggregationOperation lookupStage = lookupByStringId("client", "clientId", "clientLookup");
+        AggregationOperation matchStage = Aggregation.match(Criteria.where("invoiceId").is(null).and("clientId").in(clientIds));
+        AggregationOperation groupStage = context -> new Document("$group", new Document("_id", "$clientId")
+                .append("total", new Document("$sum", "$priceInCents")));
 
-        AggregationOperation unwindStage = context -> new Document("$unwind", new Document("path", "$clientLookup").append("preserveNullAndEmptyArrays", true));
+        List<Document> results = aggregation(Item.class, Document.class, List.of(matchStage, groupStage));
 
-        AggregationOperation addFieldsStage = context -> new Document("$addFields", new Document("clientName", "$clientLookup.name"));
-
-        AggregationOperation sortStage = billed
-                ? (context -> new Document("$sort", new Document("invoiceId", -1).append("clientName", 1).append("date", -1).append("_id", 1)))
-                : (context -> new Document("$sort", new Document("clientName", 1).append("date", -1).append("_id", 1)));
-
-        return List.of(matchStage, lookupStage, unwindStage, addFieldsStage, sortStage);
+        Map<String, Long> totalsByClientId = new HashMap<>();
+        for (Document result : results) {
+            totalsByClientId.put(result.getString("_id"), ((Number) result.get("total")).longValue());
+        }
+        return totalsByClientId;
     }
 
 }

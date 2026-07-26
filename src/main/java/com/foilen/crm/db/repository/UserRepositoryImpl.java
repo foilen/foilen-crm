@@ -14,10 +14,7 @@ public class UserRepositoryImpl extends AbstractRepositoryCustom implements User
     @Override
     public Page<User> findAllSearch(String search, Pageable pageable) {
         Pattern pattern = Pattern.compile(Pattern.quote(search), Pattern.CASE_INSENSITIVE);
-        Criteria criteria = new Criteria().orOperator(
-                Criteria.where("userId").regex(pattern),
-                Criteria.where("email").regex(pattern)
-        );
+        Criteria criteria = Criteria.where("email").regex(pattern);
         return find(User.class, pageable, criteria);
     }
 

@@ -6,7 +6,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 // Import components
 import Home from './views/Home'
+import Login from './views/Login'
 import Admin from './views/Admin'
+import MyAccount from './views/account/MyAccount'
 import ClientsList from './views/ClientsList'
 import ItemsList from './views/ItemsList'
 import RecurrentItemsList from './views/RecurrentItemsList'
@@ -57,6 +59,16 @@ function App() {
             })
     }
 
+    // Function to log out
+    const logout = async () => {
+        try {
+            await service.userLogout()
+        } catch (error) {
+            console.error('Error logging out', error)
+        }
+        refresh()
+    }
+
     // Equivalent to mounted lifecycle hook
     useEffect(() => {
         refresh()
@@ -71,6 +83,20 @@ function App() {
             window.location.href = cleanUrl
         }
     }, [])
+
+    if (!appDetails.userEmail) {
+        return (
+            <div className="container-fluid" id="app">
+                <ToastContainer/>
+                <div className="row">
+                    <div className="col-12">
+                        <span className="navbar-brand mb-0 h1">Foilen CRM</span>
+                    </div>
+                </div>
+                <Login onLoggedIn={refresh}/>
+            </div>
+        )
+    }
 
     return (
         <div className="container-fluid" id="app">
@@ -102,12 +128,14 @@ function App() {
                                 {t('menu.clients')}
                             </NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
-                                     to="/technicalSupports">
-                                {t('menu.technicalSupports')}
-                            </NavLink>
-                        </li>
+                        {appDetails.userAdmin && (
+                            <li className="nav-item">
+                                <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
+                                         to="/technicalSupports">
+                                    {t('menu.technicalSupports')}
+                                </NavLink>
+                            </li>
+                        )}
                         <li className="nav-item">
                             <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`} to="/items">
                                 {t('menu.items')}
@@ -125,11 +153,14 @@ function App() {
                                 {t('menu.recurrentItems')}
                             </NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`} to="/reports">
-                                {t('menu.reports')}
-                            </NavLink>
-                        </li>
+                        {appDetails.userAdmin && (
+                            <li className="nav-item">
+                                <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
+                                         to="/reports">
+                                    {t('menu.reports')}
+                                </NavLink>
+                            </li>
+                        )}
                         {appDetails.userAdmin && (
                             <li className="nav-item">
                                 <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
@@ -146,6 +177,18 @@ function App() {
                             {currentLang !== 'en' && <a className="nav-link"
                                                         onClick={() => changeLanguage('en')}> English</a>}
                         </li>
+                        <li className="nav-item">
+                            <NavLink className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}
+                                     to="/account">
+                                {t('menu.account')}
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#" onClick={(e) => {
+                                e.preventDefault()
+                                logout()
+                            }}>{t('menu.logout')}</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -160,14 +203,15 @@ function App() {
             {/* Content */}
             <div>
                 <Routes>
-                    <Route path="/" element={<Home/>}/>
+                    <Route path="/" element={<Home appDetails={appDetails}/>}/>
+                    <Route path="/account" element={<MyAccount appDetails={appDetails} onAppDetailsChange={refresh}/>}/>
                     <Route path="/admin" element={<Admin/>}/>
-                    <Route path="/clients" element={<ClientsList/>}/>
-                    <Route path="/items" element={<ItemsList/>}/>
-                    <Route path="/recurrentItems" element={<RecurrentItemsList/>}/>
+                    <Route path="/clients" element={<ClientsList appDetails={appDetails}/>}/>
+                    <Route path="/items" element={<ItemsList appDetails={appDetails}/>}/>
+                    <Route path="/recurrentItems" element={<RecurrentItemsList appDetails={appDetails}/>}/>
                     <Route path="/reports" element={<ReportsList/>}/>
                     <Route path="/technicalSupports" element={<TechnicalSupportsList/>}/>
-                    <Route path="/transactions" element={<TransactionsList/>}/>
+                    <Route path="/transactions" element={<TransactionsList appDetails={appDetails}/>}/>
                 </Routes>
             </div>
 

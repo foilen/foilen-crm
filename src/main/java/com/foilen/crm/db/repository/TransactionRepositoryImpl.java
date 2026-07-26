@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Component
@@ -26,6 +28,7 @@ public class TransactionRepositoryImpl extends AbstractRepositoryCustom implemen
         AggregationOperation unwindStage = context -> new Document("$unwind", new Document("path", "$clientLookup").append("preserveNullAndEmptyArrays", true));
 
         AggregationOperation projectStage = context -> new Document("$project", new Document("_id", 0)
+                .append("clientId", "$_id")
                 .append("clientName", "$clientLookup.name")
                 .append("total", 1));
 
@@ -35,7 +38,7 @@ public class TransactionRepositoryImpl extends AbstractRepositoryCustom implemen
     }
 
     @Override
-    public Page<Transaction> findAllSortedByClientName(Pageable pageable) {
+    public Page<Transaction> findAllSortedByClientName(Pageable pageable, Collection<String> clientIdFilter) {
 
         AggregationOperation lookupStage = lookupByStringId("client", "clientId", "clientLookup");
 
@@ -45,7 +48,16 @@ public class TransactionRepositoryImpl extends AbstractRepositoryCustom implemen
 
         AggregationOperation sortStage = context -> new Document("$sort", new Document("date", -1).append("clientName", 1).append("invoiceId", -1).append("_id", 1));
 
-        return aggregation(Transaction.class, Transaction.class, pageable, List.of(lookupStage, unwindStage, addFieldsStage, sortStage));
+        List<AggregationOperation> pipeline = new ArrayList<>();
+        if (clientIdFilter != null) {
+            pipeline.add(Aggregation.match(Criteria.where("clientId").in(clientIdFilter)));
+        }
+        pipeline.add(lookupStage);
+        pipeline.add(unwindStage);
+        pipeline.add(addFieldsStage);
+        pipeline.add(sortStage);
+
+        return aggregation(Transaction.class, Transaction.class, pageable, pipeline);
     }
 
     @Override

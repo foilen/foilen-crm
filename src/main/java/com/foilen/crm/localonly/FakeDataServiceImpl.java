@@ -15,9 +15,9 @@ import java.util.Calendar;
 @Transactional
 public class FakeDataServiceImpl extends AbstractBasics implements FakeDataService {
 
-    public static final String USER_ID_ADMIN = "111111";
-    public static final String USER_ID_USER = "222222";
-    public static final String USER_ID_TEST_1 = "333333";
+    public static final String USER_ID_ADMIN = "admin@example.com";
+    public static final String USER_ID_USER = "user@example.com";
+    public static final String USER_ID_TEST_1 = "test1@example.com";
 
     public static final String CLIENT_SHORTNAME_BAZAR = "bazar";
     public static final String CLIENT_SHORTNAME_EXTRA = "extra";
@@ -58,13 +58,23 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         logger.info("Begin CREATE ALL");
 
         createUsers();
+        createAllExceptUsers();
+
+        logger.info("End CREATE ALL");
+    }
+
+    @Override
+    public void createAllExceptUsers() {
+
+        logger.info("Begin CREATE ALL EXCEPT USERS");
+
         createTechnicalSupports();
         createClients();
         createItems();
         createTransactions();
         createRecurrentItems();
 
-        logger.info("End CREATE ALL");
+        logger.info("End CREATE ALL EXCEPT USERS");
     }
 
     private void createClients() {
@@ -183,7 +193,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
         userRepository.save(new User(USER_ID_ADMIN, true));
         userRepository.save(new User(USER_ID_USER, false));
         userRepository.save(new User(USER_ID_TEST_1, false));
-        userRepository.save(new User("444444", false));
+        userRepository.save(new User("test2@example.com", false));
 
     }
 

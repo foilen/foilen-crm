@@ -6,7 +6,9 @@ import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
-function TransactionsList() {
+function TransactionsList({appDetails = {}}) {
+    const isAdmin = !!appDetails.userAdmin
+
     const [queries, setQueries] = useState({})
     const [items, setItems] = useState([])
     const [pagination, setPagination] = useState({
@@ -127,9 +129,12 @@ function TransactionsList() {
     return (
         <div className="row">
             <div className="col-12">
-                <button type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">
-                    {t('button.createPayment')}
-                </button>
+                {isAdmin && (
+                    <button type="button" className="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#createModal">
+                        {t('button.createPayment')}
+                    </button>
+                )}
 
                 <div className="modal fade" id="createModal" tabIndex="-1" role="dialog"
                      aria-labelledby="createModalLabel"
@@ -338,7 +343,7 @@ function TransactionsList() {
                         <th scope="col">{t('term.date')}</th>
                         <th scope="col">{t('term.description')}</th>
                         <th scope="col">{t('term.price')}</th>
-                        <th scope="col">{t('term.actions')}</th>
+                        {isAdmin && <th scope="col">{t('term.actions')}</th>}
                     </tr>
                     </thead>
                     <tbody>
@@ -349,15 +354,17 @@ function TransactionsList() {
                             <td>{item.dateFormatted}</td>
                             <td>{item.description}</td>
                             <td>{item.priceFormatted}</td>
-                            <td>
-                                <div>
-                                    {!item.invoiceId && (
-                                        <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                onClick={() => showEdit(item)}
-                                                data-bs-target="#editModal">{t('button.edit')}</button>
-                                    )}
-                                </div>
-                            </td>
+                            {isAdmin && (
+                                <td>
+                                    <div>
+                                        {!item.invoiceId && (
+                                            <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                    onClick={() => showEdit(item)}
+                                                    data-bs-target="#editModal">{t('button.edit')}</button>
+                                        )}
+                                    </div>
+                                </td>
+                            )}
                         </tr>
                     ))}
                     </tbody>

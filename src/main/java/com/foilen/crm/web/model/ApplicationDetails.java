@@ -2,7 +2,9 @@ package com.foilen.crm.web.model;
 
 import com.foilen.smalltools.restapi.model.AbstractApiBase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApplicationDetails extends AbstractApiBase {
@@ -14,8 +16,15 @@ public class ApplicationDetails extends AbstractApiBase {
     private String userId;
     private String userEmail;
     private boolean userAdmin;
+    private boolean userHasPassword;
+
+    private List<ReportBalanceByClient> clientBalances = new ArrayList<>();
 
     private Map<String, Object> translations = new HashMap<>();
+
+    public List<ReportBalanceByClient> getClientBalances() {
+        return clientBalances;
+    }
 
     public String getLang() {
         return lang;
@@ -39,6 +48,20 @@ public class ApplicationDetails extends AbstractApiBase {
 
     public boolean isUserAdmin() {
         return userAdmin;
+    }
+
+    public boolean isUserHasPassword() {
+        return userHasPassword;
+    }
+
+    public ApplicationDetails setUserHasPassword(boolean userHasPassword) {
+        this.userHasPassword = userHasPassword;
+        return this;
+    }
+
+    public ApplicationDetails setClientBalances(List<ReportBalanceByClient> clientBalances) {
+        this.clientBalances = clientBalances;
+        return this;
     }
 
     public ApplicationDetails setLang(String lang) {

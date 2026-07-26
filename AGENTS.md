@@ -8,7 +8,7 @@ This document provides essential information for AI coding agents working on the
 **Database**: MongoDB with Spring Data MongoDB  
 **Build Tools**: Gradle 7.x (Backend), Vite (Frontend)  
 **Testing**: JUnit 5 (Backend), Vitest (Frontend)  
-**Authentication**: Azure Active Directory OAuth2
+**Authentication**: Email + password, or a one-time code emailed to the user (session-based, Spring Security)
 
 ## Build, Test, and Lint Commands
 
@@ -279,6 +279,11 @@ import {t} from './utils/TranslationUtils'
 
 ## Testing Guidelines
 
+When code changes affect behavior, update the relevant tests (new/changed test methods, JSON assertion files, etc.)
+as part of the change. Do NOT attempt to run the test suite (`./gradlew test`, `npm test`, `npm run test:ci`) —
+it fails in this sandbox environment regardless of correctness, so a failed run is not signal. Leave running the
+tests to the user.
+
 ### Backend Tests (JUnit 5)
 
 #### Test Structure
@@ -330,9 +335,7 @@ ALWAYS check user permissions in service methods before performing operations:
 
 ```java
 entitlementService.canCreateClientOrFail(userId);
-entitlementService.
-
-canEditClientOrFail(userId, clientId);
+entitlementService.canEditClientOrFail(userId, clientId);
 ```
 
 ### Database Entities
@@ -364,7 +367,7 @@ canEditClientOrFail(userId, clientId);
 ## Development Workflow
 
 1. No database setup needed (embedded MongoDB starts in-process for the `LOCAL`/`JUNIT` profiles)
-2. Configure `test-config.json` with Azure AD credentials (for auth)
+2. Configure `test-config.json` (mail server credentials are needed to send login-code emails)
 3. Run backend: `./gradlew bootRun` OR run `CrmApp.java` in IDE
 4. Run frontend dev server: `cd src/main/ui && npm start`
 5. Access: `http://localhost:8080` (backend) or `http://localhost:3000` (frontend dev)
@@ -381,7 +384,7 @@ canEditClientOrFail(userId, clientId);
 ## Critical Notes
 
 - First user becomes admin automatically
-- Azure AD authentication required for production
+- First user account ever created is automatically admin
 - CSRF protection enabled - use provided HTTP utilities
 - Production MongoDB must run as a (single-node at minimum) replica set — `@Transactional` uses
   `MongoTransactionManager`, which requires one

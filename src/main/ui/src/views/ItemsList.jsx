@@ -8,7 +8,9 @@ import service, {showSuccess} from '../service'
 import {dateNowDayOnly, priceToLong} from '../utils/features'
 import {t} from '../utils/TranslationUtils'
 
-function ItemsList() {
+function ItemsList({appDetails = {}}) {
+    const isAdmin = !!appDetails.userAdmin
+
     // State for billed items
     const [billed, setBilled] = useState({
         queries: {},
@@ -314,8 +316,10 @@ function ItemsList() {
             <div className="col-12">
                 <h1>{t('term.pending')}</h1>
 
-                <button type="button" className="btn btn-success" data-bs-toggle="modal" onClick={showCreate}
-                        data-bs-target="#createModal">{t('button.create')}</button>
+                {isAdmin && (
+                    <button type="button" className="btn btn-success" data-bs-toggle="modal" onClick={showCreate}
+                            data-bs-target="#createModal">{t('button.create')}</button>
+                )}
 
                 <div className="modal fade" id="createModal" tabIndex="-1" role="dialog"
                      aria-labelledby="createModalLabel" aria-hidden="true">
@@ -539,8 +543,10 @@ function ItemsList() {
                     </div>
                 </div>
 
-                <button type="button" className="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#createWithTimeModal">{t('button.createWithTime')}</button>
+                {isAdmin && (
+                    <button type="button" className="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#createWithTimeModal">{t('button.createWithTime')}</button>
+                )}
 
                 <div className="modal fade" id="createWithTimeModal" tabIndex="-1" role="dialog"
                      aria-labelledby="createWithTimeModalLabel" aria-hidden="true">
@@ -673,8 +679,10 @@ function ItemsList() {
                     </div>
                 </div>
 
-                <button type="button" className="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#billPendingModal">{t('button.billPending')}</button>
+                {isAdmin && (
+                    <button type="button" className="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target="#billPendingModal">{t('button.billPending')}</button>
+                )}
 
                 <div className="modal fade" id="billPendingModal" tabIndex="-1" role="dialog"
                      aria-labelledby="billPendingModalLabel" aria-hidden="true">
@@ -761,58 +769,64 @@ function ItemsList() {
                 </div>
 
                 <PaginationControl className="float-end" state={pending.pagination}
-                            onPageChange={(newPageId) => refreshPending(newPageId)}/>
+                                   onPageChange={(newPageId) => refreshPending(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>
                     <tr>
-                        <th></th>
+                        {isAdmin && <th></th>}
                         <th scope="col">{t('term.client')}</th>
                         <th scope="col">{t('term.date')}</th>
                         <th scope="col">{t('term.category')}</th>
                         <th scope="col">{t('term.description')}</th>
                         <th scope="col">{t('term.price')}</th>
-                        <th scope="col">{t('term.actions')}</th>
+                        {isAdmin && <th scope="col">{t('term.actions')}</th>}
                     </tr>
                     </thead>
                     <tbody>
                     {pending.items.map((item, index) => (
                         <tr key={item.id}>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={item.selected || false}
-                                    onChange={() => handleCheckboxChange(index)}
-                                />
-                            </td>
+                            {isAdmin && (
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        checked={item.selected || false}
+                                        onChange={() => handleCheckboxChange(index)}
+                                    />
+                                </td>
+                            )}
                             <td>{item.client.name} ({item.client.email}) ({item.client.lang})</td>
                             <td>{item.dateFormatted}</td>
                             <td>{item.category}</td>
                             <td>{item.description}</td>
                             <td>{item.priceFormatted}</td>
-                            <td>
-                                <div>
-                                    <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                            onClick={() => showEdit(item)}
-                                            data-bs-target="#editModal">{t('button.edit')}</button>
-                                    <button className="btn btn-sm btn-danger"
-                                            onClick={() => deleteOne(item)}>{t('button.delete')}</button>
-                                </div>
-                            </td>
+                            {isAdmin && (
+                                <td>
+                                    <div>
+                                        <button className="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                onClick={() => showEdit(item)}
+                                                data-bs-target="#editModal">{t('button.edit')}</button>
+                                        <button className="btn btn-sm btn-danger"
+                                                onClick={() => deleteOne(item)}>{t('button.delete')}</button>
+                                    </div>
+                                </td>
+                            )}
                         </tr>
                     ))}
                     </tbody>
                 </table>
 
-                <button type="button" className="float-end btn btn-success"
-                        onClick={showBillSelected}>{t('button.billSelected')}</button>
+                {isAdmin && (
+                    <button type="button" className="float-end btn btn-success"
+                            onClick={showBillSelected}>{t('button.billSelected')}</button>
+                )}
 
                 <hr/>
 
                 <h1>{t('term.billed')}</h1>
 
                 <PaginationControl className="float-end" state={billed.pagination}
-                            onPageChange={(newPageId) => refreshBilled(newPageId)}/>
+                                   onPageChange={(newPageId) => refreshBilled(newPageId)}/>
 
                 <table className="table table-striped">
                     <thead>

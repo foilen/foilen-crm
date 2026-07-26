@@ -43,25 +43,51 @@ function AdminUsers() {
     const toggleAdmin = async (item) => {
         const nextAdmin = !item.admin
         const confirmMessage = nextAdmin
-            ? t('prompt.makeAdmin.confirm', {0: item.email || item.userId})
-            : t('prompt.removeAdmin.confirm', {0: item.email || item.userId})
+            ? t('prompt.makeAdmin.confirm', {0: item.email})
+            : t('prompt.removeAdmin.confirm', {0: item.email})
 
         if (!window.confirm(confirmMessage)) {
             return
         }
 
         setFormResult({})
-        console.log('Admin Users - Update Admin', item.id, nextAdmin)
+        console.log('Admin Users - Update Admin', item.email, nextAdmin)
 
         try {
-            const response = await service.userUpdateAdmin(item.id, {admin: nextAdmin})
+            const response = await service.userUpdateAdmin(item.email, {admin: nextAdmin})
             setFormResult(response.data)
             if (response.data.success) {
-                showSuccess(t('prompt.updateAdmin.success', {0: item.email || item.userId}))
+                showSuccess(t('prompt.updateAdmin.success', {0: item.email}))
                 refresh(queries.pageId)
             }
         } catch (error) {
             console.error('Error updating user admin status', error)
+        }
+    }
+
+    // Function to toggle the disabled status of a user
+    const toggleDisabled = async (item) => {
+        const nextDisabled = !item.disabled
+        const confirmMessage = nextDisabled
+            ? t('prompt.disable.confirm', {0: item.email})
+            : t('prompt.enable.confirm', {0: item.email})
+
+        if (!window.confirm(confirmMessage)) {
+            return
+        }
+
+        setFormResult({})
+        console.log('Admin Users - Update Disabled', item.email, nextDisabled)
+
+        try {
+            const response = await service.userUpdateDisabled(item.email, {disabled: nextDisabled})
+            setFormResult(response.data)
+            if (response.data.success) {
+                showSuccess(t('prompt.updateDisabled.success', {0: item.email}))
+                refresh(queries.pageId)
+            }
+        } catch (error) {
+            console.error('Error updating user disabled status', error)
         }
     }
 
@@ -97,18 +123,18 @@ function AdminUsers() {
                 <table className="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">{t('term.userId')}</th>
                         <th scope="col">{t('term.email')}</th>
                         <th scope="col">{t('term.isAdmin')}</th>
+                        <th scope="col">{t('term.isDisabled')}</th>
                         <th scope="col">{t('term.actions')}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {items.map(item => (
-                        <tr key={item.id}>
-                            <td>{item.userId}</td>
+                        <tr key={item.email}>
                             <td>{item.email && <a href={`mailto:${item.email}`}>{item.email}</a>}</td>
                             <td>{item.admin ? t('common.yes') : t('common.no')}</td>
+                            <td>{item.disabled ? t('common.yes') : t('common.no')}</td>
                             <td>
                                 {item.admin ? (
                                     <button className="btn btn-sm btn-danger"
@@ -116,6 +142,13 @@ function AdminUsers() {
                                 ) : (
                                     <button className="btn btn-sm btn-primary"
                                             onClick={() => toggleAdmin(item)}>{t('button.makeAdmin')}</button>
+                                )}
+                                {item.disabled ? (
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={() => toggleDisabled(item)}>{t('button.enable')}</button>
+                                ) : (
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={() => toggleDisabled(item)}>{t('button.disable')}</button>
                                 )}
                             </td>
                         </tr>

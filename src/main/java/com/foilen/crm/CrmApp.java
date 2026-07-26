@@ -93,11 +93,6 @@ public class CrmApp {
                 ResourceTools.copyToFile("/com/foilen/crm/services/email/logo.png", CrmApp.class, new File(emailTemplateDirectory + "/logo.png"));
             }
 
-            // Configure login service
-            System.setProperty("spring.security.oauth2.client.registration.azure.client-id", config.getLoginAzureConfig().getClientId());
-            System.setProperty("spring.security.oauth2.client.registration.azure.client-secret", config.getLoginAzureConfig().getClientSecret());
-            System.setProperty("spring.security.oauth2.client.registration.azure.redirect-uri", config.getLoginAzureConfig().getRedirectUri());
-
             // Configure database
             System.setProperty("spring.mongodb.uri", config.getMongoUri());
             System.setProperty("spring.mongodb.database", config.getMongoDatabase());
@@ -168,8 +163,6 @@ public class CrmApp {
         springApplication.addPrimarySources(sources);
         springApplication.setEnvironment(environment);
 
-        // Exclude some auto-configuration
-        System.setProperty("spring.autoconfigure.exclude", "com.azure.spring.cloud.autoconfigure.implementation.context.AzureTokenCredentialAutoConfiguration");
         ConfigurableApplicationContext appCtx = springApplication.run(springBootArgs.toArray(new String[0]));
         if (closeAtEnd) {
             appCtx.close();
