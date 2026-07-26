@@ -132,6 +132,7 @@ public class CrmApp {
             sources.add(EmbeddedMongoDbSpringConfig.class);
             sources.add(CrmWebSpringConfig.class);
             sources.add(CrmSecuritySpringConfig.class);
+            sources.add(CrmSessionSpringConfig.class);
 
             // Start
             runApp(springBootArgs, sources, false);
