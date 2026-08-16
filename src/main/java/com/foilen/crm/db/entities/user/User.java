@@ -72,44 +72,54 @@ public class User {
         return disabled;
     }
 
-    public void setAdmin(boolean admin) {
+    public User setAdmin(boolean admin) {
         this.admin = admin;
+        return this;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public User setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+        return this;
     }
 
-    public void setDisabled(boolean disabled) {
+    public User setDisabled(boolean disabled) {
         this.disabled = disabled;
+        return this;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public User setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+        return this;
     }
 
-    public void setLoginCode(String loginCode) {
+    public User setLoginCode(String loginCode) {
         this.loginCode = loginCode;
+        return this;
     }
 
-    public void setLoginCodeExpiration(Date loginCodeExpiration) {
+    public User setLoginCodeExpiration(Date loginCodeExpiration) {
         this.loginCodeExpiration = loginCodeExpiration;
+        return this;
     }
 
-    public void setLoginCodeLastGenerated(Date loginCodeLastGenerated) {
+    public User setLoginCodeLastGenerated(Date loginCodeLastGenerated) {
         this.loginCodeLastGenerated = loginCodeLastGenerated;
+        return this;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public User setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+        return this;
     }
 
-    public void setPasswordLastChange(Date passwordLastChange) {
+    public User setPasswordLastChange(Date passwordLastChange) {
         this.passwordLastChange = passwordLastChange;
+        return this;
     }
 
 }

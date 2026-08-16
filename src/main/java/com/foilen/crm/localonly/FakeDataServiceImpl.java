@@ -6,6 +6,7 @@ import com.foilen.crm.db.entities.user.User;
 import com.foilen.smalltools.tools.AbstractBasics;
 import com.foilen.smalltools.tools.DateTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
     public static final String USER_ID_ADMIN = "admin@example.com";
     public static final String USER_ID_USER = "user@example.com";
     public static final String USER_ID_TEST_1 = "test1@example.com";
+    public static final String USER_PASSWORD_ADMIN = "qwerty";
 
     public static final String CLIENT_SHORTNAME_BAZAR = "bazar";
     public static final String CLIENT_SHORTNAME_EXTRA = "extra";
@@ -28,6 +30,8 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
     private ClientRepository clientRepository;
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private RecurrentItemRepository recurrentItemRepository;
     @Autowired
@@ -190,7 +194,9 @@ public class FakeDataServiceImpl extends AbstractBasics implements FakeDataServi
     private void createUsers() {
         logger.info("createUsers");
 
-        userRepository.save(new User(USER_ID_ADMIN, true));
+        userRepository.save(new User(USER_ID_ADMIN, true)
+                .setPasswordHash(passwordEncoder.encode(USER_PASSWORD_ADMIN))
+        );
         userRepository.save(new User(USER_ID_USER, false));
         userRepository.save(new User(USER_ID_TEST_1, false));
         userRepository.save(new User("test2@example.com", false));

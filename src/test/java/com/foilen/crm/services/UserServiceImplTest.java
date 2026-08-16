@@ -325,11 +325,15 @@ public class UserServiceImplTest extends AbstractSpringTests {
         @Test
         @DisplayName("Can set a password for the first time without a current password")
         void testChangePassword_firstTime_OK() {
+            User user = userRepository.findByEmail(FakeDataServiceImpl.USER_ID_ADMIN);
+            user.setPasswordHash(null);
+            userRepository.save(user);
+
             FormResult result = userService.changePassword(FakeDataServiceImpl.USER_ID_ADMIN,
                     new ChangePasswordForm().setNewPassword("secret123").setNewPasswordConfirmation("secret123"));
 
             assertTrue(result.isSuccess());
-            User user = userRepository.findByEmail(FakeDataServiceImpl.USER_ID_ADMIN);
+            user = userRepository.findByEmail(FakeDataServiceImpl.USER_ID_ADMIN);
             assertTrue(passwordEncoder.matches("secret123", user.getPasswordHash()));
         }
 

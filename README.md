@@ -115,6 +115,11 @@ Create a config file with your Azure details by following the instructions in "C
 
 Then run "CrmApp" in IntelliJ.
 
+Go on http://127.0.0.1:8080/
+
+The fake data creates `admin@example.com` as the admin user, with password `qwerty`.
+
+
 ## TEST in Docker
 
 Simply execute `./test-crm-test.sh` .
