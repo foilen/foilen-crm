@@ -102,9 +102,7 @@ public class CrmSpringConfig extends AbstractBasics {
 
         @Bean
         public LocalLaunchService localLaunchService(Environment environment) {
-            // The LOCAL profile keeps the users list empty so that the first person to log in becomes admin
-            boolean includeUsers = environment.matchesProfiles("JUNIT");
-            return new LocalLaunchService(fakeDataService(), includeUsers);
+            return new LocalLaunchService(fakeDataService(), true);
         }
 
     }
