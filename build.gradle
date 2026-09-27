@@ -5,7 +5,7 @@ buildscript {
     }
 }
 plugins {
-    id "com.github.ben-manes.versions" version "$versionsVersion"
+    id "io.github.ben-manes.versions" version "$versionsVersion"
     id 'com.github.node-gradle.node' version '7.1.0'
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
     id 'org.springframework.boot' version "$springBootVersion"
