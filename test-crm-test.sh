@@ -53,11 +53,6 @@ cat > $FOLDER_DATA/config.json << _EOF
 
 	"company" : "MyCompany",
 
-	"loginAzureConfig" : {
-		"clientId" : "XXXXX",
-		"clientSecret" : "XXXXX",
-		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
-	},
 	"loginCookieSignatureSalt" : "AAA",
 
 	"emailTemplateDirectory" : "/data/emailTemplate"

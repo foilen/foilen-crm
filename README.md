@@ -38,14 +38,10 @@ Here is an example of the content:
 	"mailPassword" : "password",
 
 	"mailFrom" : "crm@localhost",
+	"mailForceEmailTo" : "test@localhost",
 
 	"company" : "MyCompany",
 
-	"loginAzureConfig" : {
-		"clientId" : "XXXXX",
-		"clientSecret" : "XXXXX",
-		"redirectUri" : "http://xxxxxxxx/login/oauth2/code/azure"
-	},
 	"loginCookieSignatureSalt" : "AAA",
 
 	"emailTemplateDirectory" : "/data/emailTemplate"
@@ -65,12 +61,13 @@ The email configuration supports the following options:
 - `mailUsername`: SMTP authentication username (optional)
 - `mailPassword`: SMTP authentication password (optional)
 - `mailFrom`: The email address to use as the sender
+- `mailForceEmailTo`: When set, redirects all outgoing emails to this address instead of their real recipient (optional, useful for testing)
 
 **Note**: When `mailStartTlsEnable` is set to `true`, STARTTLS becomes required for the connection. Most modern SMTP servers (Gmail, Office365, etc.) require this setting.
 
 ## Admin
 
-The first user that logs in is an administrator.
+The first user account ever created is automatically an administrator.
 
 ## Change email templates
 
@@ -83,15 +80,13 @@ templates in it. You can then modify them and restart the application.
 
 The translations are in:
 - src/main/resources/com/foilen/crm/messages/messages_en.properties
-- src/main/resources/com/foilen/crm/messages/messages_en.properties
-
-And when you add more, you can easily sort them by running `SortMessagesApp`.
+- src/main/resources/com/foilen/crm/messages/messages_fr.properties
 
 ## Frontend Development
 
 The frontend is built with:
 - React
-- Bootstrap 5.3.6
+- Bootstrap 5.3.8
 
 ### Frontend Structure
 
@@ -100,8 +95,8 @@ The frontend code is located in the `src/main/ui` directory with the following s
 - `src/main/ui/src/components`: Reusable React components
 - `src/main/ui/src/utils`: Utility functions
 - `src/main/ui/src/views`: Page components
-- `src/main/ui/src/App.js`: Main application component
-- `src/main/ui/src/index.js`: Application entry point
+- `src/main/ui/src/App.jsx`: Main application component
+- `src/main/ui/src/index.jsx`: Application entry point
 
 ### Running the Frontend in Development Mode
 
