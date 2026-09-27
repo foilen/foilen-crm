@@ -2,6 +2,8 @@
   "added" : [ {
     "address" : "555 Betancour",
     "contactName" : "Abc Def",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "abc@example.com",
     "lang" : "EN",
     "mainSite" : "http://abc.here.com",

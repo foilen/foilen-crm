@@ -15,4 +15,6 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 
     List<Transaction> findFirst5ByClientIdOrderByDateDesc(String clientId);
 
+    Transaction findFirst1ByClientIdOrderByDateDesc(String clientId);
+
 }

@@ -11,14 +11,16 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends MongoRepository<Item, String>, ItemRepositoryCustom {
 
+    long deleteAllByClientId(String clientId);
+
     List<Item> findAllByInvoiceId(String invoiceId);
 
     List<Item> findAllByInvoiceIdIsNullAndClientIdOrderByDateAscDescriptionAsc(String clientId);
 
-    Item findByClientIdAndInvoiceIdNullAndDescription(String clientId, String description);
-
     Page<Item> findAllByInvoiceIdNotNull(Pageable page);
 
-    long deleteAllByClientId(String clientId);
+    Item findByClientIdAndInvoiceIdNullAndDescription(String clientId, String description);
+
+    Item findFirst1ByClientIdOrderByDateDesc(String clientId);
 
 }

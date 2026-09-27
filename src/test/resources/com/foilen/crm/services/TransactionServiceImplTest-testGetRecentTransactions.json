@@ -3,6 +3,8 @@
   "client" : {
     "address" : "2500 Alegria",
     "contactName" : "Alex Aubut",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "alex@example.com",
     "lang" : "EN",
     "mainSite" : "http://avez.example.com",
@@ -25,6 +27,8 @@
   "client" : {
     "address" : "2500 Alegria",
     "contactName" : "Alex Aubut",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "alex@example.com",
     "lang" : "EN",
     "mainSite" : "http://avez.example.com",
@@ -47,6 +51,8 @@
   "client" : {
     "address" : "2500 Alegria",
     "contactName" : "Alex Aubut",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "alex@example.com",
     "lang" : "EN",
     "mainSite" : "http://avez.example.com",
@@ -69,6 +75,8 @@
   "client" : {
     "address" : "2500 Alegria",
     "contactName" : "Alex Aubut",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "alex@example.com",
     "lang" : "EN",
     "mainSite" : "http://avez.example.com",
@@ -91,6 +99,8 @@
   "client" : {
     "address" : "2500 Alegria",
     "contactName" : "Alex Aubut",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "alex@example.com",
     "lang" : "EN",
     "mainSite" : "http://avez.example.com",

@@ -2,6 +2,8 @@
   "added" : [ {
     "address" : "1020 Betancour",
     "contactName" : "Benoit Banana",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "benoit@example2.com",
     "lang" : "EN",
     "mainSite" : "http://bazar.here.com",
@@ -17,6 +19,8 @@
   "removed" : [ {
     "address" : "1010 Betancour",
     "contactName" : "Benoit Bezos",
+    "currentBalanceFormatted" : "0.00",
+    "currentBalanceInCents" : 0,
     "email" : "benoit@example.com",
     "lang" : "FR",
     "mainSite" : "http://bazar.example.com",

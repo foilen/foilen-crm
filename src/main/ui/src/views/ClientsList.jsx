@@ -548,6 +548,9 @@ function ClientsList({appDetails = {}}) {
                         <th scope="col">{t('term.lang')}</th>
                         <th scope="col">{t('term.sid')}</th>
                         <th scope="col">{t('term.pricePerHour')}</th>
+                        <th scope="col">{t('term.lastItem')}</th>
+                        <th scope="col">{t('term.lastTransaction')}</th>
+                        <th scope="col">{t('term.currentBalance')}</th>
                         {isAdmin && <th scope="col">{t('term.actions')}</th>}
                     </tr>
                     </thead>
@@ -565,6 +568,9 @@ function ClientsList({appDetails = {}}) {
                             <td>{item.lang}</td>
                             <td>{item.technicalSupport ? item.technicalSupport.sid : ''}</td>
                             <td>{item.technicalSupport ? `${item.technicalSupport.pricePerHourFormatted}$` : ''}</td>
+                            <td>{item.lastItemDateFormatted}</td>
+                            <td>{item.lastTransactionDateFormatted}</td>
+                            <td>{item.currentBalanceFormatted}$</td>
                             {isAdmin && (
                                 <td>
                                     <div>

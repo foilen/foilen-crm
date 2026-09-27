@@ -116,9 +116,24 @@ public class ClientServiceImpl extends AbstractApiService implements ClientServi
                 .map(Client::getTechnicalSupportId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet()));
+        Map<String, Long> pendingTotalsByClientId = itemRepository.findPendingTotalsByClientIds(page.getContent().stream()
+                .map(Client::getId)
+                .collect(Collectors.toSet()));
         var items = result.getItems();
         for (int i = 0; i < items.size(); i++) {
-            items.get(i).setTechnicalSupport(technicalSupports.get(page.getContent().get(i).getTechnicalSupportId()));
+            var client = page.getContent().get(i);
+            var item = items.get(i);
+            item.setTechnicalSupport(technicalSupports.get(client.getTechnicalSupportId()));
+
+            // Get transaction and item info
+            var lastItem = itemRepository.findFirst1ByClientIdOrderByDateDesc(client.getId());
+            item.setLastItemDate(lastItem == null ? null : lastItem.getDate());
+
+            var lastTransaction = transactionRepository.findFirst1ByClientIdOrderByDateDesc(client.getId());
+            item.setLastTransactionDate(lastTransaction == null ? null : lastTransaction.getDate());
+
+            item.setCurrentBalanceInCents(transactionRepository.findTotalByClientId(client.getId())
+                    + pendingTotalsByClientId.getOrDefault(client.getId(), 0L));
         }
 
         return result;
